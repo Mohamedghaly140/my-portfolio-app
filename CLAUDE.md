@@ -110,7 +110,7 @@ bun test             # Unit tests (arrives in M2)
 - One easing curve: `Easing.bezier(0.16, 1, 0.3, 1)`. Entrance is 600 ms fade + 20 px rise; list stagger 50–60 ms.
 - Guard every non-essential animation with `useReducedMotion()`.
 - Light mode uses `accentText` (`#00805A`) for type and icons — the raw `#00E5A0` accent is 1.58:1 on light backgrounds and is for fills, dots and rules only.
-- Fonts are bundled `.ttf` under `assets/fonts/` loaded via `expo-font`; the splash holds until they resolve.
+- Fonts come from `@expo-google-fonts/{space-mono,dm-sans,jetbrains-mono}` (loaded via `expo-font` `useFonts` from `src/theme/fonts.ts`); the splash holds until they resolve.
 
 ### Chat and network
 

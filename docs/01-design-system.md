@@ -32,6 +32,8 @@ Source: `app/globals.css` `@theme inline` (verified 2026-08-15):
 
 `accentDim`: the web stores an 8-digit hex (`#00E5A015` ≈ 8.2% alpha). RN prefers an explicit `rgba(0, 229, 160, 0.082)`.
 
+`accentBorder`: `rgba(0, 229, 160, 0.2)` in dark — matches the web Badge accent variant `border-(--color-accent)/20`.
+
 ### Dark contrast (text-bearing pairs on `bg`)
 
 | Pair | Ratio |
@@ -60,6 +62,7 @@ Primary button fill uses `accent` with label colour `bg` (**11.96:1**).
 | `accent` | `#00E5A0` | Fills, rules, dots only |
 | `accentText` | `#00805A` | Accent type + icons |
 | `accentDim` | `rgba(0, 128, 90, 0.10)` | Soft accent wash |
+| `accentBorder` | `rgba(0, 128, 90, 0.2)` | Accent outline at 20% (Badge accent variant) |
 | `code` | `#8A5A00` | Inline / mono accent |
 
 ### Light contrast (text-bearing pairs)
@@ -89,20 +92,20 @@ Same three families the web loads via `next/font/google` in `app/layout.tsx`:
 | DM Sans | 400, 500, 700 | Body |
 | JetBrains Mono | 400 | Code |
 
-In the app they are bundled `.ttf` files under `assets/fonts/`, loaded with `expo-font`'s `useFonts`. Root `_layout.tsx` holds the splash screen until fonts resolve (and until the theme provider is ready).
+In the app they come from the `@expo-google-fonts/{space-mono,dm-sans,jetbrains-mono}` packages (same Google Fonts source as the web, pinned by `bun.lock`, licences included, bundled at build time). The asset map in `src/theme/fonts.ts` is handed to `expo-font`'s `useFonts`. Root `_layout.tsx` holds the splash screen until fonts resolve (and until the theme provider is ready). Do not add `assets/fonts/`.
 
 ### Type scale
 
-| Role | Size | Line height | Weight | Family |
-|---|---|---|---|---|
-| `title` | 36 | 44 | 700 | Space Mono |
-| `heading` | 24 | 32 | 700 | Space Mono |
-| `subheading` | 18 | 26 | 700 | Space Mono |
-| `body` | 16 | 26 | 400 | DM Sans |
-| `bodyMedium` | 16 | 26 | 500 | DM Sans |
-| `small` | 12 | 18 | 400 | Space Mono |
-| `label` | 11 | 16 | 400 | Space Mono (uppercase, widetrack via `letterSpacing: 2`) |
-| `code` | 14 | 22 | 400 | JetBrains Mono |
+| Role | Size | Line height | Family (weight encoded in name) |
+|---|---|---|---|
+| `title` | 36 | 44 | `SpaceMono_700Bold` |
+| `heading` | 24 | 32 | `SpaceMono_700Bold` |
+| `subheading` | 18 | 26 | `SpaceMono_700Bold` |
+| `body` | 16 | 26 | `DMSans_400Regular` |
+| `bodyMedium` | 16 | 26 | `DMSans_500Medium` |
+| `small` | 12 | 18 | `SpaceMono_400Regular` |
+| `label` | 11 | 16 | `SpaceMono_400Regular` (uppercase, widetrack via `letterSpacing: 2`) |
+| `code` | 14 | 22 | `JetBrainsMono_400Regular` |
 
 Platform note: Android may need slight size nudges; keep tokens central so a single `Platform.select` can adjust without forking components.
 
@@ -181,6 +184,7 @@ export type ThemeColors = {
   accent: string;
   accentText: string; // equals accent in dark; #00805A in light
   accentDim: string;
+  accentBorder: string; // accent at 20% alpha (Badge accent outline)
   code: string;
 };
 
@@ -200,19 +204,24 @@ export type TypeRole =
   | 'label'
   | 'code';
 
+// No fontWeight — @expo-google-fonts family names already encode weight
+// (e.g. SpaceMono_700Bold). Stacking fontWeight produces synthetic
+// double-bolding on Android.
 export type TypeStyle = {
   fontFamily: string;
   fontSize: number;
   lineHeight: number;
-  fontWeight: '400' | '500' | '700';
   letterSpacing?: number;
   textTransform?: 'uppercase';
 };
 
 export const FontFamilies: {
-  display: string; // Space Mono
-  body: string;    // DM Sans
-  code: string;    // JetBrains Mono
+  display: string;     // SpaceMono_400Regular
+  displayBold: string; // SpaceMono_700Bold
+  body: string;        // DMSans_400Regular
+  bodyMedium: string;  // DMSans_500Medium
+  bodyBold: string;    // DMSans_700Bold
+  code: string;        // JetBrainsMono_400Regular
 };
 
 export const Typography: Record<TypeRole, TypeStyle>;
@@ -238,16 +247,18 @@ export const Spacing: {
 ### `motion.ts`
 
 ```ts
-import type { EasingFunction } from 'react-native-reanimated';
+import { Easing } from 'react-native-reanimated';
 
-export const Motion: {
-  easing: EasingFunction;
-  entranceMs: 600;
-  entranceOffsetY: 20;
-  staggerMs: 55;
-  pressMs: 150;
-};
+export const Motion = {
+  easing: Easing.bezier(0.16, 1, 0.3, 1), // EasingFunctionFactory, not EasingFunction
+  entranceMs: 600,
+  entranceOffsetY: 20,
+  staggerMs: 55,
+  pressMs: 150,
+} as const;
 ```
+
+`Easing.bezier` returns an `EasingFunctionFactory`, which is what `withTiming` and the layout-animation builders accept — do not annotate it as `EasingFunction`.
 
 ### `index.ts`
 
@@ -264,14 +275,21 @@ export type AppTheme = {
 export function getTheme(scheme: ColorSchemeName): AppTheme;
 ```
 
-### `useTheme()` (replaces `src/hooks/use-theme.ts`)
+### `theme-provider.tsx` (replaces `src/hooks/use-theme.ts`)
+
+Lives beside the token modules. Do **not** re-export it from `src/theme/index.ts` (that would cycle with the provider importing `getTheme`).
 
 ```ts
-export function useTheme(): AppTheme;
+export function AppThemeProvider(props: {
+  children: React.ReactNode;
+  scheme?: ColorSchemeName; // explicit override wins; else follow system
+}): React.ReactElement;
+
+export function useTheme(): AppTheme; // throws outside the provider
 export function useThemeColors(): ThemeColors;
 ```
 
-Follow system appearance via the existing colour-scheme hooks; both schemes are first-class (D4).
+An explicit `scheme` prop wins so the M1 dev gallery can render both schemes at once. Otherwise follow system appearance via the existing `useColorScheme` from `@/hooks/use-color-scheme`, falling back to `'dark'` (brand default) when the system value is null / undefined / `'unspecified'`. Both schemes are first-class (D4).
 
 ---
 
