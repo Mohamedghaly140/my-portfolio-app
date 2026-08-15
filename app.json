@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "my-portfolio-app",
-    "slug": "my-portfolio-app",
+    "name": "Mo Ghaly",
+    "slug": "moghaly",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "myportfolioapp",
+    "scheme": "moghaly",
     "userInterfaceStyle": "automatic",
     "ios": {
       "icon": "./assets/expo.icon"
