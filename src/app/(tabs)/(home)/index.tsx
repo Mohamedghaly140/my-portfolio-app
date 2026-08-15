@@ -1,5 +1,25 @@
-import { PlaceholderScreen } from '@/components/placeholder-screen';
+import { Screen } from '@/components/ui';
+
+import { AboutTeaser } from '@/features/home/components/about-teaser';
+import { AskMohamedCTA } from '@/features/home/components/ask-mohamed-cta';
+import { CTABanner } from '@/features/home/components/cta-banner';
+import { FeaturedProjects } from '@/features/home/components/featured-projects';
+import { HeroSection } from '@/features/home/components/hero-section';
+import { LatestArticle } from '@/features/home/components/latest-article';
+import { SkillsHighlight } from '@/features/home/components/skills-highlight';
+import { StatsStrip } from '@/features/home/components/stats-strip';
 
 export default function HomeScreen() {
-  return <PlaceholderScreen title="Home" />;
+  return (
+    <Screen>
+      <HeroSection />
+      <StatsStrip />
+      <FeaturedProjects />
+      <LatestArticle />
+      <SkillsHighlight />
+      <AboutTeaser />
+      <AskMohamedCTA />
+      <CTABanner />
+    </Screen>
+  );
 }
