@@ -1,74 +1,16 @@
 import { useEffect, useState } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { router } from 'expo-router';
-import * as Linking from 'expo-linking';
-import { SymbolView } from 'expo-symbols';
 
 import { Button, Reveal, Text } from '@/components/ui';
-import {
-  CONTACT_MAILTO,
-  CONTACT_TEL,
-  CONTACT_WHATSAPP,
-} from '@/data/contact';
+import { openCv } from '@/lib/open-cv';
 import { Motion, Spacing } from '@/theme';
-import { useTheme } from '@/theme/theme-provider';
 
 import { ROLE_ROTATE_MS, ROLES } from '../constants';
-import { openCv } from '../open-cv';
-
-function isConfiguredHttpUrl(value: string | undefined): value is string {
-  if (!value) {
-    return false;
-  }
-  try {
-    const url = new URL(value);
-    return url.protocol === 'http:' || url.protocol === 'https:';
-  } catch {
-    return false;
-  }
-}
-
-type SocialLinkProps = {
-  label: string;
-  href: string;
-  children: React.ReactNode;
-};
-
-function SocialLink({ label, href, children }: SocialLinkProps) {
-  const { colors } = useTheme();
-
-  function handlePress() {
-    void Linking.openURL(href);
-  }
-
-  return (
-    <Pressable
-      accessibilityLabel={label}
-      accessibilityRole="link"
-      hitSlop={8}
-      onPress={handlePress}
-      style={({ pressed }) => [{ opacity: pressed ? 0.6 : 1 }]}
-    >
-      <View style={[styles.socialHit, { borderColor: colors.border }]}>{children}</View>
-    </Pressable>
-  );
-}
-
-function BrandGlyph({ label }: { label: string }) {
-  return (
-    <Text color="textMuted" role="small">
-      {label}
-    </Text>
-  );
-}
+import { SocialLinks } from './social-links';
 
 export function HeroSection() {
-  const { colors } = useTheme();
   const [roleIndex, setRoleIndex] = useState(0);
-
-  const githubUrl = process.env.EXPO_PUBLIC_GITHUB_URL;
-  const linkedinUrl = process.env.EXPO_PUBLIC_LINKEDIN_URL;
-  const youtubeUrl = process.env.EXPO_PUBLIC_YOUTUBE_URL;
 
   useEffect(() => {
     const id = setInterval(() => {
@@ -119,44 +61,7 @@ export function HeroSection() {
       </Reveal>
 
       <Reveal delayMs={Motion.staggerMs * 5}>
-        <View style={styles.socialRow}>
-          {isConfiguredHttpUrl(githubUrl) ? (
-            <SocialLink href={githubUrl} label="GitHub">
-              <BrandGlyph label="GH" />
-            </SocialLink>
-          ) : null}
-          {isConfiguredHttpUrl(linkedinUrl) ? (
-            <SocialLink href={linkedinUrl} label="LinkedIn">
-              <BrandGlyph label="in" />
-            </SocialLink>
-          ) : null}
-          {isConfiguredHttpUrl(youtubeUrl) ? (
-            <SocialLink href={youtubeUrl} label="YouTube">
-              <BrandGlyph label="YT" />
-            </SocialLink>
-          ) : null}
-          <SocialLink href={CONTACT_MAILTO} label="Email">
-            <SymbolView
-              name={{ ios: 'envelope', android: 'mail', web: 'mail' }}
-              size={20}
-              tintColor={colors.textMuted}
-            />
-          </SocialLink>
-          <SocialLink href={CONTACT_TEL} label="Phone">
-            <SymbolView
-              name={{ ios: 'phone', android: 'call', web: 'call' }}
-              size={20}
-              tintColor={colors.textMuted}
-            />
-          </SocialLink>
-          <SocialLink href={CONTACT_WHATSAPP} label="WhatsApp">
-            <SymbolView
-              name={{ ios: 'message', android: 'chat', web: 'chat' }}
-              size={20}
-              tintColor={colors.textMuted}
-            />
-          </SocialLink>
-        </View>
+        <SocialLinks />
       </Reveal>
     </View>
   );
@@ -185,17 +90,5 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: Spacing.two + Spacing.half,
-  },
-  socialRow: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: Spacing.three,
-  },
-  socialHit: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    minHeight: 44,
-    minWidth: 44,
   },
 });

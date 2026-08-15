@@ -5,7 +5,7 @@ import { Button, Reveal, SectionLabel, Text } from '@/components/ui';
 import { Motion, Spacing } from '@/theme';
 import { useTheme } from '@/theme/theme-provider';
 
-import { openCv } from '../open-cv';
+import { openCv } from '@/lib/open-cv';
 
 export function CTABanner() {
   const { colors } = useTheme();
