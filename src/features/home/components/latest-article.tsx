@@ -53,7 +53,12 @@ export function LatestArticle() {
 
       <Reveal delayMs={Motion.staggerMs * 2}>
         <View style={styles.cta}>
-          <Button label="Read More Articles →" onPress={handleOpenBlog} variant="ghost" />
+          <Button
+            icon={{ name: 'arrow-forward' }}
+            label="Read More Articles"
+            onPress={handleOpenBlog}
+            variant="ghost"
+          />
         </View>
       </Reveal>
     </View>

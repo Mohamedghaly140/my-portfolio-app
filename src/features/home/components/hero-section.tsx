@@ -55,8 +55,18 @@ export function HeroSection() {
 
       <Reveal delayMs={Motion.staggerMs * 4}>
         <View style={styles.actions}>
-          <Button label="View My Work →" onPress={handleViewWork} variant="primary" />
-          <Button label="Download CV ↓" onPress={openCv} variant="ghost" />
+          <Button
+            icon={{ name: 'arrow-forward' }}
+            label="View My Work"
+            onPress={handleViewWork}
+            variant="primary"
+          />
+          <Button
+            icon={{ name: 'arrow-down' }}
+            label="Download CV"
+            onPress={openCv}
+            variant="ghost"
+          />
         </View>
       </Reveal>
 

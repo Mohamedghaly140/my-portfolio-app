@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import { AskMohamedCTA } from '@/components/ask-mohamed-cta';
 import { Screen } from '@/components/ui';
 
@@ -10,8 +12,17 @@ import { SkillsHighlight } from '@/features/home/components/skills-highlight';
 import { StatsStrip } from '@/features/home/components/stats-strip';
 
 export default function HomeScreen() {
+  const [refreshing, setRefreshing] = useState(false);
+
+  function handleRefresh() {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 500);
+  }
+
   return (
-    <Screen>
+    <Screen onRefresh={handleRefresh} refreshing={refreshing}>
       <HeroSection />
       <StatsStrip />
       <FeaturedProjects />

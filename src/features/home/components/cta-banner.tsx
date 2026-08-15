@@ -34,8 +34,18 @@ export function CTABanner() {
 
       <Reveal delayMs={Motion.staggerMs}>
         <View style={styles.actions}>
-          <Button label="Let's Talk →" onPress={handleContact} variant="primary" />
-          <Button label="View Resume ↓" onPress={openCv} variant="ghost" />
+          <Button
+            icon={{ name: 'arrow-forward' }}
+            label="Let's Talk"
+            onPress={handleContact}
+            variant="primary"
+          />
+          <Button
+            icon={{ name: 'arrow-down' }}
+            label="View Resume"
+            onPress={openCv}
+            variant="ghost"
+          />
         </View>
       </Reveal>
     </View>

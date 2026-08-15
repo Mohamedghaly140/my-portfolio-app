@@ -1,9 +1,11 @@
+import { Ionicons } from '@expo/vector-icons';
 import { StyleSheet, View } from 'react-native';
 import { Image } from 'expo-image';
 import { router } from 'expo-router';
 
 import { Badge, Card, Text } from '@/components/ui';
 import { projectCoverImages } from '@/data/projects';
+import { selectionChanged } from '@/lib/haptics';
 import type { Project } from '@/types/project';
 import { Spacing } from '@/theme';
 import { useTheme } from '@/theme/theme-provider';
@@ -17,6 +19,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
   const cover = projectCoverImages[project.slug];
 
   function handlePress() {
+    selectionChanged();
     router.push({
       pathname: '/projects/[slug]',
       params: { slug: project.slug },
@@ -64,9 +67,10 @@ export function ProjectCard({ project }: ProjectCardProps) {
         </View>
 
         <View style={[styles.cardFooter, { borderTopColor: colors.border }]}>
-          <Text color="accent" role="small">
-            Case Study →
+          <Text color="textMuted" role="small">
+            Case Study
           </Text>
+          <Ionicons color={colors.accentText} name="chevron-forward" size={16} />
         </View>
       </View>
     </Card>
@@ -111,7 +115,10 @@ const styles = StyleSheet.create({
     marginTop: Spacing.one,
   },
   cardFooter: {
+    alignItems: 'center',
     borderTopWidth: StyleSheet.hairlineWidth,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     marginTop: Spacing.two,
     paddingTop: Spacing.two + Spacing.half,
   },

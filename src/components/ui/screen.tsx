@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { RefreshControl, ScrollView, StyleSheet, View } from 'react-native';
 
 import { useTheme } from '@/theme/theme-provider';
 
@@ -7,6 +7,8 @@ export type ScreenProps = {
   scroll?: boolean;
   gutter?: boolean;
   safe?: boolean;
+  onRefresh?: () => void;
+  refreshing?: boolean;
 };
 
 /**
@@ -20,6 +22,8 @@ export function Screen({
   scroll = true,
   gutter = true,
   safe = true,
+  onRefresh,
+  refreshing = false,
 }: ScreenProps) {
   const { colors, spacing } = useTheme();
   const horizontalPadding = gutter ? spacing.gutter : 0;
@@ -29,6 +33,15 @@ export function Screen({
       <ScrollView
         contentContainerStyle={[styles.content, { paddingHorizontal: horizontalPadding }]}
         contentInsetAdjustmentBehavior={safe ? 'automatic' : 'never'}
+        refreshControl={
+          onRefresh ? (
+            <RefreshControl
+              onRefresh={onRefresh}
+              refreshing={!!refreshing}
+              tintColor={colors.accentText}
+            />
+          ) : undefined
+        }
         style={[styles.scroll, { backgroundColor: colors.bg }]}
       >
         {children}

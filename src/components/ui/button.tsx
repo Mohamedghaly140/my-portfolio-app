@@ -1,12 +1,18 @@
+import { Ionicons } from '@expo/vector-icons';
 import { Link, type Href } from 'expo-router';
 import { ActivityIndicator, Pressable, StyleSheet, Text } from 'react-native';
 
+import { lightImpact } from '@/lib/haptics';
 import { FontFamilies } from '@/theme';
 import { useTheme } from '@/theme/theme-provider';
 
 export type ButtonProps = {
   variant?: 'primary' | 'ghost';
   label: string;
+  icon?: {
+    name: React.ComponentProps<typeof Ionicons>['name'];
+    position?: 'leading' | 'trailing';
+  };
   onPress?: () => void;
   href?: Href;
   disabled?: boolean;
@@ -16,6 +22,7 @@ export type ButtonProps = {
 export function Button({
   variant = 'primary',
   label,
+  icon,
   onPress,
   href,
   disabled = false,
@@ -24,12 +31,21 @@ export function Button({
   const { colors } = useTheme();
   const isDisabled = disabled || loading;
   const isPrimary = variant === 'primary';
+  const labelColor = isPrimary ? colors.onAccent : colors.accentText;
+  const iconPosition = icon?.position ?? 'trailing';
+
+  function handlePress() {
+    if (isPrimary && !isDisabled) {
+      lightImpact();
+    }
+    onPress?.();
+  }
 
   const content = (
     <Pressable
       accessibilityRole="button"
       disabled={isDisabled}
-      onPress={onPress}
+      onPress={handlePress}
       style={[
         styles.root,
         {
@@ -41,11 +57,17 @@ export function Button({
       ]}
     >
       {loading ? (
-        <ActivityIndicator color={isPrimary ? colors.onAccent : colors.accentText} />
+        <ActivityIndicator color={labelColor} />
       ) : (
-        <Text style={[styles.label, { color: isPrimary ? colors.onAccent : colors.accentText }]}>
-          {label}
-        </Text>
+        <>
+          {icon && iconPosition === 'leading' ? (
+            <Ionicons color={labelColor} name={icon.name} size={14} />
+          ) : null}
+          <Text style={[styles.label, { color: labelColor }]}>{label}</Text>
+          {icon && iconPosition === 'trailing' ? (
+            <Ionicons color={labelColor} name={icon.name} size={14} />
+          ) : null}
+        </>
       )}
     </Pressable>
   );

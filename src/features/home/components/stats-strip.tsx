@@ -11,18 +11,11 @@ export function StatsStrip() {
 
   return (
     <Reveal>
-      <View style={[styles.grid, { borderColor: colors.border }]}>
-        {STATS.map((stat, index) => (
+      <View style={styles.row}>
+        {STATS.map((stat) => (
           <View
             key={stat.label}
-            style={[
-              styles.cell,
-              {
-                borderColor: colors.border,
-                borderRightWidth: index % 2 === 0 ? 1 : 0,
-                borderBottomWidth: index < 2 ? 1 : 0,
-              },
-            ]}
+            style={[styles.cell, { borderColor: colors.border }]}
           >
             <Text color="accent" role="title" style={styles.value}>
               {stat.value}
@@ -38,18 +31,20 @@ export function StatsStrip() {
 }
 
 const styles = StyleSheet.create({
-  grid: {
-    borderWidth: 1,
+  row: {
     flexDirection: 'row',
     flexWrap: 'wrap',
+    gap: Spacing.two,
     marginVertical: Spacing.four,
   },
   cell: {
     alignItems: 'center',
+    borderWidth: 1,
+    flexBasis: 72,
+    flexGrow: 1,
     justifyContent: 'center',
     paddingHorizontal: Spacing.three,
     paddingVertical: Spacing.four + Spacing.two,
-    width: '50%',
   },
   value: {
     fontSize: 36,

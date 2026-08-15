@@ -59,7 +59,12 @@ export function FeaturedProjects() {
 
       <Reveal delayMs={Motion.staggerMs * 3}>
         <View style={styles.cta}>
-          <Button label="View All Projects →" onPress={handleViewAll} variant="ghost" />
+          <Button
+            icon={{ name: 'arrow-forward' }}
+            label="View All Projects"
+            onPress={handleViewAll}
+            variant="ghost"
+          />
         </View>
       </Reveal>
     </View>
@@ -79,7 +84,6 @@ const styles = StyleSheet.create({
   },
   placeholder: {
     alignItems: 'center',
-    borderStyle: 'dashed',
     borderWidth: 1,
     justifyContent: 'center',
     minHeight: 256,

@@ -64,11 +64,17 @@ export function AboutScreen() {
 
             <View style={styles.actions}>
               <Button
-                label="Get In Touch →"
+                icon={{ name: 'arrow-forward' }}
+                label="Get In Touch"
                 onPress={handleGetInTouch}
                 variant="primary"
               />
-              <Button label="Download CV ↓" onPress={openCv} variant="ghost" />
+              <Button
+                icon={{ name: 'arrow-down' }}
+                label="Download CV"
+                onPress={openCv}
+                variant="ghost"
+              />
             </View>
           </View>
         </View>

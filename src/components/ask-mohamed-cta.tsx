@@ -55,7 +55,12 @@ function BannerCTA() {
 
       <Reveal delayMs={Motion.staggerMs}>
         <View style={styles.bannerCta}>
-          <Button label="Ask Mo Ghaly GPT →" onPress={handleCta} variant="primary" />
+          <Button
+            icon={{ name: 'arrow-forward' }}
+            label="Ask Mo Ghaly GPT"
+            onPress={handleCta}
+            variant="primary"
+          />
         </View>
       </Reveal>
 
@@ -98,7 +103,12 @@ function CompactCTA() {
 
       <Reveal delayMs={Motion.staggerMs}>
         <View style={styles.compactCta}>
-          <Button label="Ask Mo Ghaly GPT →" onPress={handleCta} variant="primary" />
+          <Button
+            icon={{ name: 'arrow-forward' }}
+            label="Ask Mo Ghaly GPT"
+            onPress={handleCta}
+            variant="primary"
+          />
         </View>
       </Reveal>
 
