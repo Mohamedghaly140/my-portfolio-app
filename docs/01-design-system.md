@@ -43,7 +43,7 @@ Source: `app/globals.css` `@theme inline` (verified 2026-08-15):
 | `accent` on `bg` | **11.96:1** |
 | `code` on `bg` | **9.35:1** |
 
-Primary button fill uses `accent` with label colour `bg` (**11.96:1**).
+Primary button fill uses `accent` with label colour `onAccent` (== `bg` in dark, **11.96:1**; see §3 for why light mode needs its own `onAccent` value).
 
 ---
 
@@ -53,30 +53,37 @@ Primary button fill uses `accent` with label colour `bg` (**11.96:1**).
 
 | Token | Value | Role |
 |---|---|---|
-| `bg` | `#FAFAF7` | Screen background |
+| `bg` | `#F1F0EB` | Screen background |
 | `surface` | `#FFFFFF` | Cards / elevated panels |
-| `border` | `#E4E2DC` | Default hairline |
-| `borderPressed` | `#C9C6BD` | Pressed / selected border |
+| `border` | `#D6D3CA` | Default hairline |
+| `borderPressed` | `#BDBAB1` | Pressed / selected border |
 | `text` | `#14141A` | Primary type |
-| `textMuted` | `#5B6068` | Secondary type |
+| `textMuted` | `#454A52` | Secondary type |
 | `accent` | `#00E5A0` | Fills, rules, dots only |
-| `accentText` | `#00805A` | Accent type + icons |
-| `accentDim` | `rgba(0, 128, 90, 0.10)` | Soft accent wash |
-| `accentBorder` | `rgba(0, 128, 90, 0.2)` | Accent outline at 20% (Badge accent variant) |
+| `accentText` | `#006E4D` | Accent type + icons |
+| `accentDim` | `rgba(0, 110, 77, 0.10)` | Soft accent wash |
+| `accentBorder` | `rgba(0, 110, 77, 0.2)` | Accent outline at 20% (Badge accent variant) |
 | `code` | `#8A5A00` | Inline / mono accent |
+| `onAccent` | `#14141A` (== `text`) | Label/icon colour for content on a solid `accent` fill (e.g. primary Button) |
+
+`onAccent` exists because `accent` is bright in both schemes: dark mode's darkest neutral is `bg`, but light mode's darkest neutral is `text`, not `bg`. A component that puts its label on solid `accent` must use `onAccent`, never `bg` — `bg` on `accent` is only **1.45:1** in light mode.
+
+`bg` sits perceptibly below `surface` (was `#FAFAF7`, 1.05:1 from white — nearly invisible) so cards and elevated panels actually separate from the screen. `accentText` keeps the same hue ratio as the brand mint `#00E5A0` (G:B ≈ 1.43) but was deepened from a bare-AA `#00805A` (4.74:1) to `#006E4D` (5.51:1) so it reads as a confident accent rather than a washed-out minimum-contrast green.
 
 ### Light contrast (text-bearing pairs)
 
 | Pair | Ratio | Notes |
 |---|---|---|
-| `text` on `bg` | **17.54:1** | AAA |
-| `textMuted` on `bg` | **6.05:1** | AA |
-| `accentText` on `bg` | **4.74:1** | AA for normal text |
-| `code` on `bg` | **5.67:1** | AA |
+| `text` on `bg` | **16.08:1** | AAA |
+| `textMuted` on `bg` | **7.82:1** | AAA |
+| `accentText` on `bg` | **5.51:1** | AA |
+| `code` on `bg` | **5.19:1** | AA |
 | `text` on `surface` | **18.35:1** | AAA |
-| `textMuted` on `surface` | **6.33:1** | AA |
-| raw `accent` on `bg` | **1.58:1** | **Do not use for text** |
-| Primary label `bg` on fill `accent` | **11.96:1** | Keep dark label on accent fill in both schemes |
+| `textMuted` on `surface` | **8.92:1** | AAA |
+| `accentText` on `surface` | **6.29:1** | AA |
+| `code` on `surface` | **5.93:1** | AA |
+| raw `accent` on `bg` | **1.45:1** | **Do not use for text** |
+| Primary label `onAccent` on fill `accent` | **11.11:1** | See `onAccent` note above — `bg` on `accent` would be 1.45:1 |
 
 Ghost / text buttons in light mode use `accentText`, not `accent`.
 
@@ -182,10 +189,11 @@ export type ThemeColors = {
   text: string;
   textMuted: string;
   accent: string;
-  accentText: string; // equals accent in dark; #00805A in light
+  accentText: string; // equals accent in dark; #006E4D in light
   accentDim: string;
   accentBorder: string; // accent at 20% alpha (Badge accent outline)
   code: string;
+  onAccent: string; // label/icon colour on a solid accent fill — never use bg for this
 };
 
 export const Colors: Record<ColorSchemeName, ThemeColors>;
@@ -344,7 +352,7 @@ type ButtonProps = {
 };
 ```
 
-Space Mono bold 14px, `paddingHorizontal: 24`, `paddingVertical: 10`, `minHeight: 44`, `gap: 6`. Primary: `accent` fill, label colour `bg` (both schemes, 11.96:1). Ghost: transparent + `accentText` border and label. Disabled: opacity 0.5, not pressable. Loading: `ActivityIndicator` in place of the label.
+Space Mono bold 14px, `paddingHorizontal: 24`, `paddingVertical: 10`, `minHeight: 44`, `gap: 6`. Primary: `accent` fill, label colour `onAccent` (11.96:1 dark / 11.11:1 light). Ghost: transparent + `accentText` border and label. Disabled: opacity 0.5, not pressable. Loading: `ActivityIndicator` in place of the label.
 
 ### `Card`
 

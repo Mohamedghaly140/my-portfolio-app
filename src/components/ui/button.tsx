@@ -41,10 +41,9 @@ export function Button({
       ]}
     >
       {loading ? (
-        <ActivityIndicator color={isPrimary ? colors.bg : colors.accentText} />
+        <ActivityIndicator color={isPrimary ? colors.onAccent : colors.accentText} />
       ) : (
-        // Primary fill uses accent with label colour bg — 11.96:1 in both schemes.
-        <Text style={[styles.label, { color: isPrimary ? colors.bg : colors.accentText }]}>
+        <Text style={[styles.label, { color: isPrimary ? colors.onAccent : colors.accentText }]}>
           {label}
         </Text>
       )}
