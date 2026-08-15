@@ -444,7 +444,27 @@ A `colors.border` block that pulses opacity with `withRepeat(withTiming(...), -1
 
 ---
 
-## 10. Dev gallery exit criterion
+## 10. Navigation chrome
+
+Every stack's `_layout.tsx` sets header options from `useTheme()` — no hardcoded colours, no system font.
+
+- **Root tab screens** (the `index` screen inside each of `(home)`, `(blog)`, `(chat)`, `(experience)`, `(contact)`) get, on **iOS only** (`process.env.EXPO_OS === 'ios'`): `headerLargeTitle: true`, `headerTransparent: true`, `headerBlurEffect: 'systemMaterialDark'` / `'systemMaterialLight'` matched to `scheme`. **Android** gets a flat, opaque `headerStyle: { backgroundColor: colors.bg }` instead — `react-native-screens`' large-title/collapse behaviour is iOS-only; do not hand-roll a Material collapsing app bar to imitate it.
+- **Pushed screens** inside `(home)` (About, Skills, Privacy, Projects index, Project detail, dev gallery) get a standard (non-large) title and the same opaque `colors.bg` background, applied once via the `(home)` stack's `screenOptions` rather than per-screen.
+- All headers everywhere: `headerShadowVisible: false` (hairline-not-shadow, matching the rest of the design system), `headerTintColor: colors.accentText`, and brand type via `headerTitleStyle` / `headerLargeTitleStyle: { fontFamily: FontFamilies.displayBold }` instead of the system font.
+- No custom back button — the system default (via `react-native-screens`) already matches this treatment once tint/font are set.
+
+---
+
+## 11. Icons and haptics
+
+- `Button` (`src/components/ui/button.tsx`) takes an optional `icon: { name: <Ionicons name>; position?: 'leading' | 'trailing' }` (default `trailing`) instead of embedding an arrow character in the `label` string. Icon size matches the label's 14px and reuses the button's computed label colour.
+- Primary-variant `Button` presses fire a light-impact haptic (`src/lib/haptics.ts`, wrapping `expo-haptics`); ghost/text buttons stay silent. Card-style navigations (`ProjectCard`) fire a selection haptic on press instead.
+- `ProjectCard`'s footer uses a trailing `chevron-forward` (`Ionicons`, `colors.accentText`) as the "this pushes" affordance, not accent-coloured link text.
+- `Screen` (`src/components/ui/screen.tsx`) takes optional `onRefresh` / `refreshing` props wired to RN `RefreshControl` (`tintColor: colors.accentText`) on its `ScrollView`, only when `onRefresh` is provided.
+
+---
+
+## 12. Dev gallery exit criterion
 
 Route: `src/app/(tabs)/(home)/gallery.tsx` (a normal expo-router screen — **not** `_gallery.tsx`, which would become a real `/_gallery` URL). Register it in the `(home)` stack with title "Token gallery". When `__DEV__` is false, render `<Redirect href="/" />` and nothing else. A scheme toggle wraps gallery content in `<AppThemeProvider scheme={...}>` so both palettes are reachable without depending on system appearance. Reachable in development via a `__DEV__`-only link from `src/components/placeholder-screen.tsx`.
 
