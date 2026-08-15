@@ -19,7 +19,7 @@ export default function TabsLayout() {
       <NativeTabs.Trigger name="(blog)">
         <NativeTabs.Trigger.Label>Blogs</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon
-          sf={{ default: "doc.text", selected: "doc.text.fill" }}
+          sf={{ default: "newspaper", selected: "newspaper.fill" }}
           md="article"
         />
       </NativeTabs.Trigger>
@@ -27,11 +27,8 @@ export default function TabsLayout() {
       <NativeTabs.Trigger name="(chat)">
         <NativeTabs.Trigger.Label>Chat</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon
-          sf={{
-            default: "bubble.left.and.bubble.right",
-            selected: "bubble.left.and.bubble.right.fill",
-          }}
-          md="forum"
+          sf={{ default: "message", selected: "message.fill" }}
+          md="chat_bubble"
         />
       </NativeTabs.Trigger>
 
