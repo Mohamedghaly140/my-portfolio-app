@@ -1,3 +1,4 @@
+import { Link } from 'expo-router';
 import { StyleSheet, Text, View } from 'react-native';
 
 import { Spacing } from '@/theme';
@@ -13,6 +14,11 @@ export function PlaceholderScreen({ title }: { title: string }) {
   return (
     <View style={styles.container}>
       <Text style={[styles.title, { color: colors.text }]}>{title}</Text>
+      {__DEV__ ? (
+        <Link href="/gallery" style={[styles.galleryLink, { color: colors.accentText }]}>
+          Token gallery
+        </Link>
+      ) : null}
     </View>
   );
 }
@@ -23,9 +29,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: Spacing.four,
+    gap: Spacing.three,
   },
   title: {
     fontSize: 20,
     fontWeight: '700',
+  },
+  galleryLink: {
+    fontSize: 14,
   },
 });

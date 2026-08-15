@@ -8,6 +8,7 @@ export default function HomeStackLayout() {
   return (
     <Stack>
       <Stack.Screen name="index" options={{ title: 'Home' }} />
+      <Stack.Screen name="gallery" options={{ title: 'Token gallery' }} />
     </Stack>
   );
 }

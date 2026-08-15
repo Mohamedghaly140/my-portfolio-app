@@ -312,7 +312,7 @@ type TextProps = {
 };
 ```
 
-In light mode, `color="accent"` for readable type should prefer `accentText` at call sites (or map `accent` → `accentText` when used as type colour).
+`color="accent"` **always** resolves to `colors.accentText` (never the raw accent). Raw `#00E5A0` is 1.58:1 on the light background and is for fills, dots and rules only. Roles come from the `Typography` record; do not restyle them locally.
 
 ### `Badge`
 
@@ -325,22 +325,26 @@ type BadgeProps = {
 };
 ```
 
+Space Mono 12px, `paddingHorizontal: 10`, `paddingVertical: 2`, 1px border. Variants: accent (`accentDim` / `accentText` / `accentBorder`), muted (`surface` / `textMuted` / `border`), code (`surface` / `code` / `border`).
+
 ### `Button`
 
 Derives from: `components/ui/Button.tsx`.
 
 ```ts
+import type { Href } from 'expo-router';
+
 type ButtonProps = {
   variant?: 'primary' | 'ghost';
   label: string;
   onPress?: () => void;
-  href?: string; // opens via Linking / router
+  href?: Href; // expo-router Link (covers external URLs); rendered with <Link asChild>
   disabled?: boolean;
   loading?: boolean;
 };
 ```
 
-Primary: `accent` fill, label colour `bg` (both schemes). Ghost: transparent + `accent`/`accentText` border and label. Min press height 44.
+Space Mono bold 14px, `paddingHorizontal: 24`, `paddingVertical: 10`, `minHeight: 44`, `gap: 6`. Primary: `accent` fill, label colour `bg` (both schemes, 11.96:1). Ghost: transparent + `accentText` border and label. Disabled: opacity 0.5, not pressable. Loading: `ActivityIndicator` in place of the label.
 
 ### `Card`
 
@@ -354,7 +358,7 @@ type CardProps = {
 };
 ```
 
-Surface + border; no shadow; no radius. Hover → press.
+`surface` background, 1px `border`; no shadow; no radius. When `onPress` is set, the border switches to `borderPressed` while pressed.
 
 ### `SectionLabel`
 
@@ -364,7 +368,7 @@ Derives from: `components/ui/SectionLabel.tsx`.
 type SectionLabelProps = { children: string };
 ```
 
-Space Mono, uppercase, widetrack, `accent` / `accentText`.
+The `label` type role (Space Mono 11, `letterSpacing: 2`, uppercase) in `accentText`.
 
 ### `PromptChip`
 
@@ -377,7 +381,7 @@ type PromptChipProps = {
 };
 ```
 
-Bordered chip, min height 44, press swaps border/text to accent.
+Space Mono 12px, `paddingHorizontal: 16`, `paddingVertical: 8`, `minHeight: 44`, 1px border, transparent background. Rest: `textMuted` text + `border` border; pressed swaps both to `accentText`.
 
 ### `Divider`
 
@@ -386,6 +390,8 @@ Derives from: web `border-t border-(--color-border)` section rules.
 ```ts
 type DividerProps = { inset?: boolean };
 ```
+
+1px `border` hairline (`StyleSheet.hairlineWidth`). `inset` adds `marginHorizontal: Spacing.gutter`.
 
 ### `Screen`
 
@@ -400,6 +406,8 @@ type ScreenProps = {
 };
 ```
 
+When `scroll` is true (default) the `ScrollView` must be the component's **first child** and must not be wrapped in a `View` — NativeTabs relies on that for tab-bar transparency and tap-to-scroll-to-top. `safe` maps to `contentInsetAdjustmentBehavior` (`'automatic'` / `'never'`); do **not** add manual safe-area insets (NativeTabs already applies them). `gutter` applies `paddingHorizontal: Spacing.gutter` to the content container. Background is `colors.bg`. When `scroll` is false, render a plain `View` with the same padding.
+
 ### `Reveal`
 
 Derives from: `components/ui/ScrollReveal.tsx` (Framer Motion → Reanimated).
@@ -411,7 +419,7 @@ type RevealProps = {
 };
 ```
 
-600 ms fade + 20 px rise; skipped when `useReducedMotion()`.
+600 ms fade + 20 px rise via Reanimated `FadeInDown` with `Motion.easing` / `Motion.entranceMs` / `Motion.entranceOffsetY`. Guard with `useReducedMotion()` — when reduced, render children with no animation and no transform.
 
 ### `Skeleton`
 
@@ -424,16 +432,18 @@ type SkeletonProps = {
 };
 ```
 
-Surface → slightly lighter pulse; no radius; respect reduced motion (static dim block).
+A `colors.border` block that pulses opacity with `withRepeat(withTiming(...), -1, true)` on the shared easing. Under `useReducedMotion()` it is a static dimmed block with no animation. No radius.
 
 ---
 
 ## 10. Dev gallery exit criterion
 
-A `__DEV__`-only screen must render, in both schemes (toggle):
+Route: `src/app/(tabs)/(home)/gallery.tsx` (a normal expo-router screen — **not** `_gallery.tsx`, which would become a real `/_gallery` URL). Register it in the `(home)` stack with title "Token gallery". When `__DEV__` is false, render `<Redirect href="/" />` and nothing else. A scheme toggle wraps gallery content in `<AppThemeProvider scheme={...}>` so both palettes are reachable without depending on system appearance. Reachable in development via a `__DEV__`-only link from `src/components/placeholder-screen.tsx`.
+
+The gallery must render, in both schemes (toggle):
 
 - Every `Text` role
-- Every `Badge` / `Button` variant
+- Every `Badge` / `Button` variant (including disabled and loading)
 - `Card`, `SectionLabel`, `PromptChip`, `Divider`, `Skeleton`
 - A `Reveal` block
 

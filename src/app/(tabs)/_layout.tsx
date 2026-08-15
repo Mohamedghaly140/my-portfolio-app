@@ -1,4 +1,4 @@
-import { NativeTabs } from 'expo-router/unstable-native-tabs';
+import { NativeTabs } from "expo-router/unstable-native-tabs";
 
 /**
  * Tab order is fixed: Home · Blogs · Chat · Experience · Contact (D1).
@@ -10,13 +10,16 @@ export default function TabsLayout() {
     <NativeTabs>
       <NativeTabs.Trigger name="(home)">
         <NativeTabs.Trigger.Label>Home</NativeTabs.Trigger.Label>
-        <NativeTabs.Trigger.Icon sf={{ default: 'house', selected: 'house.fill' }} md="home" />
+        <NativeTabs.Trigger.Icon
+          sf={{ default: "house", selected: "house.fill" }}
+          md="home"
+        />
       </NativeTabs.Trigger>
 
       <NativeTabs.Trigger name="(blog)">
         <NativeTabs.Trigger.Label>Blogs</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon
-          sf={{ default: 'doc.text', selected: 'doc.text.fill' }}
+          sf={{ default: "doc.text", selected: "doc.text.fill" }}
           md="article"
         />
       </NativeTabs.Trigger>
@@ -24,7 +27,10 @@ export default function TabsLayout() {
       <NativeTabs.Trigger name="(chat)">
         <NativeTabs.Trigger.Label>Chat</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon
-          sf={{ default: 'bubble.left.and.bubble.right', selected: 'bubble.left.and.bubble.right.fill' }}
+          sf={{
+            default: "bubble.left.and.bubble.right",
+            selected: "bubble.left.and.bubble.right.fill",
+          }}
           md="forum"
         />
       </NativeTabs.Trigger>
@@ -32,7 +38,7 @@ export default function TabsLayout() {
       <NativeTabs.Trigger name="(experience)">
         <NativeTabs.Trigger.Label>Experience</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon
-          sf={{ default: 'briefcase', selected: 'briefcase.fill' }}
+          sf={{ default: "briefcase", selected: "briefcase.fill" }}
           md="work"
         />
       </NativeTabs.Trigger>
@@ -40,7 +46,7 @@ export default function TabsLayout() {
       <NativeTabs.Trigger name="(contact)">
         <NativeTabs.Trigger.Label>Contact</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon
-          sf={{ default: 'envelope', selected: 'envelope.fill' }}
+          sf={{ default: "envelope", selected: "envelope.fill" }}
           md="mail"
         />
       </NativeTabs.Trigger>
