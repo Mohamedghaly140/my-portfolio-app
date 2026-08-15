@@ -1,5 +1,10 @@
-import { PlaceholderScreen } from '@/components/placeholder-screen';
+import { Screen } from '@/components/ui';
+import { ProjectDetailScreen } from '@/features/projects/project-detail';
 
-export default function ProjectDetailScreen() {
-  return <PlaceholderScreen title="Project" />;
+export default function ProjectDetailRoute() {
+  return (
+    <Screen>
+      <ProjectDetailScreen />
+    </Screen>
+  );
 }
