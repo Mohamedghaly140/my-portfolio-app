@@ -16,7 +16,7 @@ export default function ChatStackLayout() {
   const indexOptions = isIOS
     ? {
         ...shared,
-        title: 'Chat',
+        title: 'Mo Ghaly GPT',
         headerLargeTitle: true,
         headerTransparent: true,
         headerBlurEffect:
@@ -25,7 +25,7 @@ export default function ChatStackLayout() {
       }
     : {
         ...shared,
-        title: 'Chat',
+        title: 'Mo Ghaly GPT',
         headerStyle: { backgroundColor: colors.bg },
       };
 

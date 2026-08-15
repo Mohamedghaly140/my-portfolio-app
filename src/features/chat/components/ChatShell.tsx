@@ -20,7 +20,13 @@ import { MessageList } from "./MessageList";
 import { StreamStatus } from "./StreamStatus";
 import { WelcomeState } from "./WelcomeState";
 
-export function ChatShell() {
+type ChatSession = ReturnType<typeof useChatSession>;
+
+type ChatShellProps = {
+  session: ChatSession;
+};
+
+export function ChatShell({ session }: ChatShellProps) {
   const { colors } = useTheme();
   const {
     messages,
@@ -32,7 +38,7 @@ export function ChatShell() {
     stop,
     retry,
     bootState,
-  } = useChatSession();
+  } = session;
 
   const [degradedBannerDismissed, setDegradedBannerDismissed] = useState(false);
 

@@ -2,14 +2,16 @@ import { Ionicons } from "@expo/vector-icons";
 import { Pressable, StyleSheet, View } from "react-native";
 import { router } from "expo-router";
 
-import { useChatSession } from "@/features/chat/hooks/useChatSession";
 import { lightImpact, selectionChanged } from "@/lib/haptics";
 import { Spacing } from "@/theme";
 import { useTheme } from "@/theme/theme-provider";
 
-export function ChatHeaderActions() {
+type ChatHeaderActionsProps = {
+  newChat: () => void;
+};
+
+export function ChatHeaderActions({ newChat }: ChatHeaderActionsProps) {
   const { colors } = useTheme();
-  const { newChat } = useChatSession();
 
   function handleNewChat() {
     lightImpact();
