@@ -12,7 +12,7 @@ The **native companion app** to Mohamed Ghaly's portfolio — an Expo / React Na
 
 Five tabs, in this fixed order: **Home · Blogs · Chat · Experience · Contact**. About, Projects, Project detail, Skills and Privacy are pushed inside the **Home stack**, not tabs.
 
-**Status:** planning complete, M0 not started. The tree is still the stock Expo scaffold. Update this line as phases land.
+**Status:** M0 landed (five-tab tree boots on iOS and Android, deps installed, template leftovers gone). M1 in progress. Update this line as phases land.
 
 ---
 
@@ -154,6 +154,33 @@ Repository skills are installed under `.claude/skills/` and `.agents/skills/`. U
 `expo-tailwind-setup` is installed but **not applicable** — D3 rules out NativeWind.
 
 For version-sensitive third-party work, check the current official documentation; delegate substantial lookups to the read-only `docs-explorer` agent in `.claude/agents/`.
+
+---
+
+## Delegating implementation
+
+**Implementation work goes to Cursor, not into this context.** When a task means writing or
+refactoring more than a couple of files against a spec that already exists, hand it to the
+`cursor-delegate` skill instead of typing the code here — it keeps this session's tokens for
+planning and review.
+
+```bash
+node .claude/skills/cursor-delegate/scripts/relay.mjs \
+  --brief <brief>.txt --cd /Users/mohamedghaly/projects/my-portfolio-app \
+  --model cursor-grok-4.5-high-fast --timeout 2h
+```
+
+- **Pin the model:** `cursor-grok-4.5-high-fast`. Do not fall back to `auto`.
+- **Claude owns judgment; Cursor owns typing.** Claude writes the brief, re-runs the gates itself,
+  reads the whole diff, and commits. Cursor never runs `git add` or `git commit` — say so in every
+  brief.
+- **Point briefs at `docs/`.** The spec is in the repo, so a brief names the document instead of
+  restating it, and carries only the deltas, the real gates (`bunx tsc --noEmit`, `bun run lint`),
+  and the report contract.
+- **One phase slice per brief.** Split a phase into sequential dispatches rather than sending one
+  sprawling brief; the next dispatch starts only after the previous diff is reviewed and green.
+- **Do not delegate:** planning, roadmap or `docs/` changes, anything touching `.env` or secrets,
+  cross-repo edits in `~/projects/my-portfolio`, and one-file tweaks.
 
 ---
 
