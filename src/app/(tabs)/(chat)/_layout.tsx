@@ -1,3 +1,4 @@
+import { isLiquidGlassAvailable } from 'expo-glass-effect';
 import { Stack } from 'expo-router';
 
 import { FontFamilies } from '@/theme';
@@ -13,14 +14,24 @@ export default function ChatStackLayout() {
     headerTitleStyle: { fontFamily: FontFamilies.displayBold },
   } as const;
 
+  // iOS 26 Liquid Glass has a UIKit bug where a blurred transparent header with
+  // headerLargeTitle renders blank until a scroll forces a relayout — dropping
+  // the blur there is react-native-screens' confirmed workaround.
+  // https://github.com/software-mansion/react-native-screens/issues/3100
+  const headerBlurEffect =
+    isIOS && !isLiquidGlassAvailable()
+      ? scheme === 'dark'
+        ? ('systemMaterialDark' as const)
+        : ('systemMaterialLight' as const)
+      : undefined;
+
   const indexOptions = isIOS
     ? {
         ...shared,
         title: 'Mo Ghaly GPT',
         headerLargeTitle: true,
         headerTransparent: true,
-        headerBlurEffect:
-          scheme === 'dark' ? ('systemMaterialDark' as const) : ('systemMaterialLight' as const),
+        headerBlurEffect,
         headerLargeTitleStyle: { fontFamily: FontFamilies.displayBold },
       }
     : {
