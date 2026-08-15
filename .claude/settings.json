@@ -8,14 +8,11 @@
     "deny": [
       "Read(./.env)",
       "Read(./.env.*)",
-      "Edit(//Users/mohamedghaly/projects/my-portfolio/**)",
-      "Write(//Users/mohamedghaly/projects/my-portfolio/**)"
+      "Edit(//Users/mohamedghaly/projects/my-portfolio/**)"
     ],
     "ask": [
       "Edit(./.env)",
-      "Edit(./.env.*)",
-      "Write(./.env)",
-      "Write(./.env.*)"
+      "Edit(./.env.*)"
     ]
   },
   "hooks": {
