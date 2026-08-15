@@ -12,7 +12,7 @@ The **native companion app** to Mohamed Ghaly's portfolio — an Expo / React Na
 
 Five tabs, in this fixed order: **Home · Blogs · Chat · Experience · Contact**. About, Projects, Project detail, Skills and Privacy are pushed inside the **Home stack**, not tabs.
 
-**Status:** M0, M1 and M2 landed — five-tab tree boots on iOS and Android; `src/theme/` tokens, bundled fonts and the ten `src/components/ui/` primitives are in, with a `__DEV__` token gallery at `(home)/gallery`; `src/data/` and `src/types/` are ported from the web repo via `scripts/sync-content.ts`, with project cover images bundled and a `bun test` exit-criterion test. **M3 (static screens) is next.** Update this line as phases land.
+**Status:** M0, M1, M2 and M3 landed — five-tab tree boots on iOS and Android; `src/theme/` tokens, bundled fonts and the ten `src/components/ui/` primitives are in, with a `__DEV__` token gallery at `(home)/gallery`; `src/data/` and `src/types/` are ported from the web repo via `scripts/sync-content.ts`, with project cover images bundled and a `bun test` exit-criterion test; Home, About, Projects, Project detail, Skills, Experience and Privacy all render from bundled data with no network calls. **M4 (backend native-client channel, in the web repo) is next.** Update this line as phases land.
 
 ---
 
