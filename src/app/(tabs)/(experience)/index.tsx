@@ -1,5 +1,10 @@
-import { PlaceholderScreen } from '@/components/placeholder-screen';
+import { Screen } from '@/components/ui';
+import { ExperienceScreen } from '@/features/experience';
 
-export default function ExperienceScreen() {
-  return <PlaceholderScreen title="Experience" />;
+export default function ExperienceRoute() {
+  return (
+    <Screen>
+      <ExperienceScreen />
+    </Screen>
+  );
 }

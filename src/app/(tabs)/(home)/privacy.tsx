@@ -1,5 +1,10 @@
-import { PlaceholderScreen } from '@/components/placeholder-screen';
+import { Screen } from '@/components/ui';
+import { PrivacyScreen } from '@/features/privacy';
 
-export default function PrivacyScreen() {
-  return <PlaceholderScreen title="Privacy" />;
+export default function PrivacyRoute() {
+  return (
+    <Screen>
+      <PrivacyScreen />
+    </Screen>
+  );
 }
