@@ -1,4 +1,4 @@
-import { StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
 
 import { PromptChip, Text } from "@/components/ui";
 import { SUGGESTED_PROMPTS } from "@/features/chat/lib/config";
@@ -21,7 +21,11 @@ export function WelcomeState({ onSelectPrompt }: WelcomeStateProps) {
   }
 
   return (
-    <View style={styles.root}>
+    <ScrollView
+      contentContainerStyle={styles.content}
+      contentInsetAdjustmentBehavior="automatic"
+      style={styles.scroll}
+    >
       <Text role="body">{WELCOME_INTRO}</Text>
 
       <View
@@ -37,12 +41,15 @@ export function WelcomeState({ onSelectPrompt }: WelcomeStateProps) {
           />
         ))}
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  root: {
+  scroll: {
+    flex: 1,
+  },
+  content: {
     flexGrow: 1,
     gap: Spacing.four,
     justifyContent: "center",

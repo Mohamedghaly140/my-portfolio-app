@@ -16,6 +16,7 @@ export function MessageList({ messages }: MessageListProps) {
     <FlatList
       accessibilityLabel="Conversation with Mo Ghaly GPT"
       contentContainerStyle={styles.content}
+      contentInsetAdjustmentBehavior="automatic"
       data={data}
       inverted
       keyExtractor={(item) => item.id}

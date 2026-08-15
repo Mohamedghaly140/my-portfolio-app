@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ActivityIndicator,
+  Keyboard,
   KeyboardAvoidingView,
   Platform,
   Pressable,
@@ -10,7 +11,7 @@ import {
 
 import { Button, Text } from "@/components/ui";
 import { useChatSession } from "@/features/chat/hooks/useChatSession";
-import { Spacing } from "@/theme";
+import { BottomTabInset, Spacing } from "@/theme";
 import { useTheme } from "@/theme/theme-provider";
 
 import { Composer } from "./Composer";
@@ -41,6 +42,18 @@ export function ChatShell({ session }: ChatShellProps) {
   } = session;
 
   const [degradedBannerDismissed, setDegradedBannerDismissed] = useState(false);
+  const [keyboardVisible, setKeyboardVisible] = useState(false);
+
+  useEffect(() => {
+    const showEvent = Platform.OS === "ios" ? "keyboardWillShow" : "keyboardDidShow";
+    const hideEvent = Platform.OS === "ios" ? "keyboardWillHide" : "keyboardDidHide";
+    const showSub = Keyboard.addListener(showEvent, () => setKeyboardVisible(true));
+    const hideSub = Keyboard.addListener(hideEvent, () => setKeyboardVisible(false));
+    return () => {
+      showSub.remove();
+      hideSub.remove();
+    };
+  }, []);
 
   const bootPhase = bootState.phase;
   const showWelcome =
@@ -116,7 +129,12 @@ export function ChatShell({ session }: ChatShellProps) {
         )}
       </View>
 
-      <View style={styles.footer}>
+      <View
+        style={[
+          styles.footer,
+          { paddingBottom: keyboardVisible ? 0 : BottomTabInset },
+        ]}
+      >
         {error ? <ErrorNotice error={error} onRetry={retry} /> : null}
         <StreamStatus phase={phase} />
         <Composer
