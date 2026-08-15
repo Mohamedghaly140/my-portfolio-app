@@ -1,5 +1,10 @@
-import { PlaceholderScreen } from '@/components/placeholder-screen';
+import { Screen } from '@/components/ui';
+import { AboutScreen } from '@/features/about';
 
-export default function AboutScreen() {
-  return <PlaceholderScreen title="About" />;
+export default function AboutRoute() {
+  return (
+    <Screen>
+      <AboutScreen />
+    </Screen>
+  );
 }

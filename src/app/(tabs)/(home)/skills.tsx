@@ -1,5 +1,10 @@
-import { PlaceholderScreen } from '@/components/placeholder-screen';
+import { Screen } from '@/components/ui';
+import { SkillsScreen } from '@/features/skills';
 
-export default function SkillsScreen() {
-  return <PlaceholderScreen title="Skills" />;
+export default function SkillsRoute() {
+  return (
+    <Screen>
+      <SkillsScreen />
+    </Screen>
+  );
 }
