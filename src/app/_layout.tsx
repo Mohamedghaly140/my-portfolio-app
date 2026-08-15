@@ -37,6 +37,7 @@ function RootLayoutNav() {
       <AppThemeProvider scheme={resolvedScheme}>
         <Stack screenOptions={{ headerShown: false }}>
           <Stack.Screen name="(tabs)" />
+          <Stack.Screen name="(chat)" options={{ presentation: 'modal', headerShown: false }} />
           <Stack.Screen name="+not-found" options={{ headerShown: true, title: 'Not found' }} />
         </Stack>
         <StatusBar style="auto" />

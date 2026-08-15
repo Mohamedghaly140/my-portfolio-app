@@ -8,10 +8,11 @@ import {
   StyleSheet,
   View,
 } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { Button, Text } from "@/components/ui";
 import { useChatSession } from "@/features/chat/hooks/useChatSession";
-import { BottomTabInset, Spacing } from "@/theme";
+import { Spacing } from "@/theme";
 import { useTheme } from "@/theme/theme-provider";
 
 import { Composer } from "./Composer";
@@ -29,6 +30,7 @@ type ChatShellProps = {
 
 export function ChatShell({ session }: ChatShellProps) {
   const { colors } = useTheme();
+  const insets = useSafeAreaInsets();
   const {
     messages,
     phase,
@@ -132,7 +134,7 @@ export function ChatShell({ session }: ChatShellProps) {
       <View
         style={[
           styles.footer,
-          { paddingBottom: keyboardVisible ? 0 : BottomTabInset },
+          { paddingBottom: keyboardVisible ? 0 : insets.bottom },
         ]}
       >
         {error ? <ErrorNotice error={error} onRetry={retry} /> : null}

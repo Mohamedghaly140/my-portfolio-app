@@ -1,8 +1,23 @@
+import { Ionicons } from '@expo/vector-icons';
 import { isLiquidGlassAvailable } from 'expo-glass-effect';
-import { Stack } from 'expo-router';
+import { router, Stack } from 'expo-router';
+import { Pressable } from 'react-native';
 
 import { FontFamilies } from '@/theme';
 import { useTheme } from '@/theme/theme-provider';
+
+function ChatCloseButton({ tintColor }: { tintColor: string }) {
+  return (
+    <Pressable
+      accessibilityLabel="Close chat"
+      accessibilityRole="button"
+      hitSlop={8}
+      onPress={() => router.back()}
+    >
+      <Ionicons color={tintColor} name="close" size={24} />
+    </Pressable>
+  );
+}
 
 export default function ChatStackLayout() {
   const { colors, scheme } = useTheme();
@@ -33,11 +48,13 @@ export default function ChatStackLayout() {
         headerTransparent: true,
         headerBlurEffect,
         headerLargeTitleStyle: { fontFamily: FontFamilies.displayBold },
+        headerLeft: () => <ChatCloseButton tintColor={colors.accentText} />,
       }
     : {
         ...shared,
         title: 'Mo Ghaly GPT',
         headerStyle: { backgroundColor: colors.bg },
+        headerLeft: () => <ChatCloseButton tintColor={colors.accentText} />,
       };
 
   return (
