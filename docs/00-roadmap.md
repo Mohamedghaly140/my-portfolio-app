@@ -98,7 +98,7 @@ The app repo's `.env` currently holds full production **server** secrets copied 
 2. Bundle Space Mono / DM Sans / JetBrains Mono `.ttf` files under `assets/fonts/`; load with `expo-font` `useFonts` and hold the splash until they resolve (root `_layout.tsx`).
 3. Implement primitives in `src/components/ui/`: `Text`, `Badge`, `Button`, `Card`, `SectionLabel`, `PromptChip`, `Divider`, `Screen`, `Reveal`, `Skeleton` — props and variants as specified in `01-design-system.md`.
 4. Radius is `0` everywhere (square corners are a rule; the web enforces this with `lib/ui/prose.test.ts` forbidding `rounded-*`).
-5. Add a **dev-only** token gallery route (e.g. `src/app/(tabs)/(home)/_gallery.tsx` or a `__dev__/gallery` screen behind `__DEV__`) that renders every primitive in both colour schemes.
+5. Add a **dev-only** token gallery route at `src/app/(tabs)/(home)/gallery.tsx`, guarded by `__DEV__`, that renders every primitive in both colour schemes. Not `_gallery.tsx` — expo-router treats only `_layout` as special, so an underscore-prefixed file still becomes a real route.
 
 **Files:** `src/theme/**`, `src/hooks/use-theme.ts` (replace), `src/components/ui/**`, `assets/fonts/**`, root layout splash gating, gallery screen.
 
