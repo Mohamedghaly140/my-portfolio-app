@@ -4,9 +4,8 @@ import { NativeTabs } from "expo-router/unstable-native-tabs";
 import { ChatFab } from "@/components/chat-fab";
 
 /**
- * Tab order: Home · Blogs · Experience · Contact. Chat moved to a root modal
- * (see `src/app/(chat)/`), reachable via the global `ChatFab`. A Settings tab
- * is landing in a follow-up change.
+ * Tab order: Home · Blogs · Experience · Contact · Settings. Chat moved to a
+ * root modal (see `src/app/(chat)/`), reachable via the global `ChatFab`.
  * About, Projects, Project detail, Skills and Privacy push inside the Home
  * stack — they are never tabs.
  */
@@ -43,6 +42,14 @@ export default function TabsLayout() {
           <NativeTabs.Trigger.Icon
             sf={{ default: "envelope", selected: "envelope.fill" }}
             md="mail"
+          />
+        </NativeTabs.Trigger>
+
+        <NativeTabs.Trigger name="(settings)">
+          <NativeTabs.Trigger.Label>Settings</NativeTabs.Trigger.Label>
+          <NativeTabs.Trigger.Icon
+            sf={{ default: "gearshape", selected: "gearshape.fill" }}
+            md="settings"
           />
         </NativeTabs.Trigger>
       </NativeTabs>
