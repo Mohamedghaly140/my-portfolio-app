@@ -7,6 +7,16 @@ const API_ORIGIN = process.env.EXPO_PUBLIC_API_ORIGIN;
 
 export type ChatUIMessage = UIMessage<unknown, Record<string, unknown>>;
 
+// Hermes has no global `crypto`, so `crypto.randomUUID()` throws on device.
+// These IDs are client-supplied idempotency keys, not security tokens.
+function randomUUID(): string {
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (character) => {
+    const random = (Math.random() * 16) | 0;
+    const value = character === "x" ? random : (random & 0x3) | 0x8;
+    return value.toString(16);
+  });
+}
+
 export function createChatTransport(args: {
   conversationId: string;
   onResponse: (response: Response) => void;
@@ -30,7 +40,7 @@ export function createChatTransport(args: {
         if (!messageId) throw new Error("Retry requires an assistant message id.");
         return {
           api: `${API_ORIGIN}/api/messages/${encodeURIComponent(messageId)}/retry`,
-          body: { clientRetryId: crypto.randomUUID(), locale: "en" },
+          body: { clientRetryId: randomUUID(), locale: "en" },
         };
       }
       const lastUserMessage = [...messages].reverse().find((message) => message.role === "user");
@@ -42,7 +52,7 @@ export function createChatTransport(args: {
         body: {
           conversationId: args.conversationId,
           message: text,
-          clientMessageId: crypto.randomUUID(),
+          clientMessageId: randomUUID(),
           locale: "en",
         },
       };
