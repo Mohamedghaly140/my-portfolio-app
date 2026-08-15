@@ -113,6 +113,7 @@ bun run sync-content # Re-port src/data + src/types from the web repo
 - Guard every non-essential animation with `useReducedMotion()`.
 - Light mode uses `accentText` (`#00805A`) for type and icons — the raw `#00E5A0` accent is 1.58:1 on light backgrounds and is for fills, dots and rules only.
 - Fonts come from `@expo-google-fonts/{space-mono,dm-sans,jetbrains-mono}` (loaded via `expo-font` `useFonts` from `src/theme/fonts.ts`); the splash holds until they resolve.
+- **Icons always come from `@expo/vector-icons`.** Do not add a separate icon library (e.g. `lucide-react-native`, `react-native-vector-icons`) or inline SVGs for iconography.
 
 ### Chat and network
 
