@@ -7,7 +7,7 @@ alwaysApply: true
 
 Native Expo / React Native client for the Next.js 16 site at `~/projects/my-portfolio`.
 
-**Tabs (fixed):** Home · Blogs · Chat · Experience · Contact. About, Projects, Project detail, Skills, Privacy live **only** in the Home stack — never as tabs.
+**Tabs (fixed):** Home · Blogs · Experience · Contact · Settings. About, Projects, Project detail, Skills, Privacy live **only** in the Home stack — never as tabs. Chat is a root-level modal reached via the global `ChatFab`, not a tab.
 
 **Status:** M0–M2 landed. **M3 (static screens) is next.** Work one phase at a time; do not start M*n+1* until M*n*'s bold **Exit:** in `docs/00-roadmap.md` is true. If a task doesn't map to a phase, say so before starting.
 

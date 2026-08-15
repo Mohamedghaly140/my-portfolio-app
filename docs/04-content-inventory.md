@@ -898,7 +898,7 @@ export const AI_IDENTITY_BADGE = "AI representative";
 | Five tabs (Home / Blogs / Chat / Experience / Contact) | NativeTabs labels |
 | About / Projects / Skills / Privacy | Home stack routes + stack titles |
 | `{ M.Ghaly }` / `MG.dev` / Hire Me / full nav / footer | **Do not** ship as web chrome; optional brand mark in splash / about only |
-| Floating Ask Mohamed FAB | **Dropped** — in-content CTA only |
+| Floating Ask Mohamed FAB | **Adopted** (2026-08-16, superseding the earlier drop) — native `ChatFab`, bottom-right, square (radius 0); in-content `AskMohamedCTA` kept alongside for seeded prompts. See `00-roadmap.md` D1. |
 
 ---
 

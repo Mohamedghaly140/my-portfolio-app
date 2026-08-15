@@ -10,7 +10,7 @@ Keep replies extremely concise. No unnecessary fluff, no long code snippets.
 
 The **native companion app** to Mohamed Ghaly's portfolio — an Expo / React Native client for the Next.js 16 site at `~/projects/my-portfolio`.
 
-Five tabs, in this fixed order: **Home · Blogs · Chat · Experience · Contact**. About, Projects, Project detail, Skills and Privacy are pushed inside the **Home stack**, not tabs.
+Five tabs, in this fixed order: **Home · Blogs · Experience · Contact · Settings**. About, Projects, Project detail, Skills and Privacy are pushed inside the **Home stack**, not tabs. Chat is not a tab — it's a root-level modal (`src/app/(chat)/`) reached from a global floating action button (`ChatFab`, mounted above `NativeTabs`), visible on every tab and every pushed screen.
 
 **Status:** M0, M1, M2 and M3 landed — five-tab tree boots on iOS and Android; `src/theme/` tokens, bundled fonts and the ten `src/components/ui/` primitives are in, with a `__DEV__` token gallery at `(home)/gallery`; `src/data/` and `src/types/` are ported from the web repo via `scripts/sync-content.ts`, with project cover images bundled and a `bun test` exit-criterion test; Home, About, Projects, Project detail, Skills, Experience and Privacy all render from bundled data with no network calls. A 2026-08-15 native UI polish pass on top of M3 fixed those screens reading as mobile-web (native large-title/blur headers, `Button` icon slot, haptics, chevron affordances, pull-to-refresh) — see `01-design-system.md` §10–11; apply those conventions to every screen built from here on. **M4 (backend native-client channel, in the web repo) is next.** Update this line as phases land.
 
@@ -93,10 +93,11 @@ bun run sync-content # Re-port src/data + src/types from the web repo
 
 ### Navigation
 
-- Tab order is **Home · Blogs · Chat · Experience · Contact** and does not change. `NativeTabs.Trigger` names are `(home)`, `(blog)`, `(chat)`, `(experience)`, `(contact)`.
+- Tab order is **Home · Blogs · Experience · Contact · Settings** and does not change. `NativeTabs.Trigger` names are `(home)`, `(blog)`, `(experience)`, `(contact)`, `(settings)`.
 - About, Projects, Project detail, Skills and Privacy live **only** in the Home stack. Do not promote one to a tab.
+- Chat is a root-level modal Stack screen (`src/app/(chat)/`, `presentation: 'modal'`), not a tab. It's reached from `ChatFab` (`src/components/chat-fab.tsx`), mounted once at the `(tabs)` layout level so it overlays every tab and every pushed screen; it disappears automatically while the modal is presented since the whole `(tabs)` screen backgrounds.
 - The router tree is specified in `docs/02-screens.md` §1. Adding a screen means adding it there too.
-- Keep `NativeTabs` (D1) — the tab bar is deliberately platform-native while everything above it is brand.
+- Keep `NativeTabs` (D1) — the tab bar is deliberately platform-native while everything above it is brand. D1 originally locked Chat in as a tab; this was superseded on 2026-08-16 in favor of the FAB + modal pattern above.
 
 ### Content
 

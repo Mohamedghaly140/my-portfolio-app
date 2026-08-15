@@ -9,8 +9,8 @@ Cross-references: tokens → [`01-design-system.md`](./01-design-system.md); cha
 ## 1. Expo Router tree
 
 ```
-src/app/_layout.tsx                      root: fonts, splash, ThemeProvider, QueryClient
-src/app/(tabs)/_layout.tsx               NativeTabs — 5 triggers, in this order
+src/app/_layout.tsx                      root: fonts, splash, ThemePreferenceProvider, ThemeProvider, QueryClient
+src/app/(tabs)/_layout.tsx               NativeTabs — 5 triggers, in this order + global ChatFab overlay
 src/app/(tabs)/(home)/_layout.tsx        Stack
 src/app/(tabs)/(home)/index.tsx          Home
 src/app/(tabs)/(home)/about.tsx
@@ -21,12 +21,14 @@ src/app/(tabs)/(home)/projects/[slug].tsx
 src/app/(tabs)/(blog)/_layout.tsx        Stack
 src/app/(tabs)/(blog)/index.tsx
 src/app/(tabs)/(blog)/[slug].tsx
-src/app/(tabs)/(chat)/_layout.tsx        Stack
-src/app/(tabs)/(chat)/index.tsx
 src/app/(tabs)/(experience)/_layout.tsx  Stack
 src/app/(tabs)/(experience)/index.tsx
 src/app/(tabs)/(contact)/_layout.tsx     Stack
 src/app/(tabs)/(contact)/index.tsx
+src/app/(tabs)/(settings)/_layout.tsx    Stack
+src/app/(tabs)/(settings)/index.tsx
+src/app/(chat)/_layout.tsx               Stack — root modal, sibling of (tabs), not a tab
+src/app/(chat)/index.tsx
 src/app/+not-found.tsx
 ```
 
@@ -36,11 +38,11 @@ src/app/+not-found.tsx
 |---|---|---|
 | 1 | `(home)` | Home |
 | 2 | `(blog)` | Blogs |
-| 3 | `(chat)` | Chat |
-| 4 | `(experience)` | Experience |
-| 5 | `(contact)` | Contact |
+| 3 | `(experience)` | Experience |
+| 4 | `(contact)` | Contact |
+| 5 | `(settings)` | Settings |
 
-About, Projects, Project detail, Skills, and Privacy are **not** tabs — they push on the Home stack only.
+About, Projects, Project detail, Skills, and Privacy are **not** tabs — they push on the Home stack only. Chat is **not** a tab — it's a root `Stack.Screen` with `presentation: 'modal'`, reached from the global `ChatFab` (mounted once at the `(tabs)` layout level, above `NativeTabs`, so it overlays every tab and every pushed screen). **2026-08-16:** superseded the original 5th-tab placement of Chat — see `00-roadmap.md` D1.
 
 ---
 
@@ -49,7 +51,7 @@ About, Projects, Project detail, Skills, and Privacy are **not** tabs — they p
 | Web | Native |
 |---|---|
 | Hover border / opacity | Press opacity + `borderPressed` |
-| Floating "Ask Mohamed" FAB (`ask-fab`) | **No FAB.** In-content `AskMohamedCTA` that switches to the Chat tab (optionally with `?q=`) |
+| Floating "Ask Mohamed" FAB (`ask-fab`) | Adopted natively as `ChatFab` (`src/components/chat-fab.tsx`) — bottom-right, square (radius 0, per D4), opens the chat modal. In-content `AskMohamedCTA` still exists alongside it for contextual seeded prompts (`?q=`) |
 | Next.js `<Link>` routes | Expo Router `router.push` / `<Link href>` |
 | `next/image` | `expo-image` / `Image` with `require()` covers |
 | MDX in the RSC tree | Bundled metadata + `GET /api/markdown` body (blog; projects optional) |
@@ -251,19 +253,20 @@ About, Projects, Project detail, Skills, and Privacy are **not** tabs — they p
 
 ---
 
-## 5. Chat stack
+## 5. Chat (root modal, not a tab)
 
-### 5.1 Chat — `/(tabs)/(chat)`
+### 5.1 Chat — `/(chat)`
 
 | | |
 |---|---|
-| **Route** | `/(tabs)/(chat)/` |
-| **Stack** | Chat |
+| **Route** | `/(chat)/` — root `Stack.Screen`, `presentation: 'modal'`, sibling of `(tabs)` |
+| **Stack** | Chat (its own nested `Stack`, headers configured in `(chat)/_layout.tsx`) |
 | **Deep link** | `/chat` · `/chat?q=<seed>` · `moghaly://chat?q=` |
+| **Entry points** | Global `ChatFab` (every screen) · in-content `AskMohamedCTA` (seeded prompts) |
 
 **Sections / regions** (`features/chat/*`):
 
-1. Header — title, New chat, Privacy & help affordance → Home-stack Privacy
+1. Header — close (dismiss modal), title, New chat, Privacy & help affordance → Home-stack Privacy
 2. Body — welcome state **or** message list
    - Welcome: intro + `SuggestedPrompts` (`SUGGESTED_PROMPTS` from web config — port the eight strings)
    - Messages: user/assistant rows, markdown text, blocks (`project_grid`, `source_list`, `lead_form`, `contact_handoff`), stopped marker, stream status / tool label
@@ -286,7 +289,7 @@ About, Projects, Project detail, Skills, and Privacy are **not** tabs — they p
 | Rate limited / blocked / network | ErrorNotice with mapped copy |
 | Empty conversation | Welcome + prompts |
 
-**Native delta:** full-height under NativeTabs (no web navbar offset); keyboard avoiding view; `expo/fetch` streaming (D5); stop always cancels server-side; poll while backgrounded generation with `AppState` (see API doc §f).
+**Native delta:** full-height root modal (no web navbar offset, no tab bar beneath it — footer padding uses `useSafeAreaInsets().bottom`, not a tab-bar-height guess); keyboard avoiding view; `expo/fetch` streaming (D5); stop always cancels server-side; poll while backgrounded generation with `AppState` (see API doc §f).
 
 ---
 
@@ -329,7 +332,7 @@ About, Projects, Project detail, Skills, and Privacy are **not** tabs — they p
 1. Header — "Contact" / "Let's Work Together" + supporting sentence
 2. `ContactForm` (name, email, subject?, message) → `POST /api/contact`
 3. `ContactLinks` (email, phone, WhatsApp, social from env)
-4. `AskMohamedCTA` (`inline`) → Chat tab
+4. `AskMohamedCTA` (`inline`) → opens the chat modal
 
 **Data:** form via network; links from bundled `contact.ts` + `EXPO_PUBLIC_*`.
 
@@ -339,7 +342,30 @@ About, Projects, Project detail, Skills, and Privacy are **not** tabs — they p
 
 ---
 
-## 8. Not found
+## 8. Settings stack
+
+### 8.1 Settings — `/(tabs)/(settings)`
+
+| | |
+|---|---|
+| **Route** | `/(tabs)/(settings)/` |
+| **Stack** | Settings |
+| **Deep link** | `/settings` |
+
+**Sections** (`(settings)/index.tsx`):
+
+1. Header — "Settings"
+2. `SectionLabel` "APPEARANCE" + `Card` with a System / Light / Dark three-way `Button` row, bound to `useThemePreference()` (`src/theme/theme-preference-provider.tsx`)
+
+**Data:** theme preference persisted via `src/lib/preferences/theme.ts` (`AsyncStorage`). No network calls.
+
+**States:** none beyond the three-way selection reflecting `preference`.
+
+**Native delta:** new to this app (added 2026-08-16 alongside the Chat → modal/FAB change, see `00-roadmap.md` D1) — no web equivalent screen. Room left for future settings under additional `SectionLabel` groups.
+
+---
+
+## 9. Not found
 
 | | |
 |---|---|
@@ -350,7 +376,7 @@ Brand `Screen` with title, short copy, button back to Home tab.
 
 ---
 
-## 9. Deep-link map (M8)
+## 10. Deep-link map (M8)
 
 | URL path | Destination |
 |---|---|
@@ -362,9 +388,10 @@ Brand `Screen` with title, short copy, button back to Home tab.
 | `/privacy` | `(home)/privacy` |
 | `/blog` | `(blog)/` |
 | `/blog/<slug>` | `(blog)/[slug]` |
-| `/chat` | `(chat)/` |
+| `/chat` | `(chat)/` — root modal, not under `(tabs)` |
 | `/chat?q=` | `(chat)/` with one-shot seed |
 | `/experience` | `(experience)/` |
 | `/contact` | `(contact)/` |
+| `/settings` | `(tabs)/(settings)/` |
 
 Custom scheme: `moghaly://` with the same path suffixes. Universal links require `apple-app-site-association` + `assetlinks.json` on the Next.js site (`public/.well-known/`).
