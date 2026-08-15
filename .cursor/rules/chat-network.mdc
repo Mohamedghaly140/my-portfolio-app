@@ -1,0 +1,24 @@
+---
+description: Single API client, expo/fetch streaming, session, chat block resolution, no server error text
+globs: src/lib/**/*.{ts,tsx},src/app/**/chat/**/*.{ts,tsx}
+alwaysApply: false
+---
+
+# Chat and network
+
+- Every request goes through the single client in `src/lib/api/`. It injects `Origin`, `x-mg-client`, `x-mg-session`, and persists the reissued session to `expo-secure-store`. **Do not `fetch` from a screen.**
+- Chat streaming uses `expo/fetch`, not global `fetch` — RN's default returns `response.body === null` (D5).
+- **Stop always calls `POST /api/conversations/{id}/cancel`** in addition to aborting; RN abort propagation is unreliable.
+- Chat UI blocks carry **slugs and statuses only** (D7). Resolve project cards and contact channels against bundled data — never render a title, URL, or phone number that came over the wire.
+- Never render server-supplied error text. Map the wire *code* to the local copy table ported from `lib/chat/errors.ts`.
+- PostgreSQL on the web side is the only chat-history source. Send one new message per turn; never upload a transcript as history.
+
+```ts
+// ❌ BAD
+await fetch(`${origin}/api/chat`, { body });
+
+// ✅ GOOD
+await api.post("/api/chat", body); // client injects Origin + session headers
+```
+
+Read `docs/03-api-contract.md`. Use the `expo-data-fetching` skill.

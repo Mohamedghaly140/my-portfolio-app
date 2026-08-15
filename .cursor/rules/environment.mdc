@@ -1,0 +1,27 @@
+---
+description: Only EXPO_PUBLIC_* vars belong here; server secrets stay in the web repo
+globs: .env*,app.config.*,eas.json,src/**/*.ts
+alwaysApply: false
+---
+
+# Environment
+
+- **Only `EXPO_PUBLIC_*` variables belong in this repo.** Everything shipped in an Expo bundle is readable by anyone with the app.
+- Server secrets — `DATABASE_URL`, `OPENAI_API_KEY`, `APP_SESSION_SECRET`, `AUTH_SECRET`, `RESEND_API_KEY`, `ADMIN_ALLOWLIST` and friends — must **never** appear here. They live in the web repo only.
+- Keep `.env.example` synchronised with what the app actually reads.
+
+```
+EXPO_PUBLIC_API_ORIGIN   Origin of the Next.js site, no trailing slash
+EXPO_PUBLIC_SITE_URL     Canonical site URL for share and universal links
+EXPO_PUBLIC_LINKEDIN_URL
+EXPO_PUBLIC_GITHUB_URL
+EXPO_PUBLIC_YOUTUBE_URL
+```
+
+```ts
+// ❌ BAD
+const db = process.env.DATABASE_URL;
+
+// ✅ GOOD
+const origin = process.env.EXPO_PUBLIC_API_ORIGIN;
+```

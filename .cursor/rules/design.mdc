@@ -1,0 +1,32 @@
+---
+description: Theme tokens, StyleSheet.create at module scope, radius 0, motion, fonts, contrast
+globs: src/{theme,components,app}/**/*.{ts,tsx}
+alwaysApply: false
+---
+
+# Design
+
+- Tokens live in `src/theme/`, ported from `app/globals.css`. Never hardcode a hex outside `src/theme/colors.ts`.
+- **Never call `StyleSheet.create(...)` inside a component's render body.** Hoist to module scope below the component. Theme/prop/state values go inline via the style array. If nothing is static, skip `StyleSheet.create`. Refs: `src/app/+not-found.tsx`, `src/components/placeholder-screen.tsx`.
+- **Radius is `0` everywhere.**
+- One easing: `Easing.bezier(0.16, 1, 0.3, 1)`. Entrance 600 ms fade + 20 px rise; list stagger 50–60 ms. Guard non-essential animation with `useReducedMotion()`.
+- Light mode: `accentText` (`#00805A`) for type and icons. Raw `#00E5A0` is for fills, dots, rules only (1.58:1 on light).
+- Fonts: `@expo-google-fonts/{space-mono,dm-sans,jetbrains-mono}` via `useFonts` from `src/theme/fonts.ts`; splash holds until they resolve.
+- **No NativeWind** (D3). `expo-tailwind-setup` is installed but not applicable.
+
+```tsx
+// ❌ BAD
+export function Card() {
+  const styles = StyleSheet.create({ root: { padding: Spacing.md } });
+  return <View style={styles.root} />;
+}
+
+// ✅ GOOD
+export function Card({ accent }: { accent: boolean }) {
+  const { colors } = useTheme();
+  return <View style={[styles.root, accent && { backgroundColor: colors.accent }]} />;
+}
+const styles = StyleSheet.create({ root: { padding: Spacing.md } });
+```
+
+Read `docs/01-design-system.md`. Use `expo-design-system` / `expo-native-ui` / `expo-ui`.

@@ -1,0 +1,27 @@
+---
+description: docs/ is the implementation contract; the web repo is source of truth for content and backends
+alwaysApply: true
+---
+
+# Docs contract and web repo
+
+`docs/` is the implementation contract. Read the relevant file **before** touching that area.
+
+| File | Read it before |
+|---|---|
+| `docs/00-roadmap.md` | anything — phases M0–M10, D1–D8 |
+| `docs/01-design-system.md` | colour, font, spacing, radius, motion, UI primitive |
+| `docs/02-screens.md` | screen, route, navigation, section order |
+| `docs/03-api-contract.md` | network, chat streaming, session, lead/contact |
+| `docs/04-content-inventory.md` | data type, record, user-visible copy |
+
+Companion web repo: `~/projects/my-portfolio`. **Source of truth** for content and every backend. Separate repository, not a sibling package.
+
+**Consult it for:** `lib/data/*.ts` + `types/*.ts` (origin of `src/data/`) · `app/globals.css` `@theme` (origin of `src/theme/colors.ts`) · `features/` + `app/(site)/` for copy/section order · `app/api/chat/route.ts`, `lib/chat/*` · `lib/leads/*` · `content/projects/*.mdx`, `content/blog/*.mdx`.
+
+## Cross-repo rules
+
+- **Read-only by default.** Only M4 (native-client channel), M8, and M9 deliberately edit the web repo. Raise any other edit first.
+- **Never copy a value by memory.** If `docs/04-content-inventory.md` disagrees with the web repo, the web repo wins — fix the doc in the same change.
+- Web data changes → re-run `scripts/sync-content.ts`. Do not hand-edit `src/data/`.
+- Honour the web repo's own `CLAUDE.md` / `AGENTS.md` when working there.

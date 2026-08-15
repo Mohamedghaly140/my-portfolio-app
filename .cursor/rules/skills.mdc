@@ -1,0 +1,24 @@
+---
+description: Which project skill to load for Bun, TypeScript, Expo, EAS, and docs lookups
+alwaysApply: true
+---
+
+# Skills and docs lookups
+
+Project skills live in `.cursor/skills/`. Load the matching one:
+
+| Area | Skill |
+|---|---|
+| Bun commands and packages | `bun-first` |
+| TypeScript design | `clean-typescript` |
+| React components | `modern-best-practice-react-components` |
+| Routing, layouts, deep links | `expo-router` |
+| Project layout | `expo-project-structure` |
+| Theming and primitives | `expo-design-system`, `expo-native-ui`, `expo-ui` |
+| Network and caching | `expo-data-fetching` |
+| Native modules, dev builds, SDK upgrades | `expo-module`, `expo-dev-client`, `expo-upgrade` |
+| Builds, updates, store submission (M10) | `eas-workflows`, `eas-app-stores`, `eas-update-insights`, `eas-simulator` |
+
+`expo-tailwind-setup` is present but **not applicable** — D3 rules out NativeWind.
+
+For version-sensitive third-party work, check current official docs. Delegate substantial lookups to the `docs-explorer` subagent in `.cursor/agents/`. Pin answers to this repo's versions (Expo 57, RN 0.86.2, React 19.2.3, expo-router 57, Reanimated 4, TypeScript 6, AI SDK 7), not the latest release.

@@ -1,0 +1,21 @@
+---
+description: Bundled static portfolio data; web lib/data is upstream; airplane-mode screens
+globs: src/{data,types}/**/*.{ts,tsx},scripts/sync-content.ts
+alwaysApply: false
+---
+
+# Content
+
+- Portfolio data is **static, typed and bundled** in `src/data/` (D2). Do not add a database, CMS, or content API for ordinary content.
+- Web repo `lib/data/` is upstream. `src/data/` is a port kept honest by `scripts/sync-content.ts` (`bun run sync-content`).
+- Only two network reads: **blog article bodies** (`GET /api/markdown`) and **chat**. Every other screen must render in airplane mode.
+
+```ts
+// ❌ BAD — inventing a projects API
+const { data } = useQuery({ queryKey: ["projects"], queryFn: fetchProjects });
+
+// ✅ GOOD — bundled module
+import { projects } from "@/data/projects";
+```
+
+If `docs/04-content-inventory.md` and the web repo disagree, the web repo wins — fix the doc in the same change. Never copy values by memory.

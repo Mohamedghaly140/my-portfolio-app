@@ -1,0 +1,24 @@
+---
+description: Tab order, Home-stack screens, and expo-router tree invariants
+globs: src/app/**/*.{ts,tsx}
+alwaysApply: false
+---
+
+# Navigation
+
+- Tab order is **Home · Blogs · Chat · Experience · Contact** and does not change.
+- `NativeTabs.Trigger` names: `(home)`, `(blog)`, `(chat)`, `(experience)`, `(contact)`.
+- About, Projects, Project detail, Skills, Privacy live **only** in the Home stack. Do not promote one to a tab.
+- Router tree is specified in `docs/02-screens.md` §1. Adding a screen means adding it there too.
+- Keep `NativeTabs` (D1) — platform-native tab bar; everything above it is brand.
+
+```tsx
+// ❌ BAD — Skills as a fifth-adjacent tab
+<NativeTabs.Trigger name="skills" />
+
+// ✅ GOOD — Skills pushed inside the Home stack
+<NativeTabs.Trigger name="(home)" />
+// src/app/(tabs)/(home)/skills.tsx
+```
+
+Read `docs/02-screens.md` before changing routes. Use the `expo-router` skill.
