@@ -12,7 +12,7 @@ The **native companion app** to Mohamed Ghaly's portfolio — an Expo / React Na
 
 Five tabs, in this fixed order: **Home · Blogs · Chat · Experience · Contact**. About, Projects, Project detail, Skills and Privacy are pushed inside the **Home stack**, not tabs.
 
-**Status:** M0, M1, M2 and M3 landed — five-tab tree boots on iOS and Android; `src/theme/` tokens, bundled fonts and the ten `src/components/ui/` primitives are in, with a `__DEV__` token gallery at `(home)/gallery`; `src/data/` and `src/types/` are ported from the web repo via `scripts/sync-content.ts`, with project cover images bundled and a `bun test` exit-criterion test; Home, About, Projects, Project detail, Skills, Experience and Privacy all render from bundled data with no network calls. **M4 (backend native-client channel, in the web repo) is next.** Update this line as phases land.
+**Status:** M0, M1, M2 and M3 landed — five-tab tree boots on iOS and Android; `src/theme/` tokens, bundled fonts and the ten `src/components/ui/` primitives are in, with a `__DEV__` token gallery at `(home)/gallery`; `src/data/` and `src/types/` are ported from the web repo via `scripts/sync-content.ts`, with project cover images bundled and a `bun test` exit-criterion test; Home, About, Projects, Project detail, Skills, Experience and Privacy all render from bundled data with no network calls. A 2026-08-15 native UI polish pass on top of M3 fixed those screens reading as mobile-web (native large-title/blur headers, `Button` icon slot, haptics, chevron affordances, pull-to-refresh) — see `01-design-system.md` §10–11; apply those conventions to every screen built from here on. **M4 (backend native-client channel, in the web repo) is next.** Update this line as phases land.
 
 ---
 
@@ -114,6 +114,7 @@ bun run sync-content # Re-port src/data + src/types from the web repo
 - Light mode uses `accentText` (`#00805A`) for type and icons — the raw `#00E5A0` accent is 1.58:1 on light backgrounds and is for fills, dots and rules only.
 - Fonts come from `@expo-google-fonts/{space-mono,dm-sans,jetbrains-mono}` (loaded via `expo-font` `useFonts` from `src/theme/fonts.ts`); the splash holds until they resolve.
 - **Icons always come from `@expo/vector-icons`.** Do not add a separate icon library (e.g. `lucide-react-native`, `react-native-vector-icons`) or inline SVGs for iconography.
+- **Native chrome, icons and haptics are specced in `docs/01-design-system.md` §10–11** — a UI polish pass (2026-08-15) fixed the app reading as a mobile-web view. Read those sections before building any new screen or list row: stack headers use native large-title + blur on iOS (flat themed bar on Android) via each `_layout.tsx`'s `screenOptions`, not per-screen; `Button` takes an `icon` prop (Ionicons) instead of an arrow character embedded in the label string; primary-button presses and card-style navigations fire haptics through `src/lib/haptics.ts` (`lightImpact()` / `selectionChanged()`) — do not call `expo-haptics` directly from a screen; a pushable card/list row gets a trailing `chevron-forward`, not accent-coloured link text (see `ProjectCard`); a screen whose content can meaningfully reload takes `Screen`'s `onRefresh`/`refreshing` props. Full rationale: `docs/superpowers/specs/2026-08-15-native-ui-polish-design.md`.
 
 ### Chat and network
 

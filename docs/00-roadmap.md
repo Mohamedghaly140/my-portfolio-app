@@ -174,7 +174,7 @@ The app repo's `.env` currently holds full production **server** secrets copied 
 2. API client: `expo/fetch` as the `fetch` implementation passed to `DefaultChatTransport`.
 3. Port block parsers (`parseChatDataPart`, `parseToolStatusPart`, `chatBlocksFromParts`, `chatBlockFingerprint`) and resolve slugs against bundled `projects` / `contact` (D7).
 4. Boot: `GET /api/conversations` → restore or `POST /api/conversations`; seed via `?q=` (deep link / in-app CTA).
-5. Streaming UI: composer, message list, stream status, stop, retry, suggested prompts, error notice mapped from local copy table only.
+5. Streaming UI: composer, message list, stream status, stop, retry, suggested prompts, error notice mapped from local copy table only. Follow `01-design-system.md` §10–11 for chrome: send/retry as `Button` with an `icon`, not an embedded arrow; haptics via `src/lib/haptics.ts`, not raw `expo-haptics` calls.
 6. Restore / poll / stop / retry state machine per `03-api-contract.md` §f — poll every 1.5 s while `hasActiveGeneration` and no local stream; drive with `AppState`; stop always also `POST .../cancel`.
 7. Error mapping: never render server `message` text; map wire `code` to local table (+ client `NETWORK`).
 
@@ -193,7 +193,7 @@ The app repo's `.env` currently holds full production **server** secrets copied 
 1. Port `LeadForm` / `ContactHandoff` UI against `POST /api/leads/draft` and `POST /api/leads` (shapes in `03-api-contract.md` §b). Native session headers required.
 2. Contact tab: form → `POST /api/contact` (no Origin/session change needed — works from native today). Contact links from bundled `contact.ts` + `EXPO_PUBLIC_*` social URLs.
 3. Privacy notice version: surface the same version string the draft endpoint returns; link into Home-stack Privacy screen.
-4. Haptics on successful submit; clipboard helpers where the web copies a lead reference.
+4. Haptics on successful submit via `src/lib/haptics.ts` (see `01-design-system.md` §11); clipboard helpers where the web copies a lead reference.
 
 **Files:** `(contact)/index.tsx`, chat block components, `src/lib/api/leads.ts`, `src/lib/api/contact.ts`.
 
@@ -207,7 +207,7 @@ The app repo's `.env` currently holds full production **server** secrets copied 
 
 **Tasks:**
 
-1. Blog index from `getPublishedPosts()` (bundled).
+1. Blog index from `getPublishedPosts()` (bundled). List rows follow `ProjectCard`'s chevron-affordance pattern (`01-design-system.md` §11), not text-link footers; the index screen is a real pull-to-refresh candidate (`Screen`'s `onRefresh`/`refreshing`, §11) since articles can actually change.
 2. Article screen: header from bundled post; body fetched as markdown, rendered with a small RN markdown component (square corners, brand type). Cache the response in react-query.
 3. Confirm M4's blog path extension is live before declaring done; 404 markdown must show a local error state, not crash.
 4. Optional: project case-study bodies can reuse the same markdown client against `/projects/<slug>`.
@@ -227,7 +227,7 @@ The app repo's `.env` currently holds full production **server** secrets copied 
 1. Persist react-query cache (AsyncStorage or equivalent) for markdown and any non-sensitive GETs. Chat transcript remains server-authoritative + secure-store session; do not put session tokens in the query cache.
 2. Universal links: serve `apple-app-site-association` and `assetlinks.json` from the Next.js site's `public/.well-known/`, mapping `/projects/<slug>`, `/blog/<slug>`, and `/chat?q=` onto the tab stacks. Keep `moghaly://` custom scheme.
 3. Share sheet for project / blog URLs (`EXPO_PUBLIC_SITE_URL` + path).
-4. Haptics on tab select / primary actions; respect `useReducedMotion()` for Reveal / list stagger.
+4. Haptics on tab select (primary-action and card-selection haptics already landed in the 2026-08-15 UI polish pass, `01-design-system.md` §11 — this task is now just the remaining tab-select case, via the same `src/lib/haptics.ts`); respect `useReducedMotion()` for Reveal / list stagger.
 5. VoiceOver / TalkBack pass on Home, Chat, Contact.
 6. Route-level error boundaries (`+not-found.tsx` already in tree; add stack `error` boundaries where expo-router supports them).
 
