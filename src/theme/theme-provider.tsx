@@ -7,7 +7,7 @@ import { getTheme, type AppTheme } from './index';
 
 const ThemeContext = createContext<AppTheme | null>(null);
 
-function resolveScheme(
+export function resolveScheme(
   override: ColorSchemeName | undefined,
   system: string | null | undefined,
 ): ColorSchemeName {

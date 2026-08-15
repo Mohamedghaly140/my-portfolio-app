@@ -3,15 +3,23 @@ import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
-import { useColorScheme } from 'react-native';
 
 import { fontAssets } from '@/theme/fonts';
+import { ThemePreferenceProvider, useThemePreference } from '@/theme/theme-preference-provider';
 import { AppThemeProvider } from '@/theme/theme-provider';
 
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
+  return (
+    <ThemePreferenceProvider>
+      <RootLayoutNav />
+    </ThemePreferenceProvider>
+  );
+}
+
+function RootLayoutNav() {
+  const { resolvedScheme } = useThemePreference();
   const [fontsLoaded, fontError] = useFonts(fontAssets);
 
   useEffect(() => {
@@ -25,8 +33,8 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <AppThemeProvider>
+    <ThemeProvider value={resolvedScheme === 'dark' ? DarkTheme : DefaultTheme}>
+      <AppThemeProvider scheme={resolvedScheme}>
         <Stack screenOptions={{ headerShown: false }}>
           <Stack.Screen name="(tabs)" />
           <Stack.Screen name="+not-found" options={{ headerShown: true, title: 'Not found' }} />
