@@ -30,26 +30,28 @@ export function Badge({ label, variant = 'muted' }: BadgeProps) {
             borderColor: colors.border,
           };
 
-  const styles = StyleSheet.create({
-    root: {
-      alignSelf: 'flex-start',
-      backgroundColor: palette.backgroundColor,
-      borderColor: palette.borderColor,
-      borderWidth: 1,
-      paddingHorizontal: 10,
-      paddingVertical: 2,
-    },
-    label: {
-      color: palette.color,
-      fontFamily: FontFamilies.display,
-      fontSize: 12,
-      lineHeight: 18,
-    },
-  });
-
   return (
-    <View style={styles.root}>
-      <Text style={styles.label}>{label}</Text>
+    <View
+      style={[
+        styles.root,
+        { backgroundColor: palette.backgroundColor, borderColor: palette.borderColor },
+      ]}
+    >
+      <Text style={[styles.label, { color: palette.color }]}>{label}</Text>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  root: {
+    alignSelf: 'flex-start',
+    borderWidth: 1,
+    paddingHorizontal: 10,
+    paddingVertical: 2,
+  },
+  label: {
+    fontFamily: FontFamilies.display,
+    fontSize: 12,
+    lineHeight: 18,
+  },
+});

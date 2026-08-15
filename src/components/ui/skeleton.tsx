@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import { StyleSheet } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useReducedMotion,
@@ -41,13 +40,7 @@ export function Skeleton({ width, height }: SkeletonProps) {
     opacity: opacity.value,
   }));
 
-  const styles = StyleSheet.create({
-    root: {
-      backgroundColor: colors.border,
-      height,
-      width,
-    },
-  });
-
-  return <Animated.View style={[styles.root, animatedStyle]} />;
+  return (
+    <Animated.View style={[{ backgroundColor: colors.border, height, width }, animatedStyle]} />
+  );
 }

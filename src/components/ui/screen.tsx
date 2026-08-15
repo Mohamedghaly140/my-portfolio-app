@@ -22,34 +22,35 @@ export function Screen({
   safe = true,
 }: ScreenProps) {
   const { colors, spacing } = useTheme();
-
-  const styles = StyleSheet.create({
-    root: {
-      backgroundColor: colors.bg,
-      flex: 1,
-      paddingHorizontal: gutter ? spacing.gutter : 0,
-    },
-    scroll: {
-      backgroundColor: colors.bg,
-      flex: 1,
-    },
-    content: {
-      flexGrow: 1,
-      paddingHorizontal: gutter ? spacing.gutter : 0,
-    },
-  });
+  const horizontalPadding = gutter ? spacing.gutter : 0;
 
   if (scroll) {
     return (
       <ScrollView
-        contentContainerStyle={styles.content}
+        contentContainerStyle={[styles.content, { paddingHorizontal: horizontalPadding }]}
         contentInsetAdjustmentBehavior={safe ? 'automatic' : 'never'}
-        style={styles.scroll}
+        style={[styles.scroll, { backgroundColor: colors.bg }]}
       >
         {children}
       </ScrollView>
     );
   }
 
-  return <View style={styles.root}>{children}</View>;
+  return (
+    <View style={[styles.root, { backgroundColor: colors.bg, paddingHorizontal: horizontalPadding }]}>
+      {children}
+    </View>
+  );
 }
+
+const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+  },
+  scroll: {
+    flex: 1,
+  },
+  content: {
+    flexGrow: 1,
+  },
+});

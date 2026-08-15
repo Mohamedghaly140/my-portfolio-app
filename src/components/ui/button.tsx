@@ -25,40 +25,28 @@ export function Button({
   const isDisabled = disabled || loading;
   const isPrimary = variant === 'primary';
 
-  const styles = StyleSheet.create({
-    root: {
-      alignItems: 'center',
-      backgroundColor: isPrimary ? colors.accent : 'transparent',
-      borderColor: isPrimary ? 'transparent' : colors.accentText,
-      borderWidth: isPrimary ? 0 : 1,
-      flexDirection: 'row',
-      gap: 6,
-      justifyContent: 'center',
-      minHeight: 44,
-      opacity: isDisabled ? 0.5 : 1,
-      paddingHorizontal: 24,
-      paddingVertical: 10,
-    },
-    label: {
-      // Primary fill uses accent with label colour bg — 11.96:1 in both schemes.
-      color: isPrimary ? colors.bg : colors.accentText,
-      fontFamily: FontFamilies.displayBold,
-      fontSize: 14,
-      lineHeight: 20,
-    },
-  });
-
   const content = (
     <Pressable
       accessibilityRole="button"
       disabled={isDisabled}
       onPress={onPress}
-      style={styles.root}
+      style={[
+        styles.root,
+        {
+          backgroundColor: isPrimary ? colors.accent : 'transparent',
+          borderColor: isPrimary ? 'transparent' : colors.accentText,
+          borderWidth: isPrimary ? 0 : 1,
+          opacity: isDisabled ? 0.5 : 1,
+        },
+      ]}
     >
       {loading ? (
         <ActivityIndicator color={isPrimary ? colors.bg : colors.accentText} />
       ) : (
-        <Text style={styles.label}>{label}</Text>
+        // Primary fill uses accent with label colour bg — 11.96:1 in both schemes.
+        <Text style={[styles.label, { color: isPrimary ? colors.bg : colors.accentText }]}>
+          {label}
+        </Text>
       )}
     </Pressable>
   );
@@ -73,3 +61,20 @@ export function Button({
 
   return content;
 }
+
+const styles = StyleSheet.create({
+  root: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: 6,
+    justifyContent: 'center',
+    minHeight: 44,
+    paddingHorizontal: 24,
+    paddingVertical: 10,
+  },
+  label: {
+    fontFamily: FontFamilies.displayBold,
+    fontSize: 14,
+    lineHeight: 20,
+  },
+});

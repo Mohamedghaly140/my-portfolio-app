@@ -6,7 +6,7 @@ import {
   type TextStyle,
 } from 'react-native';
 
-import { type TypeRole } from '@/theme';
+import { Typography, type TypeRole } from '@/theme';
 import { useTheme } from '@/theme/theme-provider';
 
 export type TextProps = {
@@ -26,7 +26,7 @@ export function Text({
   numberOfLines,
   accessibilityRole,
 }: TextProps) {
-  const { colors, typography } = useTheme();
+  const { colors } = useTheme();
 
   // `color="accent"` must resolve to accentText, never the raw accent.
   // The raw accent is 1.58:1 on the light background — fills, dots and rules only.
@@ -35,20 +35,24 @@ export function Text({
       ? colors.accentText
       : colors[color];
 
-  const styles = StyleSheet.create({
-    root: {
-      ...typography[role],
-      color: resolvedColor,
-    },
-  });
-
   return (
     <RNText
       accessibilityRole={accessibilityRole}
       numberOfLines={numberOfLines}
-      style={[styles.root, style]}
+      style={[styles[role], { color: resolvedColor }, style]}
     >
       {children}
     </RNText>
   );
 }
+
+const styles = StyleSheet.create({
+  title: Typography.title,
+  heading: Typography.heading,
+  subheading: Typography.subheading,
+  body: Typography.body,
+  bodyMedium: Typography.bodyMedium,
+  small: Typography.small,
+  label: Typography.label,
+  code: Typography.code,
+});

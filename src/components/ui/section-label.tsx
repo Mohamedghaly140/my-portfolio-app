@@ -1,5 +1,6 @@
 import { StyleSheet, Text } from 'react-native';
 
+import { Typography } from '@/theme';
 import { useTheme } from '@/theme/theme-provider';
 
 export type SectionLabelProps = {
@@ -7,14 +8,13 @@ export type SectionLabelProps = {
 };
 
 export function SectionLabel({ children }: SectionLabelProps) {
-  const { colors, typography } = useTheme();
+  const { colors } = useTheme();
 
-  const styles = StyleSheet.create({
-    root: {
-      ...typography.label,
-      color: colors.accentText,
-    },
-  });
-
-  return <Text style={styles.root}>{children}</Text>;
+  return <Text style={[styles.root, { color: colors.accentText }]}>{children}</Text>;
 }
+
+const styles = StyleSheet.create({
+  root: {
+    ...Typography.label,
+  },
+});

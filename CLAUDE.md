@@ -107,6 +107,7 @@ bun run sync-content # Re-port src/data + src/types from the web repo
 ### Design
 
 - Tokens live in `src/theme/`, ported from `app/globals.css`. Never hardcode a hex outside `src/theme/colors.ts`.
+- **Never call `StyleSheet.create(...)` inside a component's render body.** It reallocates and re-registers every style object on every render. Define `const styles = StyleSheet.create({...})` at module scope in the same file, below the component, holding only values that don't vary per render (layout, spacing, `Typography`/`FontFamilies` entries). Values that depend on theme, props, or state (`colors.*`, conditional booleans) go inline, merged via the style array: `style={[styles.root, { backgroundColor: colors.accent }]}`. If a style has nothing static to hoist, skip `StyleSheet.create` entirely and pass a plain inline object. Reference implementations: `src/app/+not-found.tsx`, `src/components/placeholder-screen.tsx`.
 - **Radius is `0` everywhere.** Square corners are a rule the web enforces with a test; keep it.
 - One easing curve: `Easing.bezier(0.16, 1, 0.3, 1)`. Entrance is 600 ms fade + 20 px rise; list stagger 50–60 ms.
 - Guard every non-essential animation with `useReducedMotion()`.

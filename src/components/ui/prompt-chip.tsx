@@ -11,48 +11,37 @@ export type PromptChipProps = {
 export function PromptChip({ label, onPress }: PromptChipProps) {
   const { colors } = useTheme();
 
-  const styles = StyleSheet.create({
-    root: {
-      alignItems: 'center',
-      alignSelf: 'flex-start',
-      backgroundColor: 'transparent',
-      borderWidth: 1,
-      justifyContent: 'center',
-      minHeight: 44,
-      paddingHorizontal: 16,
-      paddingVertical: 8,
-    },
-    rest: {
-      borderColor: colors.border,
-    },
-    pressed: {
-      borderColor: colors.accentText,
-    },
-    labelRest: {
-      color: colors.textMuted,
-      fontFamily: FontFamilies.display,
-      fontSize: 12,
-      lineHeight: 18,
-    },
-    labelPressed: {
-      color: colors.accentText,
-    },
-  });
-
   return (
     <Pressable
       accessibilityRole="button"
       onPress={onPress}
       style={({ pressed }) => [
         styles.root,
-        pressed ? styles.pressed : styles.rest,
+        { borderColor: pressed ? colors.accentText : colors.border },
       ]}
     >
       {({ pressed }) => (
-        <Text style={[styles.labelRest, pressed && styles.labelPressed]}>
+        <Text style={[styles.label, { color: pressed ? colors.accentText : colors.textMuted }]}>
           {label}
         </Text>
       )}
     </Pressable>
   );
 }
+
+const styles = StyleSheet.create({
+  root: {
+    alignItems: 'center',
+    alignSelf: 'flex-start',
+    borderWidth: 1,
+    justifyContent: 'center',
+    minHeight: 44,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+  },
+  label: {
+    fontFamily: FontFamilies.display,
+    fontSize: 12,
+    lineHeight: 18,
+  },
+});

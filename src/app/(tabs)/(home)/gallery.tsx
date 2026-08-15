@@ -37,36 +37,6 @@ function GalleryContent({
 }) {
   const { colors } = useTheme();
 
-  const styles = StyleSheet.create({
-    section: {
-      gap: Spacing.two,
-      paddingVertical: Spacing.three,
-    },
-    row: {
-      flexDirection: 'row',
-      flexWrap: 'wrap',
-      gap: Spacing.two,
-    },
-    cardBody: {
-      gap: Spacing.two,
-      padding: Spacing.three,
-    },
-    toggle: {
-      alignItems: 'center',
-      borderColor: colors.border,
-      borderWidth: 1,
-      minHeight: 44,
-      paddingHorizontal: Spacing.three,
-      paddingVertical: Spacing.two,
-    },
-    toggleLabel: {
-      color: colors.accentText,
-      fontFamily: FontFamilies.displayBold,
-      fontSize: 14,
-      lineHeight: 20,
-    },
-  });
-
   return (
     <Screen>
       <View style={styles.section}>
@@ -77,9 +47,9 @@ function GalleryContent({
         <Pressable
           accessibilityRole="button"
           onPress={onToggleScheme}
-          style={styles.toggle}
+          style={[styles.toggle, { borderColor: colors.border }]}
         >
-          <Text style={styles.toggleLabel}>
+          <Text style={[styles.toggleLabel, { color: colors.accentText }]}>
             Switch to {scheme === 'dark' ? 'light' : 'dark'}
           </Text>
         </Pressable>
@@ -170,6 +140,34 @@ function GalleryContent({
     </Screen>
   );
 }
+
+const styles = StyleSheet.create({
+  section: {
+    gap: Spacing.two,
+    paddingVertical: Spacing.three,
+  },
+  row: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: Spacing.two,
+  },
+  cardBody: {
+    gap: Spacing.two,
+    padding: Spacing.three,
+  },
+  toggle: {
+    alignItems: 'center',
+    borderWidth: 1,
+    minHeight: 44,
+    paddingHorizontal: Spacing.three,
+    paddingVertical: Spacing.two,
+  },
+  toggleLabel: {
+    fontFamily: FontFamilies.displayBold,
+    fontSize: 14,
+    lineHeight: 20,
+  },
+});
 
 export default function TokenGalleryScreen() {
   const [scheme, setScheme] = useState<ColorSchemeName>('dark');

@@ -17,28 +17,40 @@ export type CardProps = {
 export function Card({ children, onPress, style }: CardProps) {
   const { colors } = useTheme();
 
-  const styles = StyleSheet.create({
-    root: {
-      backgroundColor: colors.surface,
-      borderColor: colors.border,
-      borderWidth: 1,
-    },
-    pressed: {
-      borderColor: colors.borderPressed,
-    },
-  });
-
   if (onPress) {
     return (
       <Pressable
         accessibilityRole="button"
         onPress={onPress}
-        style={({ pressed }) => [styles.root, pressed && styles.pressed, style]}
+        style={({ pressed }) => [
+          styles.root,
+          {
+            backgroundColor: colors.surface,
+            borderColor: pressed ? colors.borderPressed : colors.border,
+          },
+          style,
+        ]}
       >
         {children}
       </Pressable>
     );
   }
 
-  return <View style={[styles.root, style]}>{children}</View>;
+  return (
+    <View
+      style={[
+        styles.root,
+        { backgroundColor: colors.surface, borderColor: colors.border },
+        style,
+      ]}
+    >
+      {children}
+    </View>
+  );
 }
+
+const styles = StyleSheet.create({
+  root: {
+    borderWidth: 1,
+  },
+});

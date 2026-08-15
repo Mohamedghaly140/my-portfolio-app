@@ -10,13 +10,18 @@ export type DividerProps = {
 export function Divider({ inset = false }: DividerProps) {
   const { colors } = useTheme();
 
-  const styles = StyleSheet.create({
-    root: {
-      backgroundColor: colors.border,
-      height: StyleSheet.hairlineWidth,
-      marginHorizontal: inset ? Spacing.gutter : 0,
-    },
-  });
-
-  return <View style={styles.root} />;
+  return (
+    <View
+      style={[
+        styles.root,
+        { backgroundColor: colors.border, marginHorizontal: inset ? Spacing.gutter : 0 },
+      ]}
+    />
+  );
 }
+
+const styles = StyleSheet.create({
+  root: {
+    height: StyleSheet.hairlineWidth,
+  },
+});
