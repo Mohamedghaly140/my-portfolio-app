@@ -51,6 +51,7 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "lint": "expo lint",
+    "test": "bun test",
     "sync-content": "bun run scripts/sync-content.ts"
   },
   "private": true
