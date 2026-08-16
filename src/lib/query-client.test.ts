@@ -41,3 +41,12 @@ describe("setupOnlineManager", () => {
     expect(onlineManager.isOnline()).toBe(false);
   });
 });
+
+describe("shouldDehydrateQuery", () => {
+  test("persists only markdown query keys", async () => {
+    const { shouldDehydrateQuery } = await import("./query-client");
+
+    expect(shouldDehydrateQuery({ queryKey: ["markdown", "/blog/some-post"] })).toBe(true);
+    expect(shouldDehydrateQuery({ queryKey: ["something-else", "x"] })).toBe(false);
+  });
+});

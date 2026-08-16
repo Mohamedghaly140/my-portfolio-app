@@ -5,13 +5,14 @@ import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 
-import { queryClient, setupOnlineManager, useQueryFocusManager } from '@/lib/query-client';
+import { queryClient, setupOnlineManager, setupQueryPersistence, useQueryFocusManager } from '@/lib/query-client';
 import { fontAssets } from '@/theme/fonts';
 import { ThemePreferenceProvider, useThemePreference } from '@/theme/theme-preference-provider';
 import { AppThemeProvider } from '@/theme/theme-provider';
 
 SplashScreen.preventAutoHideAsync();
 setupOnlineManager();
+setupQueryPersistence();
 
 export default function RootLayout() {
   useQueryFocusManager();
