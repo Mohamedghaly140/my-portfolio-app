@@ -3,8 +3,10 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import * as Linking from 'expo-linking';
 import { router, useLocalSearchParams } from 'expo-router';
 
-import { Badge, Divider, Reveal, Text } from '@/components/ui';
+import { MarkdownBody } from '@/components/markdown-body';
+import { Badge, Divider, Reveal, Skeleton, Text } from '@/components/ui';
 import { getProjectBySlug } from '@/data/projects';
+import { useArticleMarkdown } from '@/features/blog/use-article-markdown';
 import type { Project } from '@/types/project';
 import { Motion, Spacing } from '@/theme';
 
@@ -89,6 +91,33 @@ function ProjectNotFound() {
   );
 }
 
+function CaseStudyBody({ project }: { project: Project }) {
+  const { data, isLoading, error } = useArticleMarkdown(
+    `/projects/${project.slug}`,
+  );
+
+  if (isLoading) {
+    return (
+      <View style={styles.skeletonStack}>
+        <Skeleton height={16} width="100%" />
+        <Skeleton height={16} width="92%" />
+        <Skeleton height={16} width="78%" />
+        <Skeleton height={16} width="86%" />
+      </View>
+    );
+  }
+
+  if (error || !data) {
+    return (
+      <Text role="body" style={styles.bodyText}>
+        {project.description}
+      </Text>
+    );
+  }
+
+  return <MarkdownBody markdown={data} />;
+}
+
 export function ProjectDetailScreen() {
   const { slug: slugParam } = useLocalSearchParams<{ slug: string }>();
   const slug = typeof slugParam === 'string' ? slugParam : slugParam?.[0];
@@ -161,10 +190,7 @@ export function ProjectDetailScreen() {
       <Reveal delayMs={Motion.staggerMs * 4}>
         <View style={styles.body}>
           <Divider />
-          {/* Full MDX case-study body deferred to M7/M8; description is the offline body for now. */}
-          <Text role="body" style={styles.bodyText}>
-            {project.description}
-          </Text>
+          <CaseStudyBody project={project} />
         </View>
       </Reveal>
     </View>
@@ -202,6 +228,9 @@ const styles = StyleSheet.create({
   },
   bodyText: {
     marginTop: Spacing.one,
+  },
+  skeletonStack: {
+    gap: Spacing.two,
   },
   notFound: {
     alignItems: 'center',
