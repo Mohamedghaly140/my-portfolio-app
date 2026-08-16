@@ -4,7 +4,7 @@ Implementation plan for turning the Expo SDK 57 scaffold in this repository into
 
 **Product:** a five-tab app — **Home · Blogs · Experience · Contact · Settings** — with About, Projects, Project detail, Skills, and Privacy pushed inside the Home stack. Chat is not a tab: it's a root-level modal reached from a global floating action button, visible on every screen (superseded 2026-08-16, see D1).
 
-**Status:** M0–M6 landed. See `CLAUDE.md`'s Status line for the current summary; update both together as phases land. M6 still needs an on-device verification pass before it's fully closed. M7 (Blogs tab) is next.
+**Status:** M0–M6 landed. See `CLAUDE.md`'s Status line for the current summary; update both together as phases land. M6 is device-verified on iOS only (Android deferred — user accepted iOS-only for now). M7 (Blogs tab) is next.
 
 Cross-references: design system → [`01-design-system.md`](./01-design-system.md); every screen → [`02-screens.md`](./02-screens.md); backend contract → [`03-api-contract.md`](./03-api-contract.md); content inventory → [`04-content-inventory.md`](./04-content-inventory.md).
 
