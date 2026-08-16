@@ -1,5 +1,5 @@
 import { type ReactNode } from 'react';
-import { StyleSheet, Text as RNText, View } from 'react-native';
+import { Linking, StyleSheet, Text as RNText, View } from 'react-native';
 
 import { Text } from '@/components/ui';
 import { FontFamilies, Spacing, Typography } from '@/theme';
@@ -10,7 +10,7 @@ export type MarkdownBodyProps = {
 };
 
 type Block =
-  | { type: 'heading'; text: string }
+  | { type: 'heading'; level: number; text: string }
   | { type: 'paragraph'; text: string }
   | { type: 'list'; items: string[] }
   | { type: 'code'; text: string };
@@ -40,8 +40,13 @@ function parseBlocks(markdown: string): Block[] {
       continue;
     }
 
-    if (line.startsWith('## ')) {
-      blocks.push({ type: 'heading', text: line.slice(3).trim() });
+    const headingMatch = /^(#{1,6})\s+(.*)$/.exec(line);
+    if (headingMatch) {
+      blocks.push({
+        type: 'heading',
+        level: headingMatch[1].length,
+        text: headingMatch[2].trim(),
+      });
       i += 1;
       continue;
     }
@@ -60,7 +65,7 @@ function parseBlocks(markdown: string): Block[] {
     while (
       i < lines.length &&
       lines[i].trim() !== '' &&
-      !lines[i].startsWith('## ') &&
+      !/^#{1,6}\s+/.test(lines[i]) &&
       !lines[i].startsWith('```') &&
       !/^[-*]\s+/.test(lines[i])
     ) {
@@ -73,9 +78,12 @@ function parseBlocks(markdown: string): Block[] {
   return blocks;
 }
 
-function renderInline(text: string, codeColor: string): ReactNode[] {
+function renderInline(
+  text: string,
+  linkColors: { code: string; accent: string },
+): ReactNode[] {
   const nodes: ReactNode[] = [];
-  const pattern = /(\*\*[^*]+\*\*|`[^`]+`)/g;
+  const pattern = /(\*\*[^*]+\*\*|`[^`]+`|\[[^\]]+\]\([^)]+\)|_[^_]+_)/g;
   let lastIndex = 0;
   let match: RegExpExecArray | null;
   let key = 0;
@@ -94,7 +102,29 @@ function renderInline(text: string, codeColor: string): ReactNode[] {
       );
     } else if (token.startsWith('`') && token.endsWith('`')) {
       nodes.push(
-        <RNText key={key} style={[styles.inlineCode, { color: codeColor }]}>
+        <RNText key={key} style={[styles.inlineCode, { color: linkColors.code }]}>
+          {token.slice(1, -1)}
+        </RNText>,
+      );
+    } else if (token.startsWith('[')) {
+      const linkMatch = /^\[([^\]]+)\]\(([^)]+)\)$/.exec(token);
+      if (linkMatch) {
+        const [, linkText, url] = linkMatch;
+        nodes.push(
+          <RNText
+            key={key}
+            onPress={() => void Linking.openURL(url)}
+            style={[styles.link, { color: linkColors.accent }]}
+          >
+            {linkText}
+          </RNText>,
+        );
+      } else {
+        nodes.push(token);
+      }
+    } else if (token.startsWith('_') && token.endsWith('_')) {
+      nodes.push(
+        <RNText key={key} style={styles.italic}>
           {token.slice(1, -1)}
         </RNText>,
       );
@@ -116,6 +146,7 @@ function renderInline(text: string, codeColor: string): ReactNode[] {
 export function MarkdownBody({ markdown }: MarkdownBodyProps) {
   const { colors } = useTheme();
   const blocks = parseBlocks(markdown);
+  const linkColors = { code: colors.code, accent: colors.accentText };
 
   return (
     <View style={styles.root}>
@@ -123,14 +154,18 @@ export function MarkdownBody({ markdown }: MarkdownBodyProps) {
         switch (block.type) {
           case 'heading':
             return (
-              <Text key={index} role="subheading" style={styles.heading}>
+              <Text
+                key={index}
+                role={block.level <= 1 ? 'heading' : 'subheading'}
+                style={styles.heading}
+              >
                 {block.text}
               </Text>
             );
           case 'paragraph':
             return (
               <Text key={index} role="body" style={styles.paragraph}>
-                {renderInline(block.text, colors.code)}
+                {renderInline(block.text, linkColors)}
               </Text>
             );
           case 'list':
@@ -139,7 +174,7 @@ export function MarkdownBody({ markdown }: MarkdownBodyProps) {
                 {block.items.map((item, itemIndex) => (
                   <Text key={itemIndex} role="body" style={styles.listItem}>
                     {'• '}
-                    {renderInline(item, colors.code)}
+                    {renderInline(item, linkColors)}
                   </Text>
                 ))}
               </View>
@@ -190,6 +225,12 @@ const styles = StyleSheet.create({
   },
   bold: {
     fontFamily: FontFamilies.bodyBold,
+  },
+  italic: {
+    fontStyle: 'italic',
+  },
+  link: {
+    textDecorationLine: 'underline',
   },
   inlineCode: {
     fontFamily: FontFamilies.code,
