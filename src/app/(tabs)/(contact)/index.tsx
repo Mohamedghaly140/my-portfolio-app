@@ -1,5 +1,10 @@
-import { PlaceholderScreen } from '@/components/placeholder-screen';
+import { Screen } from '@/components/ui';
+import { ContactScreen } from '@/features/contact';
 
-export default function ContactScreen() {
-  return <PlaceholderScreen title="Contact" />;
+export default function ContactRoute() {
+  return (
+    <Screen>
+      <ContactScreen />
+    </Screen>
+  );
 }

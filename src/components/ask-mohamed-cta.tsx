@@ -7,7 +7,7 @@ import { Motion, Spacing } from '@/theme';
 import { useTheme } from '@/theme/theme-provider';
 
 export type AskMohamedCTAProps = {
-  variant?: 'banner' | 'compact';
+  variant?: 'banner' | 'compact' | 'inline';
 };
 
 const BANNER_PROMPTS = SUGGESTED_PROMPTS.slice(0, 4);
@@ -21,9 +21,17 @@ function openChatWithPrompt(prompt: string) {
   });
 }
 
+function openChat() {
+  router.push('/chat');
+}
+
 export function AskMohamedCTA({ variant = 'banner' }: AskMohamedCTAProps) {
   if (variant === 'compact') {
     return <CompactCTA />;
+  }
+
+  if (variant === 'inline') {
+    return <InlineCTA />;
   }
 
   return <BannerCTA />;
@@ -129,6 +137,22 @@ function CompactCTA() {
   );
 }
 
+function InlineCTA() {
+  return (
+    <View style={styles.inlineSection}>
+      <Text color="textMuted" role="body" style={styles.inlinePrompt}>
+        Not ready to send a message?
+      </Text>
+      <Button
+        icon={{ name: 'arrow-forward' }}
+        label="Or ask Mo Ghaly GPT first"
+        onPress={openChat}
+        variant="ghost"
+      />
+    </View>
+  );
+}
+
 const styles = StyleSheet.create({
   bannerSection: {
     marginHorizontal: -Spacing.gutter,
@@ -185,5 +209,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: Spacing.two,
+  },
+  inlineSection: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: Spacing.two,
+    paddingVertical: Spacing.five,
+  },
+  inlinePrompt: {
+    flexShrink: 1,
   },
 });
