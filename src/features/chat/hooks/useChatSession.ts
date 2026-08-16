@@ -85,6 +85,7 @@ export function useChatSession(): {
   stop: () => void;
   retry: () => void;
   newChat: () => void;
+  isStartingNewChat: boolean;
   bootState: BootState;
 } {
   const boot = useConversationBoot();
@@ -98,6 +99,7 @@ export function useChatSession(): {
   const [activeToolLabel, setActiveToolLabel] = useState<string | null>(null);
   const [stoppedIds, setStoppedIds] = useState(() => new Set<string>());
   const [lastError, setLastError] = useState<SessionError | null>(null);
+  const [isStartingNewChat, setIsStartingNewChat] = useState(false);
   const [draftText, setDraftText] = useState("");
 
   const lastSubmittedTextRef = useRef<string | null>(null);
@@ -335,42 +337,48 @@ export function useChatSession(): {
   }, [bootState.phase, clearError, messages, regenerate, retryBoot]);
 
   const newChat = useCallback((): void => {
+    if (isStartingNewChat) return;
+    setIsStartingNewChat(true);
     void (async () => {
-      const currentId = conversationId;
-      if (currentId) {
-        try {
-          await deleteConversation(currentId);
-        } catch {
-          // Ignore failure/409 — still create a fresh conversation.
-        }
-      }
-
       try {
-        const snapshot = await createConversation();
-        hydratedBootKeyRef.current = `ready:${snapshot.id}:${snapshot.version}`;
-        pendingHydrationRef.current = [];
-        setConversationId(snapshot.id);
-        setSnapshotVersion(snapshot.version);
-        setHasActiveGeneration(false);
-        setStoppedIds(new Set());
-        setLastError(null);
-        setConnected(false);
-        setActiveToolLabel(null);
-        setDraftText("");
-        lastSubmittedTextRef.current = null;
-        clearError();
-        save({
-          version: CACHE_VERSION,
-          conversationId: snapshot.id,
-          snapshotVersion: snapshot.version,
-          messages: [],
-          stoppedIds: [],
-        });
-      } catch {
-        // Leave the current session intact if create fails.
+        const currentId = conversationId;
+        if (currentId) {
+          try {
+            await deleteConversation(currentId);
+          } catch {
+            // Ignore failure/409 — still create a fresh conversation.
+          }
+        }
+
+        try {
+          const snapshot = await createConversation();
+          hydratedBootKeyRef.current = `ready:${snapshot.id}:${snapshot.version}`;
+          pendingHydrationRef.current = [];
+          setConversationId(snapshot.id);
+          setSnapshotVersion(snapshot.version);
+          setHasActiveGeneration(false);
+          setStoppedIds(new Set());
+          setLastError(null);
+          setConnected(false);
+          setActiveToolLabel(null);
+          setDraftText("");
+          lastSubmittedTextRef.current = null;
+          clearError();
+          save({
+            version: CACHE_VERSION,
+            conversationId: snapshot.id,
+            snapshotVersion: snapshot.version,
+            messages: [],
+            stoppedIds: [],
+          });
+        } catch {
+          // Leave the current session intact if create fails.
+        }
+      } finally {
+        setIsStartingNewChat(false);
       }
     })();
-  }, [clearError, conversationId, save]);
+  }, [clearError, conversationId, isStartingNewChat, save]);
 
   return {
     messages,
@@ -383,6 +391,7 @@ export function useChatSession(): {
     stop,
     retry,
     newChat,
+    isStartingNewChat,
     bootState,
   };
 }

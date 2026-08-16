@@ -1,6 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
-import { Pressable, StyleSheet, View } from "react-native";
 import { router } from "expo-router";
+import { ActivityIndicator, Pressable, StyleSheet, View } from "react-native";
 
 import { lightImpact, selectionChanged } from "@/lib/haptics";
 import { Spacing } from "@/theme";
@@ -8,19 +8,24 @@ import { useTheme } from "@/theme/theme-provider";
 
 type ChatHeaderActionsProps = {
   newChat: () => void;
+  isStartingNewChat: boolean;
 };
 
-export function ChatHeaderActions({ newChat }: ChatHeaderActionsProps) {
+export function ChatHeaderActions({
+  newChat,
+  isStartingNewChat,
+}: ChatHeaderActionsProps) {
   const { colors } = useTheme();
 
   function handleNewChat() {
+    if (isStartingNewChat) return;
     lightImpact();
     newChat();
   }
 
   function handlePrivacy() {
     selectionChanged();
-    router.push("/(tabs)/(home)/privacy");
+    router.push("/chat/privacy");
   }
 
   return (
@@ -28,11 +33,21 @@ export function ChatHeaderActions({ newChat }: ChatHeaderActionsProps) {
       <Pressable
         accessibilityLabel="New chat"
         accessibilityRole="button"
+        accessibilityState={{ disabled: isStartingNewChat, busy: isStartingNewChat }}
+        disabled={isStartingNewChat}
         hitSlop={8}
         onPress={handleNewChat}
         style={styles.button}
       >
-        <Ionicons color={colors.accentText} name="add-circle-outline" size={22} />
+        {isStartingNewChat ? (
+          <ActivityIndicator color={colors.accentText} size="small" />
+        ) : (
+          <Ionicons
+            color={colors.accentText}
+            name="add-circle-outline"
+            size={22}
+          />
+        )}
       </Pressable>
       <Pressable
         accessibilityLabel="Privacy and help"

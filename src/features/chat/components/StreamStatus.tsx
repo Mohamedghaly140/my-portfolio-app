@@ -56,5 +56,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: Spacing.two,
     minHeight: 24,
+    paddingHorizontal: Spacing.gutter,
   },
 });

@@ -1,10 +1,9 @@
-import { Ionicons } from '@expo/vector-icons';
-import { isLiquidGlassAvailable } from 'expo-glass-effect';
-import { router, Stack } from 'expo-router';
-import { Pressable } from 'react-native';
+import { Ionicons } from "@expo/vector-icons";
+import { router, Stack } from "expo-router";
+import { Pressable } from "react-native";
 
-import { FontFamilies } from '@/theme';
-import { useTheme } from '@/theme/theme-provider';
+import { FontFamilies } from "@/theme";
+import { useTheme } from "@/theme/theme-provider";
 
 function ChatCloseButton({ tintColor }: { tintColor: string }) {
   return (
@@ -20,46 +19,38 @@ function ChatCloseButton({ tintColor }: { tintColor: string }) {
 }
 
 export default function ChatStackLayout() {
-  const { colors, scheme } = useTheme();
-  const isIOS = process.env.EXPO_OS === 'ios';
+  const { colors } = useTheme();
 
-  const shared = {
+  // A conversation screen is read continuously while scrolling, unlike the
+  // browse-style root tab screens docs/01-design-system.md §10 specs a large,
+  // collapsing title for — and on iOS 26 (Liquid Glass), a transparent header
+  // renders with no blur at all (react-native-screens' confirmed workaround for
+  // https://github.com/software-mansion/react-native-screens/issues/3100), which
+  // left message text unreadable underneath it. An opaque compact header, same
+  // as Android already uses, keeps the header legible in every state.
+  const indexOptions = {
     headerShadowVisible: false,
     headerTintColor: colors.accentText,
     headerTitleStyle: { fontFamily: FontFamilies.displayBold },
+    title: "Mo Ghaly GPT",
+    headerStyle: { backgroundColor: colors.bg },
+    headerLeft: () => <ChatCloseButton tintColor={colors.accentText} />,
   } as const;
-
-  // iOS 26 Liquid Glass has a UIKit bug where a blurred transparent header with
-  // headerLargeTitle renders blank until a scroll forces a relayout — dropping
-  // the blur there is react-native-screens' confirmed workaround.
-  // https://github.com/software-mansion/react-native-screens/issues/3100
-  const headerBlurEffect =
-    isIOS && !isLiquidGlassAvailable()
-      ? scheme === 'dark'
-        ? ('systemMaterialDark' as const)
-        : ('systemMaterialLight' as const)
-      : undefined;
-
-  const indexOptions = isIOS
-    ? {
-        ...shared,
-        title: 'Mo Ghaly GPT',
-        headerLargeTitle: true,
-        headerTransparent: true,
-        headerBlurEffect,
-        headerLargeTitleStyle: { fontFamily: FontFamilies.displayBold },
-        headerLeft: () => <ChatCloseButton tintColor={colors.accentText} />,
-      }
-    : {
-        ...shared,
-        title: 'Mo Ghaly GPT',
-        headerStyle: { backgroundColor: colors.bg },
-        headerLeft: () => <ChatCloseButton tintColor={colors.accentText} />,
-      };
 
   return (
     <Stack>
       <Stack.Screen name="index" options={indexOptions} />
+      <Stack.Screen
+        name="privacy"
+        options={{
+          title: "Privacy",
+          presentation: "modal",
+          headerTintColor: colors.accentText,
+          headerTitleStyle: { fontFamily: FontFamilies.displayBold },
+          headerStyle: { backgroundColor: colors.bg },
+          headerLeft: () => <ChatCloseButton tintColor={colors.accentText} />,
+        }}
+      />
     </Stack>
   );
 }

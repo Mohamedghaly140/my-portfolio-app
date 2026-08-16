@@ -47,10 +47,16 @@ export function ChatShell({ session }: ChatShellProps) {
   const [keyboardVisible, setKeyboardVisible] = useState(false);
 
   useEffect(() => {
-    const showEvent = Platform.OS === "ios" ? "keyboardWillShow" : "keyboardDidShow";
-    const hideEvent = Platform.OS === "ios" ? "keyboardWillHide" : "keyboardDidHide";
-    const showSub = Keyboard.addListener(showEvent, () => setKeyboardVisible(true));
-    const hideSub = Keyboard.addListener(hideEvent, () => setKeyboardVisible(false));
+    const showEvent =
+      Platform.OS === "ios" ? "keyboardWillShow" : "keyboardDidShow";
+    const hideEvent =
+      Platform.OS === "ios" ? "keyboardWillHide" : "keyboardDidHide";
+    const showSub = Keyboard.addListener(showEvent, () =>
+      setKeyboardVisible(true),
+    );
+    const hideSub = Keyboard.addListener(hideEvent, () =>
+      setKeyboardVisible(false),
+    );
     return () => {
       showSub.remove();
       hideSub.remove();
@@ -59,18 +65,14 @@ export function ChatShell({ session }: ChatShellProps) {
 
   const bootPhase = bootState.phase;
   const showWelcome =
-    messages.length === 0 &&
-    phase !== "submitted" &&
-    phase !== "connecting";
+    messages.length === 0 && phase !== "submitted" && phase !== "connecting";
   const composerDisabled = bootPhase !== "ready";
   const showDegradedBanner =
     bootPhase === "degraded" && !degradedBannerDismissed;
 
   if (bootPhase === "loading") {
     return (
-      <View
-        style={[styles.centered, { backgroundColor: colors.bg }]}
-      >
+      <View style={[styles.centered, { backgroundColor: colors.bg }]}>
         <ActivityIndicator color={colors.accentText} size="large" />
         <Text color="textMuted" role="small">
           Loading conversation…
@@ -81,11 +83,11 @@ export function ChatShell({ session }: ChatShellProps) {
 
   if (bootPhase === "failed") {
     return (
-      <View
-        style={[styles.centered, { backgroundColor: colors.bg }]}
-      >
+      <View style={[styles.centered, { backgroundColor: colors.bg }]}>
         <Text role="body" style={styles.failedCopy}>
-          {"Couldn't load this conversation. Check your connection and try again."}
+          {
+            "Couldn't load this conversation. Check your connection and try again."
+          }
         </Text>
         <Button label="Retry" onPress={retry} variant="primary" />
       </View>
@@ -104,7 +106,10 @@ export function ChatShell({ session }: ChatShellProps) {
         <View
           style={[
             styles.banner,
-            { backgroundColor: colors.surface, borderBottomColor: colors.border },
+            {
+              backgroundColor: colors.surface,
+              borderBottomColor: colors.border,
+            },
           ]}
         >
           <Text color="textMuted" role="small" style={styles.bannerText}>
@@ -125,7 +130,7 @@ export function ChatShell({ session }: ChatShellProps) {
 
       <View style={styles.body}>
         {showWelcome ? (
-          <WelcomeState onSelectPrompt={setDraftText} />
+          <WelcomeState onSelectPrompt={sendMessage} />
         ) : (
           <MessageList messages={messages} />
         )}

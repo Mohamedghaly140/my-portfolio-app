@@ -1,8 +1,10 @@
-import { Platform, StyleSheet, TextInput, View } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { Platform, Pressable, StyleSheet, TextInput, View } from "react-native";
 
-import { Button, Text } from "@/components/ui";
+import { Text } from "@/components/ui";
 import type { StreamPhase } from "@/features/chat/hooks/streamPhase";
 import { COMPOSER_NOTICE, MESSAGE_MAX_LENGTH } from "@/features/chat/lib/config";
+import { lightImpact } from "@/lib/haptics";
 import { Typography, Spacing } from "@/theme";
 import { useTheme } from "@/theme/theme-provider";
 
@@ -59,8 +61,11 @@ export function Composer({
       onStop();
       return;
     }
+    lightImpact();
     handleSend();
   }
+
+  const actionDisabled = disabled || (!busy && trimmed.length === 0);
 
   return (
     <View
@@ -85,16 +90,26 @@ export function Composer({
           ]}
           value={draftText}
         />
-        <Button
-          disabled={disabled || (!busy && trimmed.length === 0)}
-          icon={{
-            name: busy ? "stop-circle" : "arrow-up-circle",
-            position: "trailing",
-          }}
-          label={busy ? "Stop" : "Send"}
+        <Pressable
+          accessibilityLabel={busy ? "Stop" : "Send"}
+          accessibilityRole="button"
+          disabled={actionDisabled}
+          hitSlop={8}
           onPress={handleAction}
-          variant="primary"
-        />
+          style={[
+            styles.action,
+            {
+              backgroundColor: colors.accent,
+              opacity: actionDisabled ? 0.5 : 1,
+            },
+          ]}
+        >
+          <Ionicons
+            color={colors.onAccent}
+            name={busy ? "stop" : "send"}
+            size={18}
+          />
+        </Pressable>
       </View>
 
       <View style={styles.meta}>
@@ -135,6 +150,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.three,
     paddingVertical: Platform.OS === "ios" ? Spacing.two + Spacing.half : Spacing.two,
     textAlignVertical: "top",
+  },
+  action: {
+    alignItems: "center",
+    height: 44,
+    justifyContent: "center",
+    width: 44,
   },
   meta: {
     alignItems: "flex-start",

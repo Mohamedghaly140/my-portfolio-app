@@ -8,16 +8,21 @@ import { parseSeedQuestion } from '@/features/chat/lib/seedQuestion';
 
 export default function ChatScreen() {
   const session = useChatSession();
-  const { bootState, newChat, sendMessage } = session;
+  const { bootState, newChat, isStartingNewChat, sendMessage } = session;
   const navigation = useNavigation();
   const params = useLocalSearchParams<{ q?: string }>();
   const seededRef = useRef(false);
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerRight: () => <ChatHeaderActions newChat={newChat} />,
+      headerRight: () => (
+        <ChatHeaderActions
+          isStartingNewChat={isStartingNewChat}
+          newChat={newChat}
+        />
+      ),
     });
-  }, [navigation, newChat]);
+  }, [navigation, newChat, isStartingNewChat]);
 
   useEffect(() => {
     if (seededRef.current) return;

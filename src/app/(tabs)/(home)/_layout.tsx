@@ -1,8 +1,8 @@
-import { isLiquidGlassAvailable } from 'expo-glass-effect';
-import { Stack } from 'expo-router';
+import { isLiquidGlassAvailable } from "expo-glass-effect";
+import { Stack } from "expo-router";
 
-import { FontFamilies } from '@/theme';
-import { useTheme } from '@/theme/theme-provider';
+import { FontFamilies } from "@/theme";
+import { useTheme } from "@/theme/theme-provider";
 
 /**
  * About, Projects, Project detail, Skills and Privacy push onto this stack
@@ -10,7 +10,7 @@ import { useTheme } from '@/theme/theme-provider';
  */
 export default function HomeStackLayout() {
   const { colors, scheme } = useTheme();
-  const isIOS = process.env.EXPO_OS === 'ios';
+  const isIOS = process.env.EXPO_OS === "ios";
 
   const shared = {
     headerShadowVisible: false,
@@ -29,15 +29,15 @@ export default function HomeStackLayout() {
   // https://github.com/software-mansion/react-native-screens/issues/3100
   const headerBlurEffect =
     isIOS && !isLiquidGlassAvailable()
-      ? scheme === 'dark'
-        ? ('systemMaterialDark' as const)
-        : ('systemMaterialLight' as const)
+      ? scheme === "dark"
+        ? ("systemMaterialDark" as const)
+        : ("systemMaterialLight" as const)
       : undefined;
 
   const indexOptions = isIOS
     ? {
         ...shared,
-        title: 'Home',
+        title: "Home",
         headerLargeTitle: true,
         headerTransparent: true,
         headerStyle: undefined,
@@ -46,18 +46,17 @@ export default function HomeStackLayout() {
       }
     : {
         ...pushed,
-        title: 'Home',
+        title: "Home",
       };
 
   return (
     <Stack screenOptions={pushed}>
       <Stack.Screen name="index" options={indexOptions} />
-      <Stack.Screen name="gallery" options={{ title: 'Token gallery' }} />
-      <Stack.Screen name="about" options={{ title: 'About' }} />
-      <Stack.Screen name="skills" options={{ title: 'Skills' }} />
-      <Stack.Screen name="privacy" options={{ title: 'Privacy' }} />
-      <Stack.Screen name="projects/index" options={{ title: 'Projects' }} />
-      <Stack.Screen name="projects/[slug]" options={{ title: 'Project' }} />
+      <Stack.Screen name="gallery" options={{ title: "Token gallery" }} />
+      <Stack.Screen name="about" options={{ title: "About" }} />
+      <Stack.Screen name="skills" options={{ title: "Skills" }} />
+      <Stack.Screen name="projects/index" options={{ title: "Projects" }} />
+      <Stack.Screen name="projects/[slug]" options={{ title: "Project" }} />
     </Stack>
   );
 }

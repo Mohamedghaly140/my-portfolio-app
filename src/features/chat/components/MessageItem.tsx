@@ -79,7 +79,7 @@ export function MessageItem({ message }: MessageItemProps) {
       <View
         style={[
           styles.assistantBody,
-          { borderLeftColor: colors.accentBorder },
+          { backgroundColor: colors.surface, borderColor: colors.border },
         ]}
       >
         {text.length > 0 ? <Text role="body">{text}</Text> : null}
@@ -113,8 +113,9 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.two,
   },
   assistantBody: {
-    borderLeftWidth: 2,
+    borderWidth: 1,
     gap: Spacing.three,
-    paddingLeft: Spacing.three,
+    paddingHorizontal: Spacing.three,
+    paddingVertical: Spacing.three - Spacing.half,
   },
 });
