@@ -1,3 +1,4 @@
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from 'expo-router';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
@@ -9,6 +10,14 @@ import { ThemePreferenceProvider, useThemePreference } from '@/theme/theme-prefe
 import { AppThemeProvider } from '@/theme/theme-provider';
 
 SplashScreen.preventAutoHideAsync();
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 5 * 60 * 1000,
+    },
+  },
+});
 
 export default function RootLayout() {
   return (
@@ -33,15 +42,17 @@ function RootLayoutNav() {
   }
 
   return (
-    <ThemeProvider value={resolvedScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <AppThemeProvider scheme={resolvedScheme}>
-        <Stack screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="(tabs)" />
-          <Stack.Screen name="chat" options={{ presentation: 'fullScreenModal', headerShown: false }} />
-          <Stack.Screen name="+not-found" options={{ headerShown: true, title: 'Not found' }} />
-        </Stack>
-        <StatusBar style={resolvedScheme === 'dark' ? 'light' : 'dark'} />
-      </AppThemeProvider>
-    </ThemeProvider>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider value={resolvedScheme === 'dark' ? DarkTheme : DefaultTheme}>
+        <AppThemeProvider scheme={resolvedScheme}>
+          <Stack screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="(tabs)" />
+            <Stack.Screen name="chat" options={{ presentation: 'fullScreenModal', headerShown: false }} />
+            <Stack.Screen name="+not-found" options={{ headerShown: true, title: 'Not found' }} />
+          </Stack>
+          <StatusBar style={resolvedScheme === 'dark' ? 'light' : 'dark'} />
+        </AppThemeProvider>
+      </ThemeProvider>
+    </QueryClientProvider>
   );
 }

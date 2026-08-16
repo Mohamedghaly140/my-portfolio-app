@@ -620,7 +620,7 @@ to the characters visitors see (`'`, `&`).
 - Title: `Things I've built.`
 - Placeholder card (when fewer than 3 featured): `Coming Soon`
 - CTA: `View All Projects →`
-- Per card footer (`ProjectCard`): `Case Study →`; company prefix `@ {company}` when set
+- Per card footer (`ProjectCard`): `Case Study`; company prefix `@ {company}` when set
 
 **LatestArticle**
 
@@ -628,7 +628,7 @@ to the characters visitors see (`'`, `&`).
 - SectionLabel: `Latest Writing`
 - Title: `From the blog.`
 - CTA: `Read More Articles →`
-- Card link (`BlogPostCard`): `Read Article →`
+- Card link (`BlogPostCard`): `Read Article`
 
 **SkillsHighlight**
 
@@ -683,7 +683,7 @@ to the characters visitors see (`'`, `&`).
 - Supporting: `A selection of apps and products I've shipped. Click any card for the full case study.`
 - Filter: `All` plus unique `project.category` values from data → currently `Mobile App`, `Web App`
 - Empty (`ProjectGrid`): `No projects in this category yet.`
-- Card link: `Case Study →`
+- Card link: `Case Study`
 
 ### 8.4 Project detail (`app/(site)/projects/[slug]/page.tsx`)
 
@@ -726,7 +726,7 @@ to the characters visitors see (`'`, `&`).
 - h1: `Blog`
 - Supporting: `Notes on real-time systems, Flutter, and web engineering — written from shipped products, not slides.`
 - Empty (`BlogGrid`): `No articles published yet.`
-- Card: date, title, excerpt, tags (≤4), `Read Article →`
+- Card: date, title, excerpt, tags (≤4), `Read Article`
 
 **Article**
 
