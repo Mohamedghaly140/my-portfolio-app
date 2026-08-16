@@ -33,6 +33,8 @@ export function setupOnlineManager(): void {
 }
 
 export function setupQueryPersistence(): void {
+  if (Platform.OS === "web") return;
+
   persistQueryClient({
     queryClient,
     persister: createAsyncStoragePersister({
