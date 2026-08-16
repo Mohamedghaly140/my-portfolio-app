@@ -53,3 +53,6 @@ function RootLayoutNav() {
     </QueryClientProvider>
   );
 }
+
+/** expo-router's file-based `ErrorBoundary` export convention — see RootErrorFallback for why the fallback lives in its own file and avoids theme context. */
+export { RootErrorFallback as ErrorBoundary } from '@/components/root-error-fallback';
