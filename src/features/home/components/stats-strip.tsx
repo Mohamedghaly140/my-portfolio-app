@@ -1,50 +1,69 @@
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from "react-native";
 
-import { Reveal, Text } from '@/components/ui';
-import { Spacing } from '@/theme';
-import { useTheme } from '@/theme/theme-provider';
+import { Reveal, Text } from "@/components/ui";
+import { Spacing } from "@/theme";
+import { useTheme } from "@/theme/theme-provider";
 
-import { STATS } from '../constants';
+import { STATS } from "../constants";
 
 export function StatsStrip() {
   const { colors } = useTheme();
 
   return (
     <Reveal>
-      <View style={styles.row}>
-        {STATS.map((stat) => (
-          <View
-            key={stat.label}
-            style={[styles.cell, { borderColor: colors.border }]}
-          >
-            <Text color="accent" role="title" style={styles.value}>
-              {stat.value}
-            </Text>
-            <Text color="textMuted" role="label" style={styles.label}>
-              {stat.label}
-            </Text>
-          </View>
-        ))}
+      <View style={styles.wrapper}>
+        <View style={styles.row}>
+          {STATS.slice(0, 2).map(stat => (
+            <View
+              key={stat.label}
+              style={[styles.cell, { borderColor: colors.border }]}
+            >
+              <Text color="accent" role="title" style={styles.value}>
+                {stat.value}
+              </Text>
+              <Text color="textMuted" role="label" style={styles.label}>
+                {stat.label}
+              </Text>
+            </View>
+          ))}
+        </View>
+        <View style={styles.row}>
+          {STATS.slice(2).map(stat => (
+            <View
+              key={stat.label}
+              style={[styles.cell, { borderColor: colors.border }]}
+            >
+              <Text color="accent" role="title" style={styles.value}>
+                {stat.value}
+              </Text>
+              <Text color="textMuted" role="label" style={styles.label}>
+                {stat.label}
+              </Text>
+            </View>
+          ))}
+        </View>
       </View>
     </Reveal>
   );
 }
 
 const styles = StyleSheet.create({
-  row: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+  wrapper: {
     gap: Spacing.two,
-    marginVertical: Spacing.four,
+  },
+  row: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: Spacing.two,
   },
   cell: {
-    alignItems: 'center',
+    alignItems: "center",
     borderWidth: 1,
     flexBasis: 72,
     flexGrow: 1,
-    justifyContent: 'center',
+    justifyContent: "center",
     paddingHorizontal: Spacing.three,
-    paddingVertical: Spacing.four + Spacing.two,
+    paddingVertical: Spacing.four,
   },
   value: {
     fontSize: 36,
