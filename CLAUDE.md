@@ -93,7 +93,7 @@ bun run sync-content # Re-port src/data + src/types from the web repo
 
 ### Navigation
 
-- Tab order is **Home · Blogs · Experience · Contact · Settings** and does not change. `NativeTabs.Trigger` names are `(home)`, `(blog)`, `(experience)`, `(contact)`, `(settings)`.
+- Tab order is **Home · Blogs · Experience · Contact · Settings** and does not change. `NativeTabs.Trigger` names are `(home)`, `blog`, `experience`, `contact`, `settings` — `(home)` is deliberately a route group (transparent, maps to bare `/`); the other four are literal folders so `/blog`, `/experience`, `/contact`, `/settings` are real, reachable deep-link paths. (Fixed 2026-08-16: all five originally shipped as groups, which left the latter four with no reachable path — they silently fell through to `blog/[slug].tsx`'s dynamic segment. Caught during M8 device-based deep-link verification.)
 - About, Projects, Project detail, Skills and Privacy live **only** in the Home stack. Do not promote one to a tab.
 - Chat is a root-level modal Stack screen (`src/app/chat/`, route `/chat`, `presentation: 'modal'`), not a tab. It's a real path segment, not a `(group)` — a group here would resolve to bare `/` and collide with `(tabs)/(home)/index.tsx` for the app's initial route. It's reached from `ChatFab` (`src/components/chat-fab.tsx`), mounted once at the `(tabs)` layout level so it overlays every tab and every pushed screen; it disappears automatically while the modal is presented since the whole `(tabs)` screen backgrounds.
 - The router tree is specified in `docs/02-screens.md` §1. Adding a screen means adding it there too.

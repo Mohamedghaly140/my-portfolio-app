@@ -29,7 +29,7 @@ export function BlogPostCard({ post }: BlogPostCardProps) {
   function handlePress() {
     selectionChanged();
     router.push({
-      pathname: '/(tabs)/(blog)/[slug]',
+      pathname: '/(tabs)/blog/[slug]',
       params: { slug: post.slug },
     });
   }

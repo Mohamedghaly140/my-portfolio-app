@@ -11,7 +11,7 @@ export function CTABanner() {
   const { colors } = useTheme();
 
   function handleContact() {
-    router.push('/(tabs)/(contact)');
+    router.push('/(tabs)/contact');
   }
 
   return (

@@ -15,7 +15,7 @@ export function LatestArticle() {
   }
 
   function handleOpenBlog() {
-    router.push('/(tabs)/(blog)');
+    router.push('/(tabs)/blog');
   }
 
   return (

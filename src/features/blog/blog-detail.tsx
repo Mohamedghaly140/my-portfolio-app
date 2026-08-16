@@ -41,7 +41,7 @@ function MetaPair({
 
 function BlogPostNotFound() {
   function handleBack() {
-    router.push('/(tabs)/(blog)');
+    router.push('/(tabs)/blog');
   }
 
   return (
@@ -103,7 +103,7 @@ export function BlogDetailScreen() {
   }
 
   function handleBack() {
-    router.push('/(tabs)/(blog)');
+    router.push('/(tabs)/blog');
   }
 
   return (

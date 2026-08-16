@@ -22,7 +22,7 @@ function ContactPageRow() {
       accessibilityRole="button"
       onPress={() => {
         selectionChanged();
-        router.push("/(tabs)/(contact)");
+        router.push("/(tabs)/contact");
       }}
       style={styles.contactPageRow}
     >

@@ -17,15 +17,15 @@ src/app/(tabs)/(home)/about.tsx
 src/app/(tabs)/(home)/skills.tsx
 src/app/(tabs)/(home)/projects/index.tsx
 src/app/(tabs)/(home)/projects/[slug].tsx
-src/app/(tabs)/(blog)/_layout.tsx        Stack
-src/app/(tabs)/(blog)/index.tsx
-src/app/(tabs)/(blog)/[slug].tsx
-src/app/(tabs)/(experience)/_layout.tsx  Stack
-src/app/(tabs)/(experience)/index.tsx
-src/app/(tabs)/(contact)/_layout.tsx     Stack
-src/app/(tabs)/(contact)/index.tsx
-src/app/(tabs)/(settings)/_layout.tsx    Stack
-src/app/(tabs)/(settings)/index.tsx
+src/app/(tabs)/blog/_layout.tsx          Stack
+src/app/(tabs)/blog/index.tsx
+src/app/(tabs)/blog/[slug].tsx
+src/app/(tabs)/experience/_layout.tsx    Stack
+src/app/(tabs)/experience/index.tsx
+src/app/(tabs)/contact/_layout.tsx       Stack
+src/app/(tabs)/contact/index.tsx
+src/app/(tabs)/settings/_layout.tsx      Stack
+src/app/(tabs)/settings/index.tsx
 src/app/chat/_layout.tsx                 Stack — root modal, sibling of (tabs). Real path segment
                                           (not a `(group)`) so it can't collide with `/`
 src/app/chat/index.tsx
@@ -38,10 +38,12 @@ src/app/+not-found.tsx
 | Order | Trigger `name` | Label |
 |---|---|---|
 | 1 | `(home)` | Home |
-| 2 | `(blog)` | Blogs |
-| 3 | `(experience)` | Experience |
-| 4 | `(contact)` | Contact |
-| 5 | `(settings)` | Settings |
+| 2 | `blog` | Blogs |
+| 3 | `experience` | Experience |
+| 4 | `contact` | Contact |
+| 5 | `settings` | Settings |
+
+`(home)` stays a route group (deliberately transparent, mapping to bare `/`); `blog`, `experience`, `contact` and `settings` are literal (non-group) folders so their tabs carry real URL segments. **2026-08-16:** these four were originally shipped as groups too (`(blog)`, `(experience)`, `(contact)`, `(settings)`), which meant `/blog`, `/experience`, `/contact`, `/settings` and `/blog/<slug>` had no reachable route and silently fell through to `blog/[slug].tsx`'s dynamic segment — caught during M8 deep-link device verification and fixed by renaming the four folders (internal `router.push`/`Link` call sites and `NativeTabs.Trigger` names updated to match).
 
 About, Projects, Project detail, Skills, and Privacy are **not** tabs — they push on the Home stack only. Chat is **not** a tab — it's a root `Stack.Screen` with `presentation: 'modal'`, reached from the global `ChatFab` (mounted once at the `(tabs)` layout level, above `NativeTabs`, so it overlays every tab and every pushed screen). **2026-08-16:** superseded the original 5th-tab placement of Chat — see `00-roadmap.md` D1.
 
@@ -213,11 +215,11 @@ About, Projects, Project detail, Skills, and Privacy are **not** tabs — they p
 
 ## 4. Blogs stack
 
-### 4.1 Blog index — `/(tabs)/(blog)`
+### 4.1 Blog index — `/(tabs)/blog`
 
 | | |
 |---|---|
-| **Route** | `/(tabs)/(blog)/` |
+| **Route** | `/(tabs)/blog/` |
 | **Stack** | Blog |
 | **Deep link** | `/blog` |
 
@@ -232,11 +234,11 @@ About, Projects, Project detail, Skills, and Privacy are **not** tabs — they p
 
 ---
 
-### 4.2 Blog article — `/(tabs)/(blog)/[slug]`
+### 4.2 Blog article — `/(tabs)/blog/[slug]`
 
 | | |
 |---|---|
-| **Route** | `/(tabs)/(blog)/[slug]` |
+| **Route** | `/(tabs)/blog/[slug]` |
 | **Stack** | Blog |
 | **Deep link** | `/blog/<slug>` · universal link |
 
@@ -296,11 +298,11 @@ About, Projects, Project detail, Skills, and Privacy are **not** tabs — they p
 
 ## 6. Experience stack
 
-### 6.1 Experience — `/(tabs)/(experience)`
+### 6.1 Experience — `/(tabs)/experience`
 
 | | |
 |---|---|
-| **Route** | `/(tabs)/(experience)/` |
+| **Route** | `/(tabs)/experience/` |
 | **Stack** | Experience |
 | **Deep link** | `/experience` |
 
@@ -320,11 +322,11 @@ About, Projects, Project detail, Skills, and Privacy are **not** tabs — they p
 
 ## 7. Contact stack
 
-### 7.1 Contact — `/(tabs)/(contact)`
+### 7.1 Contact — `/(tabs)/contact`
 
 | | |
 |---|---|
-| **Route** | `/(tabs)/(contact)/` |
+| **Route** | `/(tabs)/contact/` |
 | **Stack** | Contact |
 | **Deep link** | `/contact` |
 
@@ -345,11 +347,11 @@ About, Projects, Project detail, Skills, and Privacy are **not** tabs — they p
 
 ## 8. Settings stack
 
-### 8.1 Settings — `/(tabs)/(settings)`
+### 8.1 Settings — `/(tabs)/settings`
 
 | | |
 |---|---|
-| **Route** | `/(tabs)/(settings)/` |
+| **Route** | `/(tabs)/settings/` |
 | **Stack** | Settings |
 | **Deep link** | `/settings` |
 
@@ -386,13 +388,13 @@ Brand `Screen` with title, short copy, button back to Home tab.
 | `/projects` | `(home)/projects` |
 | `/projects/<slug>` | `(home)/projects/[slug]` |
 | `/skills` | `(home)/skills` |
-| `/blog` | `(blog)/` |
-| `/blog/<slug>` | `(blog)/[slug]` |
+| `/blog` | `blog/` |
+| `/blog/<slug>` | `blog/[slug]` |
 | `/chat` | `chat/` — root modal, not under `(tabs)` |
 | `/chat?q=` | `chat/` with one-shot seed |
 | `/chat/privacy` | `chat/privacy` — see §3.6 |
-| `/experience` | `(experience)/` |
-| `/contact` | `(contact)/` |
-| `/settings` | `(tabs)/(settings)/` |
+| `/experience` | `experience/` |
+| `/contact` | `contact/` |
+| `/settings` | `settings/` |
 
 Custom scheme: `moghaly://` with the same path suffixes. Universal links require `apple-app-site-association` + `assetlinks.json` on the Next.js site (`public/.well-known/`).

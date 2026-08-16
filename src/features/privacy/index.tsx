@@ -52,7 +52,7 @@ export function PrivacyScreen() {
   }
 
   function handleContactPage() {
-    router.push('/(tabs)/(contact)');
+    router.push('/(tabs)/contact');
   }
 
   return (

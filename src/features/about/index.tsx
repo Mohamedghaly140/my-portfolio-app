@@ -22,11 +22,11 @@ export function AboutScreen() {
   const { colors } = useTheme();
 
   function handleGetInTouch() {
-    router.push('/(tabs)/(contact)');
+    router.push('/(tabs)/contact');
   }
 
   function handleWorkHistory() {
-    router.push('/(tabs)/(experience)');
+    router.push('/(tabs)/experience');
   }
 
   function handleProjects() {
