@@ -5,7 +5,11 @@ import { ChatFab } from "@/components/chat-fab";
 
 /**
  * Tab order: Home · Blogs · Experience · Contact · Settings. Chat moved to a
- * root modal (see `src/app/(chat)/`), reachable via the global `ChatFab`.
+ * root modal (see `src/app/chat/`), reachable via the global `ChatFab`.
+ * `chat` is a REAL path segment, not a `(group)` — a route group here would
+ * resolve to bare "/" and collide with `(tabs)/(home)/index.tsx` for the
+ * app's initial route, which is exactly the bug this comment is warning
+ * against (cold launch opened straight into the chat modal, no tabs).
  * About, Projects, Project detail, Skills and Privacy push inside the Home
  * stack — they are never tabs.
  */

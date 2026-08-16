@@ -9,7 +9,7 @@ alwaysApply: false
 - Tab order is **Home · Blogs · Experience · Contact · Settings** and does not change.
 - `NativeTabs.Trigger` names: `(home)`, `(blog)`, `(experience)`, `(contact)`, `(settings)`.
 - About, Projects, Project detail, Skills, Privacy live **only** in the Home stack. Do not promote one to a tab.
-- Chat is a root-level modal (`src/app/(chat)/`), not a tab — reached from the global `ChatFab` mounted at the `(tabs)` layout level.
+- Chat is a root-level modal (`src/app/chat/`, route `/chat` — a real segment, not a `(group)`, so it can't collide with `/`), not a tab — reached from the global `ChatFab` mounted at the `(tabs)` layout level.
 - Router tree is specified in `docs/02-screens.md` §1. Adding a screen means adding it there too.
 - Keep `NativeTabs` (D1) — platform-native tab bar; everything above it is brand.
 

@@ -27,8 +27,9 @@ src/app/(tabs)/(contact)/_layout.tsx     Stack
 src/app/(tabs)/(contact)/index.tsx
 src/app/(tabs)/(settings)/_layout.tsx    Stack
 src/app/(tabs)/(settings)/index.tsx
-src/app/(chat)/_layout.tsx               Stack — root modal, sibling of (tabs), not a tab
-src/app/(chat)/index.tsx
+src/app/chat/_layout.tsx                 Stack — root modal, sibling of (tabs). Real path segment
+                                          (not a `(group)`) so it can't collide with `/`
+src/app/chat/index.tsx
 src/app/+not-found.tsx
 ```
 
@@ -255,12 +256,12 @@ About, Projects, Project detail, Skills, and Privacy are **not** tabs — they p
 
 ## 5. Chat (root modal, not a tab)
 
-### 5.1 Chat — `/(chat)`
+### 5.1 Chat — `/chat`
 
 | | |
 |---|---|
-| **Route** | `/(chat)/` — root `Stack.Screen`, `presentation: 'modal'`, sibling of `(tabs)` |
-| **Stack** | Chat (its own nested `Stack`, headers configured in `(chat)/_layout.tsx`) |
+| **Route** | `/chat/` — root `Stack.Screen`, `presentation: 'modal'`, sibling of `(tabs)`. `chat` is a real path segment; a `(chat)` group here previously collided with bare `/` and hijacked the app's initial route (fixed 2026-08-16) |
+| **Stack** | Chat (its own nested `Stack`, headers configured in `chat/_layout.tsx`) |
 | **Deep link** | `/chat` · `/chat?q=<seed>` · `moghaly://chat?q=` |
 | **Entry points** | Global `ChatFab` (every screen) · in-content `AskMohamedCTA` (seeded prompts) |
 
@@ -388,8 +389,8 @@ Brand `Screen` with title, short copy, button back to Home tab.
 | `/privacy` | `(home)/privacy` |
 | `/blog` | `(blog)/` |
 | `/blog/<slug>` | `(blog)/[slug]` |
-| `/chat` | `(chat)/` — root modal, not under `(tabs)` |
-| `/chat?q=` | `(chat)/` with one-shot seed |
+| `/chat` | `chat/` — root modal, not under `(tabs)` |
+| `/chat?q=` | `chat/` with one-shot seed |
 | `/experience` | `(experience)/` |
 | `/contact` | `(contact)/` |
 | `/settings` | `(tabs)/(settings)/` |

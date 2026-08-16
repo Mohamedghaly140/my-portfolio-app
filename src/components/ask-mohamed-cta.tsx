@@ -16,7 +16,7 @@ const DEFAULT_PROMPT = SUGGESTED_PROMPTS[0];
 
 function openChatWithPrompt(prompt: string) {
   router.push({
-    pathname: '/(chat)',
+    pathname: '/chat',
     params: { q: prompt },
   });
 }

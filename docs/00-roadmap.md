@@ -25,7 +25,7 @@ What is being built: a brand-faithful native client that bundles portfolio conte
 
 | ID | Decision | Rationale |
 |---|---|---|
-| **D1** | 5 native tabs via `NativeTabs` — Home / Blogs / Experience / Contact / Settings; About / Projects / Project detail / Skills / Privacy live in the Home stack. Chat is a root-level modal (`src/app/(chat)/`) reached from a global FAB (`ChatFab`), not a tab. | user-specified; keeps the tab bar platform-native (liquid glass, haptics, scroll-to-top) while everything above it is brand. **Superseded 2026-08-16:** Chat originally occupied the 3rd tab slot; the user asked for it to be reachable from every screen instead, so it moved to a modal behind a global FAB and the vacated slot became Settings (theme picker). This also reverses the M3-era "no floating FAB" call below, which was itself a deliberate departure from the web's `ask-fab` — see `02-screens.md` and `04-content-inventory.md`. |
+| **D1** | 5 native tabs via `NativeTabs` — Home / Blogs / Experience / Contact / Settings; About / Projects / Project detail / Skills / Privacy live in the Home stack. Chat is a root-level modal (`src/app/chat/`, route `/chat`) reached from a global FAB (`ChatFab`), not a tab. | user-specified; keeps the tab bar platform-native (liquid glass, haptics, scroll-to-top) while everything above it is brand. **Superseded 2026-08-16:** Chat originally occupied the 3rd tab slot; the user asked for it to be reachable from every screen instead, so it moved to a modal behind a global FAB and the vacated slot became Settings (theme picker). This also reverses the M3-era "no floating FAB" call below, which was itself a deliberate departure from the web's `ask-fab` — see `02-screens.md` and `04-content-inventory.md`. |
 | **D2** | Portfolio content is bundled static TypeScript ported from the web repo's `lib/data/`. | mirrors the web invariant "portfolio data is static and typed; do not add a database for ordinary content." Instant first paint, works offline. Blog prose and chat are the only network reads. |
 | **D3** | Typed theme + `StyleSheet.create`, **no NativeWind**. | zero new transform layers, best React-Compiler compatibility, extends the existing `src/constants/theme.ts`. |
 | **D4** | Same brand, native conventions; ship a derived light theme. Identical palette / typography / square corners, but native list, press, sheet and navigation idioms instead of web hover states. | brand continuity without pretending RN is a browser. |
@@ -139,7 +139,7 @@ The app repo's `.env` currently holds full production **server** secrets copied 
 2. Home: Hero → StatsStrip → FeaturedProjects → LatestArticle → SkillsHighlight → AboutTeaser → AskMohamedCTA (in-content, opens the chat modal — see D1 supersession) → CTABanner.
 3. About / Projects / Project detail / Skills / Privacy push inside `(home)` stack; Experience is its own tab.
 4. Project detail: metadata from bundled `projects.ts`; case-study body via offline-friendly path for M3 (short description + meta is enough to paint; full MDX body is deferred to M7's markdown client or a later offline cache of `GET /api/markdown?path=/projects/<slug>` — prefer fetching markdown when online and falling back to description in airplane mode so the Exit still holds).
-5. AskMohamedCTA / PromptChip: press navigates to `/(chat)` (the chat modal) optionally with `?q=`. **Superseded 2026-08-16** — see D1: a global floating action button (`ChatFab`) now also opens the same modal from any screen.
+5. AskMohamedCTA / PromptChip: press navigates to `/chat` (the chat modal) optionally with `?q=`. **Superseded 2026-08-16** — see D1: a global floating action button (`ChatFab`) now also opens the same modal from any screen.
 6. External links (CV PDF, store URLs, social) use `expo-linking` / `Linking.openURL`.
 
 **Files:** screens under `src/app/(tabs)/(home)/**` and `(experience)/**`, feature components under `src/features/{home,about,projects,skills,experience,privacy}/**` (or colocated — match whatever layout M0 chose), navigation helpers.
@@ -182,7 +182,7 @@ The app repo's `.env` currently holds full production **server** secrets copied 
 
 **Exit:** on a physical device: send → stream → stop → retry → background → relaunch, transcript intact; rate-limit, blocked-message and network errors each render the correct copy.
 
-**2026-08-16 update:** Chat moved from a tab (`(tabs)/(chat)/`) to a root-level modal (`src/app/(chat)/`, `presentation: 'modal'`) reached via a global `ChatFab` — see D1. Streaming, boot, restore/poll/stop/retry, and error-mapping behavior above are unchanged; only the entry point and container moved.
+**2026-08-16 update:** Chat moved from a tab (`(tabs)/(chat)/`) to a root-level modal (`src/app/chat/`, route `/chat`, `presentation: 'modal'`) reached via a global `ChatFab` — see D1. `chat` is a real path segment, not a `(group)` (a group would collide with bare `/` and hijack the app's initial route — this was caught and fixed after landing). Streaming, boot, restore/poll/stop/retry, and error-mapping behavior above are unchanged; only the entry point and container moved.
 
 ---
 

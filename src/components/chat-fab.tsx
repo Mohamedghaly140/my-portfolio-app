@@ -14,7 +14,7 @@ export function ChatFab() {
 
   function handlePress() {
     lightImpact();
-    router.push('/(chat)');
+    router.push('/chat');
   }
 
   return (
