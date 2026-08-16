@@ -1,12 +1,14 @@
-import { type ReactNode } from 'react';
+import { type ReactNode, useLayoutEffect } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import * as Linking from 'expo-linking';
-import { router, useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams, useNavigation } from 'expo-router';
 
 import { MarkdownBody } from '@/components/markdown-body';
+import { ShareHeaderButton } from '@/components/share-header-button';
 import { Badge, Divider, Reveal, Skeleton, Text } from '@/components/ui';
 import { getProjectBySlug } from '@/data/projects';
 import { useArticleMarkdown } from '@/features/blog/use-article-markdown';
+import { shareProject } from '@/lib/share';
 import type { Project } from '@/types/project';
 import { Motion, Spacing } from '@/theme';
 
@@ -119,9 +121,22 @@ function CaseStudyBody({ project }: { project: Project }) {
 }
 
 export function ProjectDetailScreen() {
+  const navigation = useNavigation();
   const { slug: slugParam } = useLocalSearchParams<{ slug: string }>();
   const slug = typeof slugParam === 'string' ? slugParam : slugParam?.[0];
   const project = slug ? getProjectBySlug(slug) : undefined;
+
+  useLayoutEffect(() => {
+    if (!project) return;
+    navigation.setOptions({
+      headerRight: () => (
+        <ShareHeaderButton
+          accessibilityLabel="Share project"
+          onShare={() => shareProject(project.slug)}
+        />
+      ),
+    });
+  }, [navigation, project]);
 
   if (!project) {
     return <ProjectNotFound />;

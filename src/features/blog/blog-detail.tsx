@@ -1,11 +1,13 @@
-import { type ReactNode } from 'react';
+import { type ReactNode, useLayoutEffect } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
-import { router, useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams, useNavigation } from 'expo-router';
 
 import { MarkdownBody } from '@/components/markdown-body';
+import { ShareHeaderButton } from '@/components/share-header-button';
 import { Badge, Button, Divider, Reveal, Skeleton, Text } from '@/components/ui';
 import { getPostBySlug } from '@/data/blog';
 import { parseMarkdownError } from '@/lib/api/markdown';
+import { shareBlogPost } from '@/lib/share';
 import type { BlogPost } from '@/types/blog';
 import { Motion, Spacing } from '@/theme';
 
@@ -94,9 +96,22 @@ function ArticleBody({ post }: { post: BlogPost }) {
 }
 
 export function BlogDetailScreen() {
+  const navigation = useNavigation();
   const { slug: slugParam } = useLocalSearchParams<{ slug: string }>();
   const slug = typeof slugParam === 'string' ? slugParam : slugParam?.[0];
   const post = slug ? getPostBySlug(slug) : undefined;
+
+  useLayoutEffect(() => {
+    if (!post || !post.published) return;
+    navigation.setOptions({
+      headerRight: () => (
+        <ShareHeaderButton
+          accessibilityLabel="Share article"
+          onShare={() => shareBlogPost(post.slug)}
+        />
+      ),
+    });
+  }, [navigation, post]);
 
   if (!post || !post.published) {
     return <BlogPostNotFound />;
