@@ -1,25 +1,21 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClientProvider } from '@tanstack/react-query';
 import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from 'expo-router';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 
+import { queryClient, setupOnlineManager, useQueryFocusManager } from '@/lib/query-client';
 import { fontAssets } from '@/theme/fonts';
 import { ThemePreferenceProvider, useThemePreference } from '@/theme/theme-preference-provider';
 import { AppThemeProvider } from '@/theme/theme-provider';
 
 SplashScreen.preventAutoHideAsync();
-
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 5 * 60 * 1000,
-    },
-  },
-});
+setupOnlineManager();
 
 export default function RootLayout() {
+  useQueryFocusManager();
+
   return (
     <ThemePreferenceProvider>
       <RootLayoutNav />
