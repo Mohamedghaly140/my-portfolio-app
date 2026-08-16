@@ -15,7 +15,6 @@ src/app/(tabs)/(home)/_layout.tsx        Stack
 src/app/(tabs)/(home)/index.tsx          Home
 src/app/(tabs)/(home)/about.tsx
 src/app/(tabs)/(home)/skills.tsx
-src/app/(tabs)/(home)/privacy.tsx
 src/app/(tabs)/(home)/projects/index.tsx
 src/app/(tabs)/(home)/projects/[slug].tsx
 src/app/(tabs)/(blog)/_layout.tsx        Stack
@@ -30,6 +29,7 @@ src/app/(tabs)/(settings)/index.tsx
 src/app/chat/_layout.tsx                 Stack — root modal, sibling of (tabs). Real path segment
                                           (not a `(group)`) so it can't collide with `/`
 src/app/chat/index.tsx
+src/app/chat/privacy.tsx                 modal, within the chat stack — see §3.6
 src/app/+not-found.tsx
 ```
 
@@ -185,15 +185,15 @@ About, Projects, Project detail, Skills, and Privacy are **not** tabs — they p
 
 ---
 
-### 3.6 Privacy — `/(tabs)/(home)/privacy`
+### 3.6 Privacy — `/chat/privacy`
 
 | | |
 |---|---|
-| **Route** | `/(tabs)/(home)/privacy` |
-| **Stack** | Home |
-| **Deep link** | `/privacy` |
+| **Route** | `src/app/chat/privacy.tsx` — a modal `Stack.Screen` inside `chat/_layout.tsx`'s Stack, not the Home stack (corrected 2026-08-16; this doc previously specced `/(tabs)/(home)/privacy`, which was never built — the M3/M5 implementation put it under the chat modal instead, reached from the chat header's "Privacy & help") |
+| **Stack** | Chat (its own nested Stack — see §5.1) |
+| **Deep link** | `/chat/privacy` |
 
-**Sections** (`features/privacy/index.tsx`):
+**Sections** (`features/privacy/index.tsx`, rendered by `src/app/chat/privacy.tsx`):
 
 1. Header + intro
 2. What is collected and why
@@ -207,7 +207,7 @@ About, Projects, Project detail, Skills, and Privacy are **not** tabs — they p
 
 **States:** static. Native copy should mention Secure Store session + optional push token once M9 ships.
 
-**Native delta:** replace `sessionStorage` wording with "on-device display cache"; link Contact via tab switch.
+**Native delta:** replace `sessionStorage` wording with "on-device display cache"; the in-chat `LeadForm`'s privacy-notice paragraph (M6) links here via `router.push("/chat/privacy")`, the same route the chat header's "Privacy & help" uses.
 
 ---
 
@@ -386,11 +386,11 @@ Brand `Screen` with title, short copy, button back to Home tab.
 | `/projects` | `(home)/projects` |
 | `/projects/<slug>` | `(home)/projects/[slug]` |
 | `/skills` | `(home)/skills` |
-| `/privacy` | `(home)/privacy` |
 | `/blog` | `(blog)/` |
 | `/blog/<slug>` | `(blog)/[slug]` |
 | `/chat` | `chat/` — root modal, not under `(tabs)` |
 | `/chat?q=` | `chat/` with one-shot seed |
+| `/chat/privacy` | `chat/privacy` — see §3.6 |
 | `/experience` | `(experience)/` |
 | `/contact` | `(contact)/` |
 | `/settings` | `(tabs)/(settings)/` |

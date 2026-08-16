@@ -311,6 +311,11 @@ export function LeadForm({ block }: LeadFormProps) {
             Read the privacy notice
           </Text>
         </Pressable>
+        {credentials ? (
+          <Text color="textMuted" role="small">
+            Privacy notice v{credentials.privacyNoticeVersion}
+          </Text>
+        ) : null}
       </View>
 
       <Controller
