@@ -2,6 +2,7 @@ import { View } from "react-native";
 import { NativeTabs } from "expo-router/unstable-native-tabs";
 
 import { ChatFab } from "@/components/chat-fab";
+import { selectionChanged } from "@/lib/haptics";
 
 /**
  * Tab order: Home · Blogs · Experience · Contact · Settings. Chat moved to a
@@ -23,7 +24,7 @@ import { ChatFab } from "@/components/chat-fab";
 export default function TabsLayout() {
   return (
     <View style={{ flex: 1 }}>
-      <NativeTabs>
+      <NativeTabs screenListeners={{ tabPress: () => selectionChanged() }}>
         <NativeTabs.Trigger name="(home)">
           <NativeTabs.Trigger.Label>Home</NativeTabs.Trigger.Label>
           <NativeTabs.Trigger.Icon
