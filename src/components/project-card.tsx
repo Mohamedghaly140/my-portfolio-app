@@ -27,7 +27,11 @@ export function ProjectCard({ project }: ProjectCardProps) {
   }
 
   return (
-    <Card onPress={handlePress} style={styles.card}>
+    <Card
+      accessibilityLabel={`${project.title}, ${project.category} project`}
+      onPress={handlePress}
+      style={styles.card}
+    >
       <View style={[styles.cover, { borderBottomColor: colors.border }]}>
         {cover ? (
           <Image
@@ -70,7 +74,12 @@ export function ProjectCard({ project }: ProjectCardProps) {
           <Text color="textMuted" role="small">
             Case Study
           </Text>
-          <Ionicons color={colors.accentText} name="chevron-forward" size={16} />
+          <View
+            accessibilityElementsHidden
+            importantForAccessibility="no-hide-descendants"
+          >
+            <Ionicons color={colors.accentText} name="chevron-forward" size={16} />
+          </View>
         </View>
       </View>
     </Card>

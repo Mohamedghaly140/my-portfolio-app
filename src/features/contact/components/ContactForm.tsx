@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
+  AccessibilityInfo,
   KeyboardAvoidingView,
   Platform,
   StyleSheet,
@@ -48,6 +49,7 @@ export function ContactForm() {
     if (result.ok) {
       lightImpact();
       setSubmitState("success");
+      AccessibilityInfo.announceForAccessibility("Message sent!");
       return;
     }
 
@@ -68,6 +70,7 @@ export function ContactForm() {
 
     setSubmitError(result.message);
     setSubmitState("error");
+    AccessibilityInfo.announceForAccessibility(result.message);
   }
 
   return (

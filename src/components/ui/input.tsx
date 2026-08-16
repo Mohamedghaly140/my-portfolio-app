@@ -60,6 +60,7 @@ export function Input({
         ) : null}
       </Text>
       <TextInput
+        accessibilityLabel={label}
         autoCapitalize={autoCapitalize}
         autoComplete={autoComplete}
         editable={editable}
@@ -88,9 +89,11 @@ export function Input({
         value={value}
       />
       {error ? (
-        <Text color="danger" role="small">
-          {error}
-        </Text>
+        <View accessibilityLiveRegion="polite">
+          <Text color="danger" role="small">
+            {error}
+          </Text>
+        </View>
       ) : null}
     </View>
   );

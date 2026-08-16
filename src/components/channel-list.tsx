@@ -34,6 +34,7 @@ export function ChannelList({ heading, items }: ChannelListProps) {
         {items.map((item) =>
           item.href ? (
             <Pressable
+              accessibilityLabel={`${item.label}, ${item.value}`}
               accessibilityRole="link"
               key={item.id}
               onPress={() => {
@@ -42,12 +43,17 @@ export function ChannelList({ heading, items }: ChannelListProps) {
               }}
               style={styles.row}
             >
-              <Ionicons
-                color={colors.accentText}
-                name={item.icon}
-                size={18}
-                style={styles.icon}
-              />
+              <View
+                accessibilityElementsHidden
+                importantForAccessibility="no-hide-descendants"
+              >
+                <Ionicons
+                  color={colors.accentText}
+                  name={item.icon}
+                  size={18}
+                  style={styles.icon}
+                />
+              </View>
               <View style={styles.copy}>
                 <Text color="textMuted" role="small">
                   {item.label}
@@ -56,20 +62,34 @@ export function ChannelList({ heading, items }: ChannelListProps) {
                   {item.value}
                 </Text>
               </View>
-              <Ionicons
-                color={colors.accentText}
-                name="chevron-forward"
-                size={16}
-              />
+              <View
+                accessibilityElementsHidden
+                importantForAccessibility="no-hide-descendants"
+              >
+                <Ionicons
+                  color={colors.accentText}
+                  name="chevron-forward"
+                  size={16}
+                />
+              </View>
             </Pressable>
           ) : (
-            <View key={item.id} style={styles.row}>
-              <Ionicons
-                color={colors.textMuted}
-                name={item.icon}
-                size={18}
-                style={styles.icon}
-              />
+            <View
+              accessibilityLabel={`${item.label}, ${item.value}`}
+              key={item.id}
+              style={styles.row}
+            >
+              <View
+                accessibilityElementsHidden
+                importantForAccessibility="no-hide-descendants"
+              >
+                <Ionicons
+                  color={colors.textMuted}
+                  name={item.icon}
+                  size={18}
+                  style={styles.icon}
+                />
+              </View>
               <View style={styles.copy}>
                 <Text color="textMuted" role="small">
                   {item.label}

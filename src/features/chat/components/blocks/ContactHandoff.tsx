@@ -19,6 +19,7 @@ function ContactPageRow() {
 
   return (
     <Pressable
+      accessibilityLabel="Open the Contact tab"
       accessibilityRole="button"
       onPress={() => {
         selectionChanged();
@@ -26,12 +27,17 @@ function ContactPageRow() {
       }}
       style={styles.contactPageRow}
     >
-      <Ionicons
-        color={colors.accentText}
-        name="create-outline"
-        size={18}
-        style={styles.contactPageIcon}
-      />
+      <View
+        accessibilityElementsHidden
+        importantForAccessibility="no-hide-descendants"
+      >
+        <Ionicons
+          color={colors.accentText}
+          name="create-outline"
+          size={18}
+          style={styles.contactPageIcon}
+        />
+      </View>
       <View style={styles.contactPageCopy}>
         <Text color="textMuted" role="small">
           Contact page
@@ -40,7 +46,12 @@ function ContactPageRow() {
           Open the Contact tab
         </Text>
       </View>
-      <Ionicons color={colors.accentText} name="chevron-forward" size={16} />
+      <View
+        accessibilityElementsHidden
+        importantForAccessibility="no-hide-descendants"
+      >
+        <Ionicons color={colors.accentText} name="chevron-forward" size={16} />
+      </View>
     </Pressable>
   );
 }

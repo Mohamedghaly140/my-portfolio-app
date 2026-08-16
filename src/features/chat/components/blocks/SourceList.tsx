@@ -37,6 +37,7 @@ export function SourceList({ block }: SourceListProps) {
       <View style={styles.list}>
         {sources.map((source) => (
           <Pressable
+            accessibilityLabel={source.title}
             accessibilityRole="button"
             key={source.slug}
             onPress={() => handlePress(source.slug)}
@@ -51,7 +52,12 @@ export function SourceList({ block }: SourceListProps) {
             <Text color="textMuted" role="small" style={styles.title}>
               {source.title}
             </Text>
-            <Ionicons color={colors.accentText} name="open-outline" size={14} />
+            <View
+              accessibilityElementsHidden
+              importantForAccessibility="no-hide-descendants"
+            >
+              <Ionicons color={colors.accentText} name="open-outline" size={14} />
+            </View>
           </Pressable>
         ))}
       </View>

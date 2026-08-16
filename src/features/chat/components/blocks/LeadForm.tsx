@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { Pressable, StyleSheet, View } from "react-native";
+import { AccessibilityInfo, Pressable, StyleSheet, View } from "react-native";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as Clipboard from "expo-clipboard";
 import { router } from "expo-router";
@@ -65,12 +65,16 @@ export function LeadForm({ block }: LeadFormProps) {
       setReference(result.response.lead.reference);
       setSubmitState("success");
       lightImpact();
+      AccessibilityInfo.announceForAccessibility(
+        `Your details were submitted to Mohamed. Reference ${result.response.lead.reference}.`,
+      );
       return;
     }
 
     setCredentials(result.credentials);
     setSubmitError(result.message);
     setSubmitState("error");
+    AccessibilityInfo.announceForAccessibility(result.message);
   }
 
   function handleCopyReference() {

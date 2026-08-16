@@ -17,6 +17,7 @@ export function SkillsHighlight() {
 
   return (
     <Pressable
+      accessibilityLabel="Toolkit. View all skills."
       accessibilityRole="button"
       onPress={handleOpenSkills}
       style={[styles.section, { backgroundColor: colors.surface }]}

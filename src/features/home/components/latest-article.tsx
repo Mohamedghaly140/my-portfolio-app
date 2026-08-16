@@ -28,7 +28,11 @@ export function LatestArticle() {
       </Reveal>
 
       <Reveal delayMs={Motion.staggerMs}>
-        <Card onPress={handleOpenBlog} style={styles.card}>
+        <Card
+          accessibilityLabel={`${latest.title}, latest article`}
+          onPress={handleOpenBlog}
+          style={styles.card}
+        >
           <View style={styles.cardBody}>
             <Text color="textMuted" role="small">
               {latest.date}
@@ -42,7 +46,11 @@ export function LatestArticle() {
                 <Badge key={tag} label={tag} variant="code" />
               ))}
             </View>
-            <View style={[styles.cardFooter, { borderTopColor: colors.border }]}>
+            <View
+              accessibilityElementsHidden
+              importantForAccessibility="no-hide-descendants"
+              style={[styles.cardFooter, { borderTopColor: colors.border }]}
+            >
               <Text color="accent" role="small">
                 Read Article →
               </Text>
