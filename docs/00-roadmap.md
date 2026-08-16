@@ -4,7 +4,7 @@ Implementation plan for turning the Expo SDK 57 scaffold in this repository into
 
 **Product:** a five-tab app — **Home · Blogs · Experience · Contact · Settings** — with About, Projects, Project detail, Skills, and Privacy pushed inside the Home stack. Chat is not a tab: it's a root-level modal reached from a global floating action button, visible on every screen (superseded 2026-08-16, see D1).
 
-**Status:** M0–M6 landed. See `CLAUDE.md`'s Status line for the current summary; update both together as phases land. M6 is device-verified on iOS only (Android deferred — user accepted iOS-only for now). M7 (Blogs tab) is next.
+**Status:** M0–M7 landed. See `CLAUDE.md`'s Status line for the current summary; update both together as phases land. M6 is device-verified on iOS only (Android deferred — user accepted iOS-only for now). M8 (offline caching, deep links, polish) is next.
 
 Cross-references: design system → [`01-design-system.md`](./01-design-system.md); every screen → [`02-screens.md`](./02-screens.md); backend contract → [`03-api-contract.md`](./03-api-contract.md); content inventory → [`04-content-inventory.md`](./04-content-inventory.md).
 
@@ -15,7 +15,7 @@ Cross-references: design system → [`01-design-system.md`](./01-design-system.m
 | Repo | Role today |
 |---|---|
 | `~/projects/my-portfolio` | Finished Next.js 16 App Router portfolio. Static typed data in `lib/data/`, chat + leads on Postgres, public markdown via `GET /api/markdown`. **Read-only reference for app work; M4 (and later device/push work) edits it deliberately.** |
-| `~/projects/my-portfolio-app` (this repo) | Stock Expo SDK 57 scaffold: expo-router 57, RN 0.86.2, React 19.2.3, New Architecture, React Compiler + typed routes, `src/` with `@/*`, `NativeTabs` already used in `src/components/app-tabs.tsx`, two placeholder tabs (`index`, `explore`). |
+| `~/projects/my-portfolio-app` (this repo) | Stock Expo SDK 57 scaffold: expo-router 57, RN 0.86.2, React 19.2.3, New Architecture, React Compiler + typed routes, `src/` with `@/*`, `NativeTabs` already used in `src/components/app-tabs.tsx`, two placeholder tabs (`index`, `explore`). *(Historical scaffold description — the app has since moved through M0–M7; see CLAUDE.md's Status line for current state.)* |
 
 What is being built: a brand-faithful native client that bundles portfolio content, streams Mo Ghaly GPT over a native-safe fetch path, and captures leads / contact through the existing site APIs after a small native-client channel lands on the backend.
 
