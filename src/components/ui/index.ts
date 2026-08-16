@@ -1,7 +1,9 @@
 export { Badge, type BadgeProps } from './badge';
 export { Button, type ButtonProps } from './button';
 export { Card, type CardProps } from './card';
+export { Checkbox, type CheckboxProps } from './checkbox';
 export { Divider, type DividerProps } from './divider';
+export { Input, type InputProps } from './input';
 export { PromptChip, type PromptChipProps } from './prompt-chip';
 export { Reveal, type RevealProps } from './reveal';
 export { Screen, type ScreenProps } from './screen';

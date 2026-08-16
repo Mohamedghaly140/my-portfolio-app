@@ -11,7 +11,7 @@ import { useTheme } from '@/theme/theme-provider';
 
 export type TextProps = {
   role?: TypeRole;
-  color?: 'text' | 'textMuted' | 'accent' | 'accentText' | 'code';
+  color?: 'text' | 'textMuted' | 'accent' | 'accentText' | 'code' | 'danger';
   children: React.ReactNode;
   style?: StyleProp<TextStyle>;
   numberOfLines?: number;

@@ -87,6 +87,7 @@ export function useChatSession(): {
   newChat: () => void;
   isStartingNewChat: boolean;
   bootState: BootState;
+  conversationId: string;
 } {
   const boot = useConversationBoot();
   const { retry: retryBoot, ...bootState } = boot;
@@ -393,5 +394,6 @@ export function useChatSession(): {
     newChat,
     isStartingNewChat,
     bootState,
+    conversationId: conversationId ?? "",
   };
 }

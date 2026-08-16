@@ -27,12 +27,15 @@ Source: `app/globals.css` `@theme inline` (verified 2026-08-15):
 | Accent | `--color-accent` | `#00E5A0` | `accent` |
 | Accent dim | `--color-accent-dim` | `#00E5A015` | `accentDim` → `rgba(0, 229, 160, 0.082)` |
 | Code | `--color-code` | `#E2A84B` | `code` |
+| Danger | — (app-only) | `#F87171` | `danger` |
 
 `borderHover` becomes `borderPressed` because RN has no hover; press / selected borders use this token.
 
 `accentDim`: the web stores an 8-digit hex (`#00E5A015` ≈ 8.2% alpha). RN prefers an explicit `rgba(0, 229, 160, 0.082)`.
 
 `accentBorder`: `rgba(0, 229, 160, 0.2)` in dark — matches the web Badge accent variant `border-(--color-accent)/20`.
+
+`danger` is app-only (not ported from the web `@theme`): Contact-form field and server error text only. Do not use it for borders or fills.
 
 ### Dark contrast (text-bearing pairs on `bg`)
 
@@ -65,6 +68,7 @@ Primary button fill uses `accent` with label colour `onAccent` (== `bg` in dark,
 | `accentBorder` | `rgba(0, 110, 77, 0.2)` | Accent outline at 20% (Badge accent variant) |
 | `code` | `#8A5A00` | Inline / mono accent |
 | `onAccent` | `#14141A` (== `text`) | Label/icon colour for content on a solid `accent` fill (e.g. primary Button) |
+| `danger` | `#DC2626` | Contact-form field/server error text only |
 
 `onAccent` exists because `accent` is bright in both schemes: dark mode's darkest neutral is `bg`, but light mode's darkest neutral is `text`, not `bg`. A component that puts its label on solid `accent` must use `onAccent`, never `bg` — `bg` on `accent` is only **1.45:1** in light mode.
 
@@ -194,6 +198,7 @@ export type ThemeColors = {
   accentBorder: string; // accent at 20% alpha (Badge accent outline)
   code: string;
   onAccent: string; // label/icon colour on a solid accent fill — never use bg for this
+  danger: string; // Contact-form error text only (`#F87171` dark / `#DC2626` light)
 };
 
 export const Colors: Record<ColorSchemeName, ThemeColors>;
@@ -312,7 +317,7 @@ Derives from: raw headings / body / `JetBrains` spans on the web (no single `Tex
 ```ts
 type TextProps = {
   role?: TypeRole; // default 'body'
-  color?: 'text' | 'textMuted' | 'accent' | 'accentText' | 'code';
+  color?: 'text' | 'textMuted' | 'accent' | 'accentText' | 'code' | 'danger';
   children: React.ReactNode;
   style?: StyleProp<TextStyle>;
   numberOfLines?: number;
@@ -320,7 +325,7 @@ type TextProps = {
 };
 ```
 
-`color="accent"` **always** resolves to `colors.accentText` (never the raw accent). Raw `#00E5A0` is 1.58:1 on the light background and is for fills, dots and rules only. Roles come from the `Typography` record; do not restyle them locally.
+`color="accent"` **always** resolves to `colors.accentText` (never the raw accent). Raw `#00E5A0` is 1.58:1 on the light background and is for fills, dots and rules only. `color="danger"` resolves to `colors.danger` (Contact-form errors only). Roles come from the `Typography` record; do not restyle them locally.
 
 ### `Badge`
 
@@ -367,6 +372,48 @@ type CardProps = {
 ```
 
 `surface` background, 1px `border`; no shadow; no radius. When `onPress` is set, the border switches to `borderPressed` while pressed.
+
+### `Input`
+
+Derives from: web contact / lead form text fields (no single shared Input on the web).
+
+```ts
+type InputProps = {
+  label: string;
+  optionalHint?: boolean; // appends muted " (optional)" after the label
+  value: string;
+  onChangeText: (text: string) => void;
+  onBlur?: () => void;
+  placeholder?: string;
+  error?: string; // small `color="danger"` text below the field — no red border
+  multiline?: boolean;
+  numberOfLines?: number;
+  keyboardType?: TextInputProps['keyboardType'];
+  autoComplete?: TextInputProps['autoComplete'];
+  autoCapitalize?: TextInputProps['autoCapitalize'];
+  maxLength?: number;
+  editable?: boolean;
+  variant?: 'surface' | 'bg'; // field background; default 'surface'
+};
+```
+
+Dumb labeled `TextInput` — not react-hook-form-aware; wire via `Controller` in screens. Label uses the `label` type role (muted). Field: `minHeight: 44`, 1px border (`border` idle, `accent` while focused), `borderRadius: 0`, background `colors[variant]`. Multiline sets `textAlignVertical: 'top'`. Error text only — never a danger-coloured border.
+
+### `Checkbox`
+
+Derives from: web lead-form consent checkbox.
+
+```ts
+type CheckboxProps = {
+  checked: boolean;
+  onChange: (checked: boolean) => void;
+  label: React.ReactNode;
+  disabled?: boolean;
+  accessibilityLabel?: string;
+};
+```
+
+Pressable row (`minHeight: 44`, `accessibilityRole="checkbox"`). 20×20 square: `border` outline when unchecked; `accent` fill + `checkmark` Ionicon (`onAccent`, size 14) when checked. Toggle fires `selectionChanged()` via `src/lib/haptics.ts`, then `onChange(!checked)`.
 
 ### `SectionLabel`
 

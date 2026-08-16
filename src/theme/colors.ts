@@ -13,6 +13,7 @@ export type ThemeColors = {
   accentBorder: string;
   code: string;
   onAccent: string; // label/icon colour for content on a solid `accent` fill
+  danger: string; // Contact-form field/server error text only
 };
 
 export const Colors: Record<ColorSchemeName, ThemeColors> = {
@@ -29,6 +30,7 @@ export const Colors: Record<ColorSchemeName, ThemeColors> = {
     accentBorder: 'rgba(0, 229, 160, 0.2)',
     code: '#E2A84B',
     onAccent: '#0A0A0F', // == bg; 11.96:1 on accent
+    danger: '#F87171',
   },
   light: {
     bg: '#F1F0EB',
@@ -43,5 +45,6 @@ export const Colors: Record<ColorSchemeName, ThemeColors> = {
     accentBorder: 'rgba(0, 110, 77, 0.2)',
     code: '#8A5A00',
     onAccent: '#14141A', // == text; 11.11:1 on accent (bg would be ~1.45:1)
+    danger: '#DC2626',
   },
 };
