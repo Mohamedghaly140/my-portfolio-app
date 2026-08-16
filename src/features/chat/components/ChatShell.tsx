@@ -15,6 +15,7 @@ import { useChatSession } from "@/features/chat/hooks/useChatSession";
 import { Spacing } from "@/theme";
 import { useTheme } from "@/theme/theme-provider";
 
+import { ChatConversationProvider } from "./ChatConversationContext";
 import { Composer } from "./Composer";
 import { ErrorNotice } from "./ErrorNotice";
 import { LiveAnnouncer } from "./LiveAnnouncer";
@@ -41,6 +42,7 @@ export function ChatShell({ session }: ChatShellProps) {
     stop,
     retry,
     bootState,
+    conversationId,
   } = session;
 
   const [degradedBannerDismissed, setDegradedBannerDismissed] = useState(false);
@@ -95,65 +97,67 @@ export function ChatShell({ session }: ChatShellProps) {
   }
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : undefined}
-      keyboardVerticalOffset={Platform.OS === "ios" ? 88 : 0}
-      style={[styles.root, { backgroundColor: colors.bg }]}
-    >
-      <LiveAnnouncer errorMessage={error?.message} phase={phase} />
+    <ChatConversationProvider conversationId={conversationId}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
+        keyboardVerticalOffset={Platform.OS === "ios" ? 88 : 0}
+        style={[styles.root, { backgroundColor: colors.bg }]}
+      >
+        <LiveAnnouncer errorMessage={error?.message} phase={phase} />
 
-      {showDegradedBanner ? (
+        {showDegradedBanner ? (
+          <View
+            style={[
+              styles.banner,
+              {
+                backgroundColor: colors.surface,
+                borderBottomColor: colors.border,
+              },
+            ]}
+          >
+            <Text color="textMuted" role="small" style={styles.bannerText}>
+              {"You're viewing a cached version of this conversation."}
+            </Text>
+            <Pressable
+              accessibilityLabel="Dismiss cached conversation banner"
+              accessibilityRole="button"
+              hitSlop={8}
+              onPress={() => setDegradedBannerDismissed(true)}
+            >
+              <Text color="accentText" role="small">
+                Dismiss
+              </Text>
+            </Pressable>
+          </View>
+        ) : null}
+
+        <View style={styles.body}>
+          {showWelcome ? (
+            <WelcomeState onSelectPrompt={sendMessage} />
+          ) : (
+            <MessageList messages={messages} />
+          )}
+        </View>
+
         <View
           style={[
-            styles.banner,
-            {
-              backgroundColor: colors.surface,
-              borderBottomColor: colors.border,
-            },
+            styles.footer,
+            { paddingBottom: keyboardVisible ? 0 : insets.bottom },
           ]}
         >
-          <Text color="textMuted" role="small" style={styles.bannerText}>
-            {"You're viewing a cached version of this conversation."}
-          </Text>
-          <Pressable
-            accessibilityLabel="Dismiss cached conversation banner"
-            accessibilityRole="button"
-            hitSlop={8}
-            onPress={() => setDegradedBannerDismissed(true)}
-          >
-            <Text color="accentText" role="small">
-              Dismiss
-            </Text>
-          </Pressable>
+          {error ? <ErrorNotice error={error} onRetry={retry} /> : null}
+          <StreamStatus phase={phase} />
+          <Composer
+            disabled={composerDisabled}
+            draftText={draftText}
+            onSend={sendMessage}
+            onStop={stop}
+            phase={phase}
+            setDraftText={setDraftText}
+          />
         </View>
-      ) : null}
-
-      <View style={styles.body}>
-        {showWelcome ? (
-          <WelcomeState onSelectPrompt={sendMessage} />
-        ) : (
-          <MessageList messages={messages} />
-        )}
-      </View>
-
-      <View
-        style={[
-          styles.footer,
-          { paddingBottom: keyboardVisible ? 0 : insets.bottom },
-        ]}
-      >
-        {error ? <ErrorNotice error={error} onRetry={retry} /> : null}
-        <StreamStatus phase={phase} />
-        <Composer
-          disabled={composerDisabled}
-          draftText={draftText}
-          onSend={sendMessage}
-          onStop={stop}
-          phase={phase}
-          setDraftText={setDraftText}
-        />
-      </View>
-    </KeyboardAvoidingView>
+      </KeyboardAvoidingView>
+    </ChatConversationProvider>
   );
 }
 

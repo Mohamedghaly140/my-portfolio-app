@@ -9,8 +9,8 @@ import type { ChatUIMessage } from "@/lib/api/chatTransport";
 import { Spacing } from "@/theme";
 import { useTheme } from "@/theme/theme-provider";
 
-import { ContactHandoffPlaceholder } from "./blocks/ContactHandoffPlaceholder";
-import { LeadFormPlaceholder } from "./blocks/LeadFormPlaceholder";
+import { ContactHandoff } from "./blocks/ContactHandoff";
+import { LeadForm } from "./blocks/LeadForm";
 import { ProjectGrid } from "./blocks/ProjectGrid";
 import { SourceList } from "./blocks/SourceList";
 import { UnknownBlock } from "./blocks/UnknownBlock";
@@ -37,9 +37,9 @@ function BlockRenderer({ entry }: { entry: RenderableChatBlock }) {
     case "source_list":
       return <SourceList block={entry.block} />;
     case "lead_form":
-      return <LeadFormPlaceholder block={entry.block} />;
+      return <LeadForm block={entry.block} />;
     case "contact_handoff":
-      return <ContactHandoffPlaceholder block={entry.block} />;
+      return <ContactHandoff block={entry.block} />;
   }
 }
 
