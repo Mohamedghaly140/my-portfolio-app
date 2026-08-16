@@ -1,5 +1,6 @@
 import { describe, expect, test, mock } from "bun:test";
 import { onlineManager } from "@tanstack/react-query";
+import { createMockMmkv } from "@/lib/storage/mmkv.mock";
 
 let emitNetInfoChange: ((state: { isConnected: boolean | null }) => void) | undefined;
 const unsubscribeNetInfo = mock(() => {});
@@ -7,6 +8,10 @@ const unsubscribeNetInfo = mock(() => {});
 mock.module("react-native", () => ({
   AppState: { addEventListener: mock(() => ({ remove: mock() })) },
   Platform: { OS: "ios" },
+}));
+
+mock.module("react-native-mmkv", () => ({
+  createMMKV: () => createMockMmkv(),
 }));
 
 mock.module("@react-native-community/netinfo", () => ({

@@ -1,14 +1,24 @@
 import { useEffect } from "react";
 import { AppState, Platform } from "react-native";
 import type { AppStateStatus } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import NetInfo from "@react-native-community/netinfo";
-import { createAsyncStoragePersister } from "@tanstack/query-async-storage-persister";
+import { createSyncStoragePersister } from "@tanstack/query-sync-storage-persister";
 import { QueryClient, focusManager, onlineManager } from "@tanstack/react-query";
 import { persistQueryClient } from "@tanstack/react-query-persist-client";
+import { storage } from "@/lib/storage/mmkv";
 
 const QUERY_CACHE_KEY = "mg_query_cache";
 const QUERY_CACHE_MAX_AGE = 24 * 60 * 60 * 1000;
+
+const mmkvStorageAdapter = {
+  getItem: (key: string): string | null => storage.getString(key) ?? null,
+  setItem: (key: string, value: string): void => {
+    storage.set(key, value);
+  },
+  removeItem: (key: string): void => {
+    storage.remove(key);
+  },
+};
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -19,7 +29,7 @@ export const queryClient = new QueryClient({
   },
 });
 
-/** Only markdown GETs may be written to AsyncStorage — never session/chat keys. */
+/** Only markdown GETs may be written to MMKV — never session/chat keys. */
 export function shouldDehydrateQuery(query: { queryKey: readonly unknown[] }): boolean {
   return query.queryKey[0] === "markdown";
 }
@@ -37,8 +47,8 @@ export function setupQueryPersistence(): void {
 
   persistQueryClient({
     queryClient,
-    persister: createAsyncStoragePersister({
-      storage: AsyncStorage,
+    persister: createSyncStoragePersister({
+      storage: mmkvStorageAdapter,
       key: QUERY_CACHE_KEY,
     }),
     dehydrateOptions: {

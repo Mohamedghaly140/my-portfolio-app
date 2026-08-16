@@ -1,4 +1,4 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { storage } from '@/lib/storage/mmkv';
 
 const THEME_PREFERENCE_KEY = 'mg_theme_preference';
 
@@ -9,17 +9,17 @@ function isThemePreference(value: string): value is ThemePreference {
 }
 
 export async function getStoredThemePreference(): Promise<ThemePreference | null> {
-  const value = await AsyncStorage.getItem(THEME_PREFERENCE_KEY);
-  if (value === null || !isThemePreference(value)) {
+  const value = storage.getString(THEME_PREFERENCE_KEY);
+  if (value === undefined || !isThemePreference(value)) {
     return null;
   }
   return value;
 }
 
 export async function setStoredThemePreference(value: ThemePreference): Promise<void> {
-  await AsyncStorage.setItem(THEME_PREFERENCE_KEY, value);
+  storage.set(THEME_PREFERENCE_KEY, value);
 }
 
 export async function clearStoredThemePreference(): Promise<void> {
-  await AsyncStorage.removeItem(THEME_PREFERENCE_KEY);
+  storage.remove(THEME_PREFERENCE_KEY);
 }
