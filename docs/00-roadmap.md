@@ -227,7 +227,9 @@ The app repo's `.env` currently holds full production **server** secrets copied 
 **Tasks:**
 
 1. Persist react-query cache (AsyncStorage or equivalent) for markdown and any non-sensitive GETs. Chat transcript remains server-authoritative + secure-store session; do not put session tokens in the query cache.
-2. Universal links: serve `apple-app-site-association` and `assetlinks.json` from the Next.js site's `public/.well-known/`, mapping `/projects/<slug>`, `/blog/<slug>`, and `/chat?q=` onto the tab stacks. Keep `moghaly://` custom scheme.
+2. Universal links: serve `apple-app-site-association` and `assetlinks.json` as Next.js route handlers under the web repo's `app/.well-known/` (matching every other well-known endpoint there — `api-catalog`, `mcp/server-card.json`, etc. — none of them are static files under `public/`), mapping `/projects/<slug>`, `/blog/<slug>`, and `/chat?q=` onto the tab stacks. Keep `moghaly://` custom scheme.
+   - **iOS done (2026-08-18):** `app/.well-known/apple-app-site-association/route.ts` added in the web repo, appIDs `87RCGD58DJ.com.moghaly.app` (team ID `87RCGD58DJ`, bundle ID `com.moghaly.app`), components for `/projects/*`, `/blog/*`, `/chat`. `ios.associatedDomains: ["applinks:moghaly.dev"]` added to this repo's `app.json` — needs a new dev/EAS build to take effect (native entitlement, not picked up by Expo Go).
+   - **Android deferred:** `assetlinks.json` needs the release SHA256 cert fingerprint for `com.moghaly.app`, which isn't available yet (user deferred — no Android keystore/EAS credentials set up). Revisit once that exists; `android.intentFilters` in `app.json` also still needs adding alongside it.
 3. Share sheet for project / blog URLs (`EXPO_PUBLIC_SITE_URL` + path).
 4. Haptics on tab select (primary-action and card-selection haptics already landed in the 2026-08-15 UI polish pass, `01-design-system.md` §11 — this task is now just the remaining tab-select case, via the same `src/lib/haptics.ts`); respect `useReducedMotion()` for Reveal / list stagger.
 5. VoiceOver / TalkBack pass on Home, Chat, Contact.

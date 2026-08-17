@@ -9,7 +9,8 @@
     "userInterfaceStyle": "automatic",
     "ios": {
       "icon": "./assets/expo.icon",
-      "bundleIdentifier": "com.moghaly.app"
+      "bundleIdentifier": "com.moghaly.app",
+      "associatedDomains": ["applinks:moghaly.dev"]
     },
     "android": {
       "package": "com.moghaly.app",
