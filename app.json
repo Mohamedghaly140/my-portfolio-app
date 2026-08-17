@@ -8,9 +8,15 @@
     "scheme": "moghaly",
     "userInterfaceStyle": "automatic",
     "ios": {
-      "icon": "./assets/expo.icon",
+      "icon": {
+        "light": "./assets/images/icon-light.png",
+        "dark": "./assets/images/icon-dark.png"
+      },
       "bundleIdentifier": "com.moghaly.app",
-      "associatedDomains": ["applinks:moghaly.dev"]
+      "associatedDomains": [
+        "applinks:moghaly.dev"
+      ],
+      "appleTeamId": "87RCGD58DJ"
     },
     "android": {
       "package": "com.moghaly.app",
