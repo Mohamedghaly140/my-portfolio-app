@@ -1,5 +1,5 @@
-import { View } from "react-native";
 import { NativeTabs } from "expo-router/unstable-native-tabs";
+import { View } from "react-native";
 
 import { ChatFab } from "@/components/chat-fab";
 import { selectionChanged } from "@/lib/haptics";
