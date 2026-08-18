@@ -4,10 +4,21 @@ import { AskMohamedCTA } from "@/components/ask-mohamed-cta";
 import { Reveal, SectionLabel, Text } from "@/components/ui";
 import { Spacing } from "@/theme";
 
+import { AppearanceMenuButton } from "@/components/appearance-menu-button";
+import { useNavigation } from "expo-router";
+import { useLayoutEffect } from "react";
 import { ContactForm } from "./components/ContactForm";
 import { ContactLinks } from "./components/ContactLinks";
 
 export function ContactScreen() {
+  const navigation = useNavigation();
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => <AppearanceMenuButton />,
+    });
+  }, [navigation]);
+
   return (
     <View style={styles.root}>
       <Reveal>
