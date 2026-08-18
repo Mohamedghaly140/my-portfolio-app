@@ -5,7 +5,7 @@ import { ChatFab } from "@/components/chat-fab";
 import { selectionChanged } from "@/lib/haptics";
 
 /**
- * Tab order: Home · Blogs · Experience · Contact · Settings. Chat moved to a
+ * Tab order: Home · Blogs · Experience · Contact. Chat moved to a
  * root modal (see `src/app/chat/`), reachable via the global `ChatFab`.
  * `chat` is a REAL path segment, not a `(group)` — a route group here would
  * resolve to bare "/" and collide with `(tabs)/(home)/index.tsx` for the
@@ -15,11 +15,11 @@ import { selectionChanged } from "@/lib/haptics";
  * stack — they are never tabs.
  *
  * `(home)` stays a route group (deliberately transparent, mapping to bare
- * "/"); `blog`, `experience`, `contact` and `settings` are literal folders
- * so their tabs get real URL segments (`/blog`, `/experience`, `/contact`,
- * `/settings`) for deep linking — fixed 2026-08-16 after device testing
- * showed the group-wrapped versions had no reachable path and silently fell
- * through to `blog/[slug].tsx`'s dynamic segment instead.
+ * "/"); `blog`, `experience` and `contact` are literal folders so their
+ * tabs get real URL segments (`/blog`, `/experience`, `/contact`) for deep
+ * linking — fixed 2026-08-16 after device testing showed the group-wrapped
+ * versions had no reachable path and silently fell through to
+ * `blog/[slug].tsx`'s dynamic segment instead.
  */
 export default function TabsLayout() {
   return (
@@ -54,14 +54,6 @@ export default function TabsLayout() {
           <NativeTabs.Trigger.Icon
             sf={{ default: "envelope", selected: "envelope.fill" }}
             md="mail"
-          />
-        </NativeTabs.Trigger>
-
-        <NativeTabs.Trigger name="settings">
-          <NativeTabs.Trigger.Label>Settings</NativeTabs.Trigger.Label>
-          <NativeTabs.Trigger.Icon
-            sf={{ default: "gearshape", selected: "gearshape.fill" }}
-            md="settings"
           />
         </NativeTabs.Trigger>
       </NativeTabs>

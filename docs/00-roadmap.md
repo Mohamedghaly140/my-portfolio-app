@@ -2,7 +2,7 @@
 
 Implementation plan for turning the Expo SDK 57 scaffold in this repository into the native companion to the Next.js 16 portfolio at `~/projects/my-portfolio`.
 
-**Product:** a five-tab app — **Home · Blogs · Experience · Contact · Settings** — with About, Projects, Project detail, Skills, and Privacy pushed inside the Home stack. Chat is not a tab: it's a root-level modal reached from a global floating action button, visible on every screen (superseded 2026-08-16, see D1).
+**Product:** a four-tab app — **Home · Blogs · Experience · Contact** — with About, Projects, Project detail, Skills, and Privacy pushed inside the Home stack. Chat is not a tab: it's a root-level modal reached from a global floating action button, visible on every screen (superseded 2026-08-16, see D1). Appearance (System / Light / Dark) lives in a Home header dropdown (superseded 2026-08-18, see D1).
 
 **Status:** M0–M7 landed. See `CLAUDE.md`'s Status line for the current summary; update both together as phases land. M6 is device-verified on iOS only (Android deferred — user accepted iOS-only for now). M8 (offline caching, deep links, polish) is next.
 
@@ -25,7 +25,7 @@ What is being built: a brand-faithful native client that bundles portfolio conte
 
 | ID | Decision | Rationale |
 |---|---|---|
-| **D1** | 5 native tabs via `NativeTabs` — Home / Blogs / Experience / Contact / Settings; About / Projects / Project detail / Skills / Privacy live in the Home stack. Chat is a root-level modal (`src/app/chat/`, route `/chat`) reached from a global FAB (`ChatFab`), not a tab. | user-specified; keeps the tab bar platform-native (liquid glass, haptics, scroll-to-top) while everything above it is brand. **Superseded 2026-08-16:** Chat originally occupied the 3rd tab slot; the user asked for it to be reachable from every screen instead, so it moved to a modal behind a global FAB and the vacated slot became Settings (theme picker). This also reverses the M3-era "no floating FAB" call below, which was itself a deliberate departure from the web's `ask-fab` — see `02-screens.md` and `04-content-inventory.md`. |
+| **D1** | 5 native tabs via `NativeTabs` — Home / Blogs / Experience / Contact / Settings; About / Projects / Project detail / Skills / Privacy live in the Home stack. Chat is a root-level modal (`src/app/chat/`, route `/chat`) reached from a global FAB (`ChatFab`), not a tab. | user-specified; keeps the tab bar platform-native (liquid glass, haptics, scroll-to-top) while everything above it is brand. **Superseded 2026-08-16:** Chat originally occupied the 3rd tab slot; the user asked for it to be reachable from every screen instead, so it moved to a modal behind a global FAB and the vacated slot became Settings (theme picker). This also reverses the M3-era "no floating FAB" call below, which was itself a deliberate departure from the web's `ask-fab` — see `02-screens.md` and `04-content-inventory.md`. **Superseded 2026-08-18:** the Settings tab was removed (4 tabs: Home / Blogs / Experience / Contact); its appearance picker moved to a Home header-right dropdown (native `Menu` on iOS / `DropdownMenu` on Android via `@expo/ui`), still bound to `useThemePreference()`. |
 | **D2** | Portfolio content is bundled static TypeScript ported from the web repo's `lib/data/`. | mirrors the web invariant "portfolio data is static and typed; do not add a database for ordinary content." Instant first paint, works offline. Blog prose and chat are the only network reads. |
 | **D3** | Typed theme + `StyleSheet.create`, **no NativeWind**. | zero new transform layers, best React-Compiler compatibility, extends the existing `src/constants/theme.ts`. |
 | **D4** | Same brand, native conventions; ship a derived light theme. Identical palette / typography / square corners, but native list, press, sheet and navigation idioms instead of web hover states. | brand continuity without pretending RN is a browser. |
@@ -70,7 +70,7 @@ The app repo's `.env` currently holds full production **server** secrets copied 
 3. Add `ios.bundleIdentifier` and `android.package` (suggest `com.moghaly.app`; confirm before first EAS build).
 4. Keep `scheme: "moghaly"`.
 
-**Router restructure** — replace the two-tab scaffold with the tree in [`02-screens.md`](./02-screens.md) §1. Wire `NativeTabs.Trigger` names `(home)`, `(blog)`, `(chat)`, `(experience)`, `(contact)` in that order. Each tab's `index` can be an empty `Screen` placeholder labelled correctly.
+**Router restructure** — replace the two-tab scaffold with the tree in [`02-screens.md`](./02-screens.md) §1. Wire `NativeTabs.Trigger` names `(home)`, `blog`, `experience`, `contact` in that order. Each tab's `index` can be an empty `Screen` placeholder labelled correctly.
 
 **Delete template leftovers:**
 

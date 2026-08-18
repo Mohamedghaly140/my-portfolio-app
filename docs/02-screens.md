@@ -10,7 +10,7 @@ Cross-references: tokens → [`01-design-system.md`](./01-design-system.md); cha
 
 ```
 src/app/_layout.tsx                      root: fonts, splash, ThemePreferenceProvider, ThemeProvider, QueryClient
-src/app/(tabs)/_layout.tsx               NativeTabs — 5 triggers, in this order + global ChatFab overlay
+src/app/(tabs)/_layout.tsx               NativeTabs — 4 triggers, in this order + global ChatFab overlay
 src/app/(tabs)/(home)/_layout.tsx        Stack
 src/app/(tabs)/(home)/index.tsx          Home
 src/app/(tabs)/(home)/about.tsx
@@ -24,8 +24,6 @@ src/app/(tabs)/experience/_layout.tsx    Stack
 src/app/(tabs)/experience/index.tsx
 src/app/(tabs)/contact/_layout.tsx       Stack
 src/app/(tabs)/contact/index.tsx
-src/app/(tabs)/settings/_layout.tsx      Stack
-src/app/(tabs)/settings/index.tsx
 src/app/chat/_layout.tsx                 Stack — root modal, sibling of (tabs). Real path segment
                                           (not a `(group)`) so it can't collide with `/`
 src/app/chat/index.tsx
@@ -41,9 +39,8 @@ src/app/+not-found.tsx
 | 2 | `blog` | Blogs |
 | 3 | `experience` | Experience |
 | 4 | `contact` | Contact |
-| 5 | `settings` | Settings |
 
-`(home)` stays a route group (deliberately transparent, mapping to bare `/`); `blog`, `experience`, `contact` and `settings` are literal (non-group) folders so their tabs carry real URL segments. **2026-08-16:** these four were originally shipped as groups too (`(blog)`, `(experience)`, `(contact)`, `(settings)`), which meant `/blog`, `/experience`, `/contact`, `/settings` and `/blog/<slug>` had no reachable route and silently fell through to `blog/[slug].tsx`'s dynamic segment — caught during M8 deep-link device verification and fixed by renaming the four folders (internal `router.push`/`Link` call sites and `NativeTabs.Trigger` names updated to match).
+`(home)` stays a route group (deliberately transparent, mapping to bare `/`); `blog`, `experience` and `contact` are literal (non-group) folders so their tabs carry real URL segments. **2026-08-16:** these were originally shipped as groups too (`(blog)`, `(experience)`, `(contact)`, and formerly `(settings)`), which meant `/blog`, `/experience`, `/contact`, `/settings` and `/blog/<slug>` had no reachable route and silently fell through to `blog/[slug].tsx`'s dynamic segment — caught during M8 deep-link device verification and fixed by renaming the folders (internal `router.push`/`Link` call sites and `NativeTabs.Trigger` names updated to match). **2026-08-18:** the Settings tab / `/settings` route was removed; appearance moved to the Home header (see §3.1).
 
 About, Projects, Project detail, Skills, and Privacy are **not** tabs — they push on the Home stack only. Chat is **not** a tab — it's a root `Stack.Screen` with `presentation: 'modal'`, reached from the global `ChatFab` (mounted once at the `(tabs)` layout level, above `NativeTabs`, so it overlays every tab and every pushed screen). **2026-08-16:** superseded the original 5th-tab placement of Chat — see `00-roadmap.md` D1.
 
@@ -92,6 +89,8 @@ About, Projects, Project detail, Skills, and Privacy are **not** tabs — they p
 **States:** no loading (static). Empty featured/latest: hide section. Error: N/A offline.
 
 **Native delta:** Hero floating code block may simplify on small phones; keep brand name hero-level. No grayscale-hover on images — optional press opacity.
+
+**Header:** `headerRight` mounts `AppearanceMenuButton` (`src/components/appearance-menu-button.ios.tsx` / `.android.tsx`) — a native System / Light / Dark dropdown (`Menu` on iOS, `DropdownMenu` on Android via `@expo/ui`), bound to `useThemePreference()`. No network calls; preference persists via `src/lib/preferences/theme.ts`. **2026-08-18:** moved here from the removed Settings tab (see `00-roadmap.md` D1).
 
 ---
 
@@ -345,30 +344,7 @@ About, Projects, Project detail, Skills, and Privacy are **not** tabs — they p
 
 ---
 
-## 8. Settings stack
-
-### 8.1 Settings — `/(tabs)/settings`
-
-| | |
-|---|---|
-| **Route** | `/(tabs)/settings/` |
-| **Stack** | Settings |
-| **Deep link** | `/settings` |
-
-**Sections** (`(settings)/index.tsx`):
-
-1. Header — "Settings"
-2. `SectionLabel` "APPEARANCE" + `Card` with a System / Light / Dark three-way `Button` row, bound to `useThemePreference()` (`src/theme/theme-preference-provider.tsx`)
-
-**Data:** theme preference persisted via `src/lib/preferences/theme.ts` (`AsyncStorage`). No network calls.
-
-**States:** none beyond the three-way selection reflecting `preference`.
-
-**Native delta:** new to this app (added 2026-08-16 alongside the Chat → modal/FAB change, see `00-roadmap.md` D1) — no web equivalent screen. Room left for future settings under additional `SectionLabel` groups.
-
----
-
-## 9. Not found
+## 8. Not found
 
 | | |
 |---|---|
@@ -379,7 +355,7 @@ Brand `Screen` with title, short copy, button back to Home tab.
 
 ---
 
-## 10. Deep-link map (M8)
+## 9. Deep-link map (M8)
 
 | URL path | Destination |
 |---|---|
@@ -395,6 +371,5 @@ Brand `Screen` with title, short copy, button back to Home tab.
 | `/chat/privacy` | `chat/privacy` — see §3.6 |
 | `/experience` | `experience/` |
 | `/contact` | `contact/` |
-| `/settings` | `settings/` |
 
 Custom scheme: `moghaly://` with the same path suffixes. Universal links require `apple-app-site-association` + `assetlinks.json` on the Next.js site (`public/.well-known/`).
