@@ -1,26 +1,26 @@
-import { useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
-import { router } from 'expo-router';
+import { router } from "expo-router";
+import { useEffect, useState } from "react";
+import { StyleSheet, View } from "react-native";
 
-import { Button, Reveal, Text } from '@/components/ui';
-import { openCv } from '@/lib/open-cv';
-import { Motion, Spacing } from '@/theme';
+import { Button, Reveal, Text } from "@/components/ui";
+import { openCv } from "@/lib/open-cv";
+import { Motion, Spacing } from "@/theme";
 
-import { ROLE_ROTATE_MS, ROLES } from '../constants';
-import { SocialLinks } from './social-links';
+import { ROLE_ROTATE_MS, ROLES } from "../constants";
+import { SocialLinks } from "./social-links";
 
 export function HeroSection() {
   const [roleIndex, setRoleIndex] = useState(0);
 
   useEffect(() => {
     const id = setInterval(() => {
-      setRoleIndex((current) => (current + 1) % ROLES.length);
+      setRoleIndex(current => (current + 1) % ROLES.length);
     }, ROLE_ROTATE_MS);
     return () => clearInterval(id);
   }, []);
 
   function handleViewWork() {
-    router.push('/projects');
+    router.push("/projects");
   }
 
   return (
@@ -33,7 +33,7 @@ export function HeroSection() {
 
       <Reveal delayMs={Motion.staggerMs}>
         <Text accessibilityRole="header" role="title" style={styles.name}>
-          Mohamed Ghaly.
+          Mohamed Ghaly
         </Text>
       </Reveal>
 
@@ -47,22 +47,22 @@ export function HeroSection() {
 
       <Reveal delayMs={Motion.staggerMs * 3}>
         <Text color="textMuted" role="body" style={styles.pitch}>
-          I build cross-platform mobile apps and high-performance web interfaces.
-          Focused on clean architecture, real-time features, and developer experience
-          that scales.
+          I build cross-platform mobile apps and high-performance web
+          interfaces. Focused on clean architecture, real-time features, and
+          developer experience that scales.
         </Text>
       </Reveal>
 
       <Reveal delayMs={Motion.staggerMs * 4}>
         <View style={styles.actions}>
           <Button
-            icon={{ name: 'arrow-forward' }}
+            icon={{ name: "arrow-forward" }}
             label="View My Work"
             onPress={handleViewWork}
             variant="primary"
           />
           <Button
-            icon={{ name: 'arrow-down' }}
+            icon={{ name: "arrow-down" }}
             label="Download CV"
             onPress={openCv}
             variant="ghost"
@@ -81,6 +81,7 @@ const styles = StyleSheet.create({
   section: {
     gap: Spacing.three,
     paddingVertical: Spacing.section,
+    alignItems: "center",
   },
   eyebrow: {
     letterSpacing: 2,
@@ -97,8 +98,8 @@ const styles = StyleSheet.create({
     maxWidth: 480,
   },
   actions: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+    flexDirection: "row",
+    flexWrap: "wrap",
     gap: Spacing.two + Spacing.half,
   },
 });
