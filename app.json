@@ -12,8 +12,9 @@
       "bundleIdentifier": "com.moghaly.app",
       "associatedDomains": ["applinks:moghaly.dev"],
       "appleTeamId": "87RCGD58DJ",
-      "infoPlist": {
-        "ITSAppUsesNonExemptEncryption": false
+      "supportsTablet": false,
+      "config": {
+        "usesNonExemptEncryption": false
       }
     },
     "android": {
@@ -40,7 +41,8 @@
           "imageWidth": 76
         }
       ],
-      "expo-secure-store"
+      "expo-secure-store",
+      "./plugins/withIphoneOnlyDestination"
     ],
     "experiments": {
       "typedRoutes": true,
