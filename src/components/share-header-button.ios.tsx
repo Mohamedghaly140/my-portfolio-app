@@ -1,10 +1,6 @@
 import { Host } from "@expo/ui";
 import { Button } from "@expo/ui/swift-ui";
-import {
-  buttonBorderShape,
-  buttonStyle,
-  labelStyle,
-} from "@expo/ui/swift-ui/modifiers";
+import { buttonBorderShape, labelStyle } from "@expo/ui/swift-ui/modifiers";
 import { StyleSheet, View } from "react-native";
 
 import { lightImpact } from "@/lib/haptics";
@@ -26,14 +22,10 @@ export function ShareHeaderButton({
 
   return (
     <View style={styles.button}>
-      <Host matchContents style={styles.host}>
+      <Host matchContents>
         <Button
           label={accessibilityLabel}
-          modifiers={[
-            labelStyle("iconOnly"),
-            buttonStyle("glass"),
-            buttonBorderShape("circle"),
-          ]}
+          modifiers={[labelStyle("iconOnly"), buttonBorderShape("circle")]}
           onPress={handlePress}
           systemImage="square.and.arrow.up"
         />
@@ -47,8 +39,5 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  host: {
-    height: 44,
-    width: 44,
-  },
+  host: {},
 });
