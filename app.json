@@ -11,7 +11,10 @@
       "icon": "./assets/images/icon.png",
       "bundleIdentifier": "com.moghaly.app",
       "associatedDomains": ["applinks:moghaly.dev"],
-      "appleTeamId": "87RCGD58DJ"
+      "appleTeamId": "87RCGD58DJ",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "package": "com.moghaly.app",
