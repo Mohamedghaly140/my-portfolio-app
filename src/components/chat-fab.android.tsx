@@ -9,7 +9,7 @@ import { lightImpact } from "@/lib/haptics";
 import { Spacing } from "@/theme";
 import { useTheme } from "@/theme/theme-provider";
 
-const FAB_ICON_SIZE = 38;
+const FAB_ICON_SIZE = 32;
 // Clearance above the safe-area inset needed to clear the floating native
 // tab bar pill, whose height isn't exposed to JS by expo-router.
 const TAB_BAR_CLEARANCE = 96;
