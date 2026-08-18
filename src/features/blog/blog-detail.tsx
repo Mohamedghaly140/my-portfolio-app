@@ -1,36 +1,37 @@
-import { type ReactNode, useLayoutEffect } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
-import { router, useLocalSearchParams, useNavigation } from 'expo-router';
+import { router, useLocalSearchParams, useNavigation } from "expo-router";
+import { type ReactNode, useLayoutEffect } from "react";
+import { Pressable, StyleSheet, View } from "react-native";
 
-import { MarkdownBody } from '@/components/markdown-body';
-import { ShareHeaderButton } from '@/components/share-header-button';
-import { Badge, Button, Divider, Reveal, Skeleton, Text } from '@/components/ui';
-import { getPostBySlug } from '@/data/blog';
-import { parseMarkdownError } from '@/lib/api/markdown';
-import { shareBlogPost } from '@/lib/share';
-import type { BlogPost } from '@/types/blog';
-import { Motion, Spacing } from '@/theme';
+import { MarkdownBody } from "@/components/markdown-body";
+import { ShareHeaderButton } from "@/components/share-header-button";
+import {
+  Badge,
+  Button,
+  Divider,
+  Reveal,
+  Skeleton,
+  Text,
+} from "@/components/ui";
+import { getPostBySlug } from "@/data/blog";
+import { parseMarkdownError } from "@/lib/api/markdown";
+import { shareBlogPost } from "@/lib/share";
+import { Motion, Spacing } from "@/theme";
+import type { BlogPost } from "@/types/blog";
 
-import { useArticleMarkdown } from './use-article-markdown';
+import { useArticleMarkdown } from "./use-article-markdown";
 
 function formatPostDate(isoDate: string): string {
-  const [year, month, day] = isoDate.split('-').map(Number);
+  const [year, month, day] = isoDate.split("-").map(Number);
   if (!year || !month || !day) return isoDate;
   const date = new Date(year, month - 1, day);
-  return date.toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
+  return date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
   });
 }
 
-function MetaPair({
-  label,
-  children,
-}: {
-  label: string;
-  children: ReactNode;
-}) {
+function MetaPair({ label, children }: { label: string; children: ReactNode }) {
   return (
     <View style={styles.metaPair}>
       <Text color="textMuted" role="label">
@@ -43,7 +44,7 @@ function MetaPair({
 
 function BlogPostNotFound() {
   function handleBack() {
-    router.push('/(tabs)/blog');
+    router.push("/(tabs)/blog");
   }
 
   return (
@@ -98,7 +99,7 @@ function ArticleBody({ post }: { post: BlogPost }) {
 export function BlogDetailScreen() {
   const navigation = useNavigation();
   const { slug: slugParam } = useLocalSearchParams<{ slug: string }>();
-  const slug = typeof slugParam === 'string' ? slugParam : slugParam?.[0];
+  const slug = typeof slugParam === "string" ? slugParam : slugParam?.[0];
   const post = slug ? getPostBySlug(slug) : undefined;
 
   useLayoutEffect(() => {
@@ -117,20 +118,8 @@ export function BlogDetailScreen() {
     return <BlogPostNotFound />;
   }
 
-  function handleBack() {
-    router.push('/(tabs)/blog');
-  }
-
   return (
     <View style={styles.root}>
-      <Reveal>
-        <Pressable accessibilityRole="link" hitSlop={8} onPress={handleBack}>
-          <Text color="accent" role="small">
-            ← All Articles
-          </Text>
-        </Pressable>
-      </Reveal>
-
       <Reveal delayMs={Motion.staggerMs}>
         <View style={styles.header}>
           <Text accessibilityRole="header" role="heading" style={styles.title}>
@@ -158,7 +147,7 @@ export function BlogDetailScreen() {
 
       <Reveal delayMs={Motion.staggerMs * 3}>
         <View style={styles.tags}>
-          {post.tags.map((tag) => (
+          {post.tags.map(tag => (
             <Badge key={tag} label={tag} variant="code" />
           ))}
         </View>
@@ -187,8 +176,8 @@ const styles = StyleSheet.create({
     marginTop: Spacing.one,
   },
   metaRow: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+    flexDirection: "row",
+    flexWrap: "wrap",
     gap: Spacing.three,
   },
   metaPair: {
@@ -196,8 +185,8 @@ const styles = StyleSheet.create({
     minWidth: 120,
   },
   tags: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+    flexDirection: "row",
+    flexWrap: "wrap",
     gap: 6,
   },
   body: {
@@ -210,10 +199,10 @@ const styles = StyleSheet.create({
     gap: Spacing.three,
   },
   notFound: {
-    alignItems: 'center',
+    alignItems: "center",
     flex: 1,
     gap: Spacing.three,
-    justifyContent: 'center',
+    justifyContent: "center",
     padding: Spacing.four,
   },
 });

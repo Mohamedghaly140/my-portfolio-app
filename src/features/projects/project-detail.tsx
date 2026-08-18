@@ -1,16 +1,16 @@
-import { type ReactNode, useLayoutEffect } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
-import * as Linking from 'expo-linking';
-import { router, useLocalSearchParams, useNavigation } from 'expo-router';
+import * as Linking from "expo-linking";
+import { router, useLocalSearchParams, useNavigation } from "expo-router";
+import { type ReactNode, useLayoutEffect } from "react";
+import { Pressable, StyleSheet, View } from "react-native";
 
-import { MarkdownBody } from '@/components/markdown-body';
-import { ShareHeaderButton } from '@/components/share-header-button';
-import { Badge, Divider, Reveal, Skeleton, Text } from '@/components/ui';
-import { getProjectBySlug } from '@/data/projects';
-import { useArticleMarkdown } from '@/features/blog/use-article-markdown';
-import { shareProject } from '@/lib/share';
-import type { Project } from '@/types/project';
-import { Motion, Spacing } from '@/theme';
+import { MarkdownBody } from "@/components/markdown-body";
+import { ShareHeaderButton } from "@/components/share-header-button";
+import { Badge, Divider, Reveal, Skeleton, Text } from "@/components/ui";
+import { getProjectBySlug } from "@/data/projects";
+import { useArticleMarkdown } from "@/features/blog/use-article-markdown";
+import { shareProject } from "@/lib/share";
+import { Motion, Spacing } from "@/theme";
+import type { Project } from "@/types/project";
 
 type MetaLink = {
   label: string;
@@ -21,35 +21,37 @@ type MetaLink = {
 function buildMetaLinks(project: Project): MetaLink[] {
   const links: MetaLink[] = [];
   if (project.liveUrl) {
-    links.push({ label: 'Live', href: project.liveUrl, linkText: 'View Site →' });
+    links.push({
+      label: "Live",
+      href: project.liveUrl,
+      linkText: "View Site →",
+    });
   }
   if (project.appstoreUrl) {
     links.push({
-      label: 'App Store',
+      label: "App Store",
       href: project.appstoreUrl,
-      linkText: 'Download →',
+      linkText: "Download →",
     });
   }
   if (project.playstoreUrl) {
     links.push({
-      label: 'Play Store',
+      label: "Play Store",
       href: project.playstoreUrl,
-      linkText: 'Download →',
+      linkText: "Download →",
     });
   }
   if (project.githubUrl) {
-    links.push({ label: 'Source', href: project.githubUrl, linkText: 'GitHub →' });
+    links.push({
+      label: "Source",
+      href: project.githubUrl,
+      linkText: "GitHub →",
+    });
   }
   return links;
 }
 
-function MetaPair({
-  label,
-  children,
-}: {
-  label: string;
-  children: ReactNode;
-}) {
+function MetaPair({ label, children }: { label: string; children: ReactNode }) {
   return (
     <View style={styles.metaPair}>
       <Text color="textMuted" role="label">
@@ -78,7 +80,7 @@ function MetaLinkPair({ label, href, linkText }: MetaLink) {
 
 function ProjectNotFound() {
   function handleBack() {
-    router.push('/projects');
+    router.push("/projects");
   }
 
   return (
@@ -123,7 +125,7 @@ function CaseStudyBody({ project }: { project: Project }) {
 export function ProjectDetailScreen() {
   const navigation = useNavigation();
   const { slug: slugParam } = useLocalSearchParams<{ slug: string }>();
-  const slug = typeof slugParam === 'string' ? slugParam : slugParam?.[0];
+  const slug = typeof slugParam === "string" ? slugParam : slugParam?.[0];
   const project = slug ? getProjectBySlug(slug) : undefined;
 
   useLayoutEffect(() => {
@@ -144,20 +146,8 @@ export function ProjectDetailScreen() {
 
   const metaLinks = buildMetaLinks(project);
 
-  function handleBack() {
-    router.push('/projects');
-  }
-
   return (
     <View style={styles.root}>
-      <Reveal>
-        <Pressable accessibilityRole="link" hitSlop={8} onPress={handleBack}>
-          <Text color="accent" role="small">
-            ← All Projects
-          </Text>
-        </Pressable>
-      </Reveal>
-
       <Reveal delayMs={Motion.staggerMs}>
         <View style={styles.header}>
           <Badge label={project.category} variant="muted" />
@@ -188,7 +178,7 @@ export function ProjectDetailScreen() {
             </Text>
           </MetaPair>
 
-          {metaLinks.map((link) => (
+          {metaLinks.map(link => (
             <MetaLinkPair key={link.label} {...link} />
           ))}
         </View>
@@ -196,7 +186,7 @@ export function ProjectDetailScreen() {
 
       <Reveal delayMs={Motion.staggerMs * 3}>
         <View style={styles.tags}>
-          {project.tags.map((tag) => (
+          {project.tags.map(tag => (
             <Badge key={tag} label={tag} variant="code" />
           ))}
         </View>
@@ -225,8 +215,8 @@ const styles = StyleSheet.create({
     marginTop: Spacing.one,
   },
   metaRow: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+    flexDirection: "row",
+    flexWrap: "wrap",
     gap: Spacing.three,
   },
   metaPair: {
@@ -234,8 +224,8 @@ const styles = StyleSheet.create({
     minWidth: 120,
   },
   tags: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+    flexDirection: "row",
+    flexWrap: "wrap",
     gap: 6,
   },
   body: {
@@ -248,10 +238,10 @@ const styles = StyleSheet.create({
     gap: Spacing.two,
   },
   notFound: {
-    alignItems: 'center',
+    alignItems: "center",
     flex: 1,
     gap: Spacing.three,
-    justifyContent: 'center',
+    justifyContent: "center",
     padding: Spacing.four,
   },
 });

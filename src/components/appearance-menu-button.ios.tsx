@@ -1,27 +1,31 @@
-import { StyleSheet, View } from 'react-native';
-import { Host } from '@expo/ui';
-import { Button, Menu } from '@expo/ui/swift-ui';
-import { labelStyle } from '@expo/ui/swift-ui/modifiers';
+import { Host } from "@expo/ui";
+import { Button, Menu } from "@expo/ui/swift-ui";
+import {
+  buttonBorderShape,
+  labelStyle,
+  menuIndicator,
+} from "@expo/ui/swift-ui/modifiers";
+import { StyleSheet, View } from "react-native";
 
-import { lightImpact } from '@/lib/haptics';
-import type { ThemePreference } from '@/lib/preferences/theme';
-import { useThemePreference } from '@/theme/theme-preference-provider';
+import { lightImpact } from "@/lib/haptics";
+import type { ThemePreference } from "@/lib/preferences/theme";
+import { useThemePreference } from "@/theme/theme-preference-provider";
 
 const OPTIONS: { value: ThemePreference; label: string }[] = [
-  { value: 'system', label: 'System' },
-  { value: 'light', label: 'Light' },
-  { value: 'dark', label: 'Dark' },
+  { value: "system", label: "System" },
+  { value: "light", label: "Light" },
+  { value: "dark", label: "Dark" },
 ];
 
 function triggerSystemImage(preference: ThemePreference): string {
   switch (preference) {
-    case 'light':
-      return 'sun.max';
-    case 'dark':
-      return 'moon';
-    case 'system':
+    case "light":
+      return "sun.max";
+    case "dark":
+      return "moon";
+    case "system":
     default:
-      return 'gearshape';
+      return "gearshape";
   }
 }
 
@@ -34,10 +38,14 @@ export function AppearanceMenuButton() {
       <Host matchContents style={styles.host}>
         <Menu
           label="Appearance"
-          modifiers={[labelStyle('iconOnly')]}
+          modifiers={[
+            labelStyle("iconOnly"),
+            menuIndicator("hidden"),
+            buttonBorderShape("circle"),
+          ]}
           systemImage={triggerSystemImage(preference)}
         >
-          {OPTIONS.map((option) => (
+          {OPTIONS.map(option => (
             <Button
               key={option.value}
               label={option.label}
@@ -45,7 +53,7 @@ export function AppearanceMenuButton() {
                 setPreference(option.value);
               }}
               {...(preference === option.value
-                ? { systemImage: 'checkmark' }
+                ? { systemImage: "checkmark" }
                 : {})}
             />
           ))}
@@ -57,10 +65,8 @@ export function AppearanceMenuButton() {
 
 const styles = StyleSheet.create({
   button: {
-    alignItems: 'center',
-    height: 44,
-    justifyContent: 'center',
-    width: 44,
+    alignItems: "center",
+    justifyContent: "center",
   },
   host: {
     height: 44,

@@ -160,7 +160,7 @@ About, Projects, Project detail, Skills, and Privacy are **not** tabs — they p
 
 **States:** unknown slug → not-found. Loading markdown → `Skeleton`. Markdown error → description + retry.
 
-**Native delta:** external store/GitHub links via `Linking.openURL`; share sheet on header action (M8).
+**Native delta:** external store/GitHub links via `Linking.openURL`. **Header:** `headerRight` mounts `ShareHeaderButton` (`src/components/share-header-button.ios.tsx` / `.android.tsx`) — a native icon-only share control (`Button` on iOS, `IconButton` on Android via `@expo/ui`) that opens the share sheet (M8).
 
 ---
 
@@ -252,6 +252,8 @@ About, Projects, Project detail, Skills, and Privacy are **not** tabs — they p
 **Data:** bundled post meta + network markdown.
 
 **States:** unpublished / unknown → not-found. Loading → skeletons. Offline → meta visible, body error with retry. HTTP 404 markdown → local "Article unavailable."
+
+**Header:** `headerRight` mounts the same `ShareHeaderButton` as project detail.
 
 ---
 

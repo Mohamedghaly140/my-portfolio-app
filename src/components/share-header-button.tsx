@@ -1,15 +1,18 @@
-import { Ionicons } from '@expo/vector-icons';
-import { Pressable, StyleSheet } from 'react-native';
+import { Ionicons } from "@expo/vector-icons";
+import { Pressable, StyleSheet } from "react-native";
 
-import { lightImpact } from '@/lib/haptics';
-import { useTheme } from '@/theme/theme-provider';
+import { lightImpact } from "@/lib/haptics";
+import { useTheme } from "@/theme/theme-provider";
 
 type ShareHeaderButtonProps = {
   accessibilityLabel: string;
   onShare: () => void;
 };
 
-/** Icon-only header action that opens the native share sheet. */
+/**
+ * Plain-RN fallback for web (Metro resolves `.ios.tsx` / `.android.tsx` on
+ * device, which render a native SwiftUI / Jetpack Compose header button).
+ */
 export function ShareHeaderButton({
   accessibilityLabel,
   onShare,
@@ -36,9 +39,7 @@ export function ShareHeaderButton({
 
 const styles = StyleSheet.create({
   button: {
-    alignItems: 'center',
-    height: 44,
-    justifyContent: 'center',
-    width: 44,
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
