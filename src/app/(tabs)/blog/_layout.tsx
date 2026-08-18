@@ -1,6 +1,7 @@
 import { isLiquidGlassAvailable } from 'expo-glass-effect';
 import { Stack } from 'expo-router';
 
+import { BackHeaderButton } from '@/components/back-header-button';
 import { FontFamilies } from '@/theme';
 import { useTheme } from '@/theme/theme-provider';
 
@@ -12,7 +13,10 @@ export default function BlogStackLayout() {
     headerShadowVisible: false,
     headerTintColor: colors.accentText,
     headerTitleStyle: { fontFamily: FontFamilies.displayBold },
-  } as const;
+    headerBackButtonDisplayMode: 'minimal' as const,
+    headerLeft: ({ canGoBack }: { canGoBack?: boolean }) =>
+      canGoBack ? <BackHeaderButton tintColor={colors.accentText} /> : undefined,
+  };
 
   const pushed = {
     ...shared,

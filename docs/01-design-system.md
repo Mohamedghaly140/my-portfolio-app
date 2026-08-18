@@ -498,7 +498,7 @@ Every stack's `_layout.tsx` sets header options from `useTheme()` — no hardcod
 - **Root tab screens** (the `index` screen inside each of `(home)`, `(blog)`, `(chat)`, `(experience)`, `(contact)`) get, on **iOS only** (`process.env.EXPO_OS === 'ios'`): `headerLargeTitle: true`, `headerTransparent: true`, `headerBlurEffect: 'systemMaterialDark'` / `'systemMaterialLight'` matched to `scheme`. **Android** gets a flat, opaque `headerStyle: { backgroundColor: colors.bg }` instead — `react-native-screens`' large-title/collapse behaviour is iOS-only; do not hand-roll a Material collapsing app bar to imitate it.
 - **Pushed screens** inside `(home)` (About, Skills, Privacy, Projects index, Project detail, dev gallery) get a standard (non-large) title and the same opaque `colors.bg` background, applied once via the `(home)` stack's `screenOptions` rather than per-screen.
 - All headers everywhere: `headerShadowVisible: false` (hairline-not-shadow, matching the rest of the design system), `headerTintColor: colors.accentText`, and brand type via `headerTitleStyle` / `headerLargeTitleStyle: { fontFamily: FontFamilies.displayBold }` instead of the system font.
-- No custom back button — the system default (via `react-native-screens`) already matches this treatment once tint/font are set.
+- Back control is icon-only (`headerBackButtonDisplayMode: 'minimal'` plus `BackHeaderButton` in `headerLeft` when `canGoBack`) — a circular chevron in `colors.accentText`, no previous-screen title. SwiftUI `Button` on iOS, Compose `IconButton` on Android (`src/components/back-header-button.ios.tsx` / `.android.tsx`). Chat's close affordance stays an `x`, not a back chevron.
 
 ---
 

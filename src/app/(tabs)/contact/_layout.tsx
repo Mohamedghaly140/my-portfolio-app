@@ -1,6 +1,7 @@
 import { isLiquidGlassAvailable } from 'expo-glass-effect';
 import { Stack } from 'expo-router';
 
+import { BackHeaderButton } from '@/components/back-header-button';
 import { FontFamilies } from '@/theme';
 import { useTheme } from '@/theme/theme-provider';
 
@@ -12,7 +13,10 @@ export default function ContactStackLayout() {
     headerShadowVisible: false,
     headerTintColor: colors.accentText,
     headerTitleStyle: { fontFamily: FontFamilies.displayBold },
-  } as const;
+    headerBackButtonDisplayMode: 'minimal' as const,
+    headerLeft: ({ canGoBack }: { canGoBack?: boolean }) =>
+      canGoBack ? <BackHeaderButton tintColor={colors.accentText} /> : undefined,
+  };
 
   // iOS 26 Liquid Glass has a UIKit bug where a blurred transparent header with
   // headerLargeTitle renders blank until a scroll forces a relayout — dropping
