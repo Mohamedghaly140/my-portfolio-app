@@ -4,16 +4,17 @@ import { Reveal, Text } from "@/components/ui";
 import { Spacing } from "@/theme";
 import { useTheme } from "@/theme/theme-provider";
 
-import { STATS } from "../constants";
+import { useStats } from "../use-stats";
 
 export function StatsStrip() {
   const { colors } = useTheme();
+  const { data: stats } = useStats();
 
   return (
     <Reveal>
       <View style={styles.wrapper}>
         <View style={styles.row}>
-          {STATS.slice(0, 2).map(stat => (
+          {stats.slice(0, 2).map(stat => (
             <View
               key={stat.label}
               style={[styles.cell, { borderColor: colors.border }]}
@@ -28,7 +29,7 @@ export function StatsStrip() {
           ))}
         </View>
         <View style={styles.row}>
-          {STATS.slice(2).map(stat => (
+          {stats.slice(2).map(stat => (
             <View
               key={stat.label}
               style={[styles.cell, { borderColor: colors.border }]}

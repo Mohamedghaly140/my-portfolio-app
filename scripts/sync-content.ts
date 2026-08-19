@@ -20,6 +20,7 @@ const DATA_MODULES = [
   "education.ts",
   "courses.ts",
   "experience.ts",
+  "stats.ts",
 ] as const;
 
 const TYPE_MODULES = [

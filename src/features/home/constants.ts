@@ -5,13 +5,6 @@ export const ROLES = [
   'UI/UX Enthusiast',
 ] as const;
 
-export const STATS = [
-  { value: '5+', label: 'Years Exp' },
-  { value: '3+', label: 'Tech Stacks' },
-  { value: '10+', label: 'Live Apps' },
-  { value: '∞', label: 'Lines Shipped' },
-] as const;
-
 /** First 4 are shown on Home AskMohamedCTA banner. Full list owned by M5 chat config. */
 export const SUGGESTED_PROMPTS = [
   'What does Mohamed specialize in?',

@@ -4,14 +4,15 @@ import { AskMohamedCTA } from '@/components/ask-mohamed-cta';
 import { Divider, Reveal, SectionLabel, Text } from '@/components/ui';
 import { courses } from '@/data/courses';
 import { education } from '@/data/education';
-import { experience } from '@/data/experience';
 import { Motion, Spacing } from '@/theme';
 
 import { CourseCard } from './components/course-card';
 import { EducationCard } from './components/education-card';
 import { Timeline } from './components/timeline';
+import { useExperience } from './use-experience';
 
 export function ExperienceScreen() {
+  const { data: experience } = useExperience();
   const educationSectionDelay = experience.length * Motion.staggerMs;
   const courseworkSectionDelay =
     educationSectionDelay + (1 + education.length) * Motion.staggerMs;

@@ -480,3 +480,31 @@ Client must surface those codes via the local table and offer Retry when `retrya
 2. `curl` without `Origin`, with `x-mg-client: mobile/1.0` and valid `x-mg-session`, completes a full chat turn.
 3. Blog markdown path returns 200 for a published slug.
 4. In the web repo: `bun test`, `bun run lint`, `bun run build`.
+
+---
+
+## h) Public stats and experience reads
+
+Shapes transcribed from the web repo's public JSON routes — do not invent fields.
+
+### `GET /api/stats`
+
+**Response:**
+
+```ts
+{ data: { value: string; label: string }[] }
+```
+
+Public, no session/Origin guard. `Cache-Control: public, max-age=0,
+s-maxage=3600, stale-while-revalidate=86400`.
+
+### `GET /api/experience`
+
+**Response:**
+
+```ts
+{ data: ExperienceItem[] }
+```
+
+Same `ExperienceItem` shape as `src/types/experience.ts`. Public, no
+session/Origin guard. Same `Cache-Control` as above.
