@@ -2,6 +2,7 @@ import { isLiquidGlassAvailable } from 'expo-glass-effect';
 import { Stack } from 'expo-router';
 
 import { BackHeaderButton } from '@/components/back-header-button';
+import { CloseHeaderButton } from '@/components/close-header-button';
 import { FontFamilies } from '@/theme';
 import { useTheme } from '@/theme/theme-provider';
 
@@ -47,6 +48,17 @@ export default function ContactStackLayout() {
   return (
     <Stack>
       <Stack.Screen name="index" options={indexOptions} />
+      <Stack.Screen
+        name="privacy"
+        options={{
+          title: 'Privacy',
+          presentation: 'modal',
+          headerTintColor: colors.accentText,
+          headerTitleStyle: { fontFamily: FontFamilies.displayBold },
+          headerStyle: { backgroundColor: colors.bg },
+          headerLeft: () => <CloseHeaderButton tintColor={colors.accentText} />,
+        }}
+      />
     </Stack>
   );
 }

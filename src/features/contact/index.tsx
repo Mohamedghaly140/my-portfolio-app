@@ -5,6 +5,7 @@ import { Reveal, SectionLabel, Text } from "@/components/ui";
 import { Spacing } from "@/theme";
 
 import { AppearanceMenuButton } from "@/components/appearance-menu-button";
+import { PrivacyHeaderButton } from "@/components/privacy-header-button";
 import { useNavigation } from "expo-router";
 import { useLayoutEffect } from "react";
 import { ContactForm } from "./components/ContactForm";
@@ -15,7 +16,8 @@ export function ContactScreen() {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerRight: () => <AppearanceMenuButton />,
+      headerLeft: () => <AppearanceMenuButton />,
+      headerRight: () => <PrivacyHeaderButton />,
     });
   }, [navigation]);
 

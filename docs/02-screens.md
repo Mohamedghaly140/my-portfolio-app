@@ -24,6 +24,7 @@ src/app/(tabs)/experience/_layout.tsx    Stack
 src/app/(tabs)/experience/index.tsx
 src/app/(tabs)/contact/_layout.tsx       Stack
 src/app/(tabs)/contact/index.tsx
+src/app/(tabs)/contact/privacy.tsx       modal, within the contact stack — see §3.6
 src/app/chat/_layout.tsx                 Stack — root modal, sibling of (tabs). Real path segment
                                           (not a `(group)`) so it can't collide with `/`
 src/app/chat/index.tsx
@@ -186,15 +187,15 @@ About, Projects, Project detail, Skills, and Privacy are **not** tabs — they p
 
 ---
 
-### 3.6 Privacy — `/chat/privacy`
+### 3.6 Privacy — `/chat/privacy` · `/contact/privacy`
 
 | | |
 |---|---|
-| **Route** | `src/app/chat/privacy.tsx` — a modal `Stack.Screen` inside `chat/_layout.tsx`'s Stack, not the Home stack (corrected 2026-08-16; this doc previously specced `/(tabs)/(home)/privacy`, which was never built — the M3/M5 implementation put it under the chat modal instead, reached from the chat header's "Privacy & help") |
-| **Stack** | Chat (its own nested Stack — see §5.1) |
-| **Deep link** | `/chat/privacy` |
+| **Route** | `src/app/chat/privacy.tsx` — a modal `Stack.Screen` inside `chat/_layout.tsx`'s Stack, not the Home stack (corrected 2026-08-16; this doc previously specced `/(tabs)/(home)/privacy`, which was never built — the M3/M5 implementation put it under the chat modal instead, reached from the chat header's "Privacy & help"). **2026-08-20:** also registered as `src/app/(tabs)/contact/privacy.tsx`, a second modal `Stack.Screen` inside `contact/_layout.tsx`'s Stack, reached from the Contact tab header's info-icon `PrivacyHeaderButton` — both route files render the same `features/privacy/index.tsx` component; there's no content duplication |
+| **Stack** | Chat (its own nested Stack — see §5.1) · Contact (see §7.1) |
+| **Deep link** | `/chat/privacy` · `/contact/privacy` |
 
-**Sections** (`features/privacy/index.tsx`, rendered by `src/app/chat/privacy.tsx`):
+**Sections** (`features/privacy/index.tsx`, rendered by `src/app/chat/privacy.tsx` and `src/app/(tabs)/contact/privacy.tsx`):
 
 1. Header + intro
 2. What is collected and why
@@ -331,6 +332,8 @@ About, Projects, Project detail, Skills, and Privacy are **not** tabs — they p
 | **Stack** | Contact |
 | **Deep link** | `/contact` |
 
+**Header:** `AppearanceMenuButton` in `headerLeft`, `PrivacyHeaderButton` (info icon → `/contact/privacy`, see §3.6) in `headerRight` — set via `navigation.setOptions` in a `useLayoutEffect`, same pattern as Home's `index.tsx`.
+
 **Sections** (`features/contact/index.tsx`):
 
 1. Header — "Contact" / "Let's Work Together" + supporting sentence
@@ -373,5 +376,6 @@ Brand `Screen` with title, short copy, button back to Home tab.
 | `/chat/privacy` | `chat/privacy` — see §3.6 |
 | `/experience` | `experience/` |
 | `/contact` | `contact/` |
+| `/contact/privacy` | `contact/privacy` — see §3.6 |
 
 Custom scheme: `moghaly://` with the same path suffixes. Universal links require `apple-app-site-association` + `assetlinks.json` on the Next.js site (`public/.well-known/`).

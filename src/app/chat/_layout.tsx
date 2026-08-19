@@ -1,22 +1,8 @@
-import { Ionicons } from "@expo/vector-icons";
-import { router, Stack } from "expo-router";
-import { Pressable } from "react-native";
+import { Stack } from "expo-router";
 
+import { CloseHeaderButton } from "@/components/close-header-button";
 import { FontFamilies } from "@/theme";
 import { useTheme } from "@/theme/theme-provider";
-
-function ChatCloseButton({ tintColor }: { tintColor: string }) {
-  return (
-    <Pressable
-      accessibilityLabel="Close chat"
-      accessibilityRole="button"
-      hitSlop={8}
-      onPress={() => router.back()}
-    >
-      <Ionicons color={tintColor} name="close" size={24} />
-    </Pressable>
-  );
-}
 
 export default function ChatStackLayout() {
   const { colors } = useTheme();
@@ -34,7 +20,7 @@ export default function ChatStackLayout() {
     headerTitleStyle: { fontFamily: FontFamilies.displayBold },
     title: "Mo Ghaly GPT",
     headerStyle: { backgroundColor: colors.bg },
-    headerLeft: () => <ChatCloseButton tintColor={colors.accentText} />,
+    headerLeft: () => <CloseHeaderButton tintColor={colors.accentText} />,
   } as const;
 
   return (
@@ -48,7 +34,7 @@ export default function ChatStackLayout() {
           headerTintColor: colors.accentText,
           headerTitleStyle: { fontFamily: FontFamilies.displayBold },
           headerStyle: { backgroundColor: colors.bg },
-          headerLeft: () => <ChatCloseButton tintColor={colors.accentText} />,
+          headerLeft: () => <CloseHeaderButton tintColor={colors.accentText} />,
         }}
       />
     </Stack>
