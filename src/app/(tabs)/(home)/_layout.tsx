@@ -53,14 +53,28 @@ export default function HomeStackLayout() {
         title: "Home",
       };
 
+  const glassOptions = (title: string) =>
+    isIOS
+      ? {
+          ...shared,
+          title,
+          headerTransparent: true,
+          headerStyle: undefined,
+          headerBlurEffect,
+        }
+      : {
+          ...pushed,
+          title,
+        };
+
   return (
     <Stack screenOptions={pushed}>
       <Stack.Screen name="index" options={indexOptions} />
       <Stack.Screen name="gallery" options={{ title: "Token gallery" }} />
       <Stack.Screen name="about" options={{ title: "About" }} />
       <Stack.Screen name="skills" options={{ title: "Skills" }} />
-      <Stack.Screen name="projects/index" options={{ title: "Projects" }} />
-      <Stack.Screen name="projects/[slug]" options={{ title: "Project" }} />
+      <Stack.Screen name="projects/index" options={glassOptions("Projects")} />
+      <Stack.Screen name="projects/[slug]" options={glassOptions("Project")} />
     </Stack>
   );
 }

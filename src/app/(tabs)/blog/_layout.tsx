@@ -48,10 +48,23 @@ export default function BlogStackLayout() {
         title: 'Blogs',
       };
 
+  const detailOptions = isIOS
+    ? {
+        ...shared,
+        title: 'Article',
+        headerTransparent: true,
+        headerStyle: undefined,
+        headerBlurEffect,
+      }
+    : {
+        ...pushed,
+        title: 'Article',
+      };
+
   return (
     <Stack screenOptions={pushed}>
       <Stack.Screen name="index" options={indexOptions} />
-      <Stack.Screen name="[slug]" options={{ title: 'Article' }} />
+      <Stack.Screen name="[slug]" options={detailOptions} />
     </Stack>
   );
 }

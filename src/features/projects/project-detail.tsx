@@ -131,6 +131,7 @@ export function ProjectDetailScreen() {
   useLayoutEffect(() => {
     if (!project) return;
     navigation.setOptions({
+      title: project.title,
       headerRight: () => (
         <ShareHeaderButton
           accessibilityLabel="Share project"
