@@ -4,7 +4,7 @@ import { Image } from 'expo-image';
 import { router } from 'expo-router';
 
 import { Badge, Card, Text } from '@/components/ui';
-import { projectCoverImages } from '@/data/projects';
+import { projectCoverImages } from '@/data/project-cover-images';
 import { selectionChanged } from '@/lib/haptics';
 import type { Project } from '@/types/project';
 import { Spacing } from '@/theme';
