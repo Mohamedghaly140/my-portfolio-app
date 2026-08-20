@@ -8,7 +8,7 @@ import { parseSeedQuestion } from '@/features/chat/lib/seedQuestion';
 
 export default function ChatScreen() {
   const session = useChatSession();
-  const { bootState, newChat, isStartingNewChat, sendMessage } = session;
+  const { bootState, newChat, isStartingNewChat, sendMessage, conversationId } = session;
   const navigation = useNavigation();
   const params = useLocalSearchParams<{ q?: string }>();
   const seededRef = useRef(false);
@@ -26,7 +26,7 @@ export default function ChatScreen() {
 
   useEffect(() => {
     if (seededRef.current) return;
-    if (bootState.phase !== 'ready') return;
+    if (bootState.phase !== 'ready' || !conversationId) return;
 
     const seed = parseSeedQuestion(
       typeof params.q === 'string' ? params.q : undefined,
@@ -36,7 +36,7 @@ export default function ChatScreen() {
     seededRef.current = true;
     sendMessage(seed);
     router.setParams({ q: undefined });
-  }, [bootState.phase, params.q, sendMessage]);
+  }, [bootState.phase, conversationId, params.q, sendMessage]);
 
   return <ChatShell session={session} />;
 }
